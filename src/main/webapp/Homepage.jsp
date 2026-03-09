@@ -8,6 +8,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ManoForte - Trova la tua mano di fiducia</title>
 
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
@@ -17,13 +18,12 @@
     <%List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioniList");%>
     <%Map<Long, String> utenti = (Map<Long, String>) request.getAttribute("listaUtenti");%>
 
-
 <header>
-    <a href="Homepage" class="logo">TaskFinder</a>
+    <a href="Homepage" class="logo">ManoForte</a>
     <nav>
         <a href="Homepage">Home</a>
         <a href="ListaProfessionisti">Esplora</a>
-        <a href="Login" style="color: var(--primary);">Area Riservata</a>
+        <a href="login" style="color: var(--primary);">Area Riservata</a>
     </nav>
 </header>
 

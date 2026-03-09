@@ -58,7 +58,7 @@ public class Utente {
 		this.cognome = cognome;
 		this.dataNascita = dataNascita;
 		this.codice_fiscale = codice_fiscale;
-		this.ruolo = Ruolo.UTENTE_BASE;
+		this.ruolo = Ruolo.PROFESSIONISTA;
 		this.id_citta = id_citta;
 		this.professioni = professioni;
 		this.tariffa = tariffa;

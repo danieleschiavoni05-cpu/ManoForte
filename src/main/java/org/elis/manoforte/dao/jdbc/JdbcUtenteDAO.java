@@ -26,7 +26,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO utente(email, nome, cognome, password, data_nascita, codice_fiscale, ruolo, id_citta) VALUES(?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
-            IO.print(": hello");
+            System.out.println(": hello");
 
             statement.setString(1, utente.getEmail());
             statement.setString(2, utente.getNome());
@@ -140,6 +140,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
             statement.setString(1, email);
             ResultSet result = statement.executeQuery();
             if(result.next()){
+                System.out.println(email+"--> "+result.getString("email"));
                 return false;
             }
         }

@@ -99,7 +99,8 @@ public class DatiErratiException extends RuntimeException {
         if(errEmail) messages.add("La mail è in un formato invalido.");
         if(errPassword) messages.add("Le password non coincidono.");
         if(errData!=null&&errData) messages.add("La data inserita non è valida.");
-        if(errMailGiaPresente || errCFGiaPresente) messages.add("Email già registrata.");
+        if(errMailGiaPresente) messages.add("Email già registrata.");
+        if(errCFGiaPresente) messages.add("Codice fiscale già registrato.");
         if(errCF) messages.add("Codice fiscale non valido.");
         if(errTariffa) messages.add("La tariffa deve essere maggiore di 0.");
         if(errProfessioni) messages.add("Inserire almeno una professione.");

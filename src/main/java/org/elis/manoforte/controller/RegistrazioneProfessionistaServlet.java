@@ -1,0 +1,176 @@
+package org.elis.manoforte.controller;
+
+import jakarta.servlet.ServletException;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.servlet.http.*;
+import jakarta.servlet.annotation.*;
+import jakarta.servlet.RequestDispatcher;
+import org.elis.manoforte.dao.definition.CittaDAO;
+import org.elis.manoforte.dao.definition.ProfessioneDAO;
+import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.definition.VeicoloDAO;
+import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
+import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
+import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
+import org.elis.manoforte.exception.DatiErratiException;
+import org.elis.manoforte.exception.NessunValoreTrovatoException;
+import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.utility.DTOResponse;
+import org.elis.manoforte.utility.DataSourceConfig;
+import org.elis.manoforte.utility.Utility;
+import tools.jackson.databind.ObjectMapper;
+
+@WebServlet("/registrazioneprofessionista")
+public class RegistrazioneProfessionistaServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    public RegistrazioneProfessionistaServlet() {
+        super();
+    }
+
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, IOException {
+        HttpSession session = request.getSession();
+
+        Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
+
+        if(loggedUser != null){
+            response.sendRedirect(request.getContextPath()+Utility.getUserHomePage(loggedUser));
+            return;
+        }
+
+        ProfessioneDAO professioneDAO = new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
+        CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
+        VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
+        try {
+            request.setAttribute("citta", cittaDAO.getAllCitta());
+            request.setAttribute("professioni", professioneDAO.getAllProfessioni());
+            request.setAttribute("veicoli", veicoloDAO.getAllVeicolo());
+        }catch(SQLException e) {
+            e.printStackTrace();
+            response.sendRedirect("/errorpage");
+            return;
+        }catch(NessunValoreTrovatoException e){
+            e.printStackTrace();
+            request.setAttribute("errore", e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/registrazione_professionista.jsp");
+        dispatcher.forward(request, response);
+    }
+
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter outJson = response.getWriter();
+        ObjectMapper mapper = new ObjectMapper();
+
+        LocalDate data_nascita = null;
+        Long citta = null;
+        BigDecimal tariffa = null;
+        List<Long> professioni = new ArrayList<>();
+        List<Long> veicoli = new ArrayList<>();
+
+        String email = request.getParameter("email");
+        String nome = request.getParameter("nome");
+        String cognome = request.getParameter("cognome");
+        if(request.getParameter("data_nascita")!=null && !request.getParameter("data_nascita").equals(""))
+            data_nascita = LocalDate.parse(request.getParameter("data_nascita"));
+        String codice_fiscale = request.getParameter("codice_fiscale");
+        if(request.getParameter("citta")!=null && !request.getParameter("citta").equals(""))
+            citta =  Long.parseLong(request.getParameter("citta"));
+        String password = request.getParameter("password");
+        String confermaPassword = request.getParameter("conferma_password");
+        if(request.getParameterValues("professioni")!=null)
+            for(String str : request.getParameterValues("professioni"))
+                professioni.add(Long.parseLong(str));
+        if(request.getParameterValues("veicoli")!=null)
+            for(String str : request.getParameterValues("veicoli"))
+                veicoli.add(Long.parseLong(str));
+        if(request.getParameterValues("tariffa")!=null && !request.getParameter("tariffa").equals(""))
+            tariffa = new BigDecimal(request.getParameter("tariffa"));
+
+        DatiErratiException emptyError = new DatiErratiException();
+        if(email==null || email.trim().isEmpty())
+            emptyError.setErrEmail();
+        if(nome==null || nome.trim().isEmpty())
+            emptyError.setErrNome();
+        if(cognome==null || cognome.trim().isEmpty())
+            emptyError.setErrCognome();;
+        if(data_nascita==null)
+            emptyError.setErrData();
+        if(codice_fiscale==null || codice_fiscale.trim().isEmpty())
+            emptyError.setErrCF();
+        if(password==null||confermaPassword==null ||
+                confermaPassword.trim().isEmpty() || password.trim().isEmpty())
+            emptyError.setErrPassword();
+        if(professioni.isEmpty())
+            emptyError.setErrProfessioni();
+        if(tariffa==null||tariffa.compareTo(BigDecimal.ZERO)<=0)
+            emptyError.setErrTariffa();
+
+
+        if(emptyError.checkErrors()){
+            emptyError.printStackTrace();
+            emptyError.buildEmptyErrorMessage();
+
+            DTOResponse risposta = new DTOResponse(false,
+                    "Alcuni dei campi non sono stati compilati", emptyError.getMessages());
+            outJson.print(mapper.writeValueAsString(risposta));
+            outJson.flush();
+            return;
+        }
+
+        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+
+        try {
+            Utente professionista = Utility.checkInputProfessionista(nome, cognome, email, data_nascita, codice_fiscale,
+                    citta, professioni, veicoli, tariffa, password, confermaPassword);
+            utenteDAO.inserisciProfessionista(professionista);
+
+            DTOResponse risposta = new DTOResponse(true,
+                    "Registrazione completata con successo.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
+
+        }catch(DatiErratiException e) {
+            e.printStackTrace();
+            e.buildErrorMessage();
+
+            DTOResponse risposta = new DTOResponse(false,
+                    "Errore inserimento dati dell'utente.", e.getMessages());
+            outJson.print(mapper.writeValueAsString(risposta));
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+
+            DTOResponse risposta = new DTOResponse(false,
+                    "Errore inserimento nel database, riprovare più tardi.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
+        }catch (Exception e){
+            e.printStackTrace();
+            DTOResponse risposta = new DTOResponse(false,
+                    "Errore imprevisto, riprovare.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
+        }
+
+        outJson.flush();
+    }
+}

@@ -100,7 +100,6 @@ public class RecensioneDAOJDBC implements RecensioneDAO {
                 rs.getDate("data").toLocalDate(),
                 rs.getLong("id_cliente"),
                 rs.getLong("id_professionista")
-
         );
 
         return r;

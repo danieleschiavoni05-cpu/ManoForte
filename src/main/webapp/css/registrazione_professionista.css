@@ -1,0 +1,82 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 25px 0 25px 0;
+    background-image: url('../res/registrazioneProf_bg.jpg');
+    background-color: #908f8f;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+.container {
+    max-width: 500px;
+    background: rgba(255, 255, 255, 0.73);
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+h2 {
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #212529;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+}
+
+.login-register-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.login-register-button:hover {
+    background-color: #0b5ed7;
+    transform: translateY(-1px);
+}
+
+.section-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.checkbox-box {
+    max-height: 180px;
+    overflow-y: auto;
+    padding: 10px;
+    border: 1px solid #c4c4c4;
+    border-radius: 8px;
+    background-color: #e2e2e2;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin-left: 5px;
+}
+
+input[type="number"]{
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.error-div{
+    background-color: #f44336;
+    border-radius: 15px;
+    padding: 15px;
+    width: 100%;
+}
+p.error-message {
+    color: white;
+}
+
