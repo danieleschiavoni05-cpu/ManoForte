@@ -74,7 +74,7 @@ public class Utility {
         if(userType.equals(Ruolo.ADMIN)){
             return "homeadmin";
         }else if(userType.equals(Ruolo.UTENTE_BASE)){
-            return "homecliente";
+            return "homeBase";
         }else return "homeprofessionista";
     }
 

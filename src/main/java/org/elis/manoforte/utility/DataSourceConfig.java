@@ -14,7 +14,7 @@ public class DataSourceConfig {
         // DB connection
         properties.setProperty("dataSourceClassName", "com.mysql.cj.jdbc.MysqlDataSource");
         properties.setProperty("dataSource.user","root");
-        properties.setProperty("dataSource.password","root");
+        properties.setProperty("dataSource.password",System.getenv("db_password"));
         properties.setProperty("dataSource.databaseName","progetto_java_web");
         properties.setProperty("dataSource.serverName","localhost");
         // www.baeldung.com/hikaricp

@@ -126,5 +126,13 @@ public class Utente {
 		else return false;
 	}
 
+	
+	public void setId_citta(Long id_citta) {
+		this.id_citta = id_citta;
+	}
+	
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
 
 }

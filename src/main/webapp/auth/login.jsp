@@ -43,7 +43,7 @@
             </form>
             <hr style="color: white;">
             <div class="text-center">
-                <p class="mt-1 mb-0">Sei un cliente? <a href="<%=request.getContextPath()%>/registrazionecliente">Registrati qui!</a></p>
+                <p class="mt-1 mb-0">Sei un cliente? <a href="<%=request.getContextPath()%>/registerBase">Registrati qui!</a></p>
                 <p class="mt-1 mb-0">Sei un professionista? <a href="<%=request.getContextPath()%>/registrazioneprofessionista">Registrati qui!</a></p>
             </div>
         </div>
