@@ -175,5 +175,31 @@ public class JdbcUtenteDAO implements UtenteDAO {
         return listaUtenti;
     }
 
+	@Override
+	public List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception {
+		List<Utente> professionisti = new ArrayList<>();
+        String sql = "SELECT u.* FROM utente u " +
+                     "JOIN utente_professione up ON u.id = up.id_utente " +
+                     "JOIN professione p ON p.id = up.id_professione " +
+                     "WHERE p.nome = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, nomeProfessione);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Usiamo la tua utility per mantenere coerenza nel progetto
+                    professionisti.add(Utility.createUserObj(rs));
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Errore nel recupero professionisti per: " + nomeProfessione, e);
+        }
+        return professionisti;
+    }
+
+
 }
+
 

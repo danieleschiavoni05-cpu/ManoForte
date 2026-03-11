@@ -15,7 +15,8 @@
 
     <%
         // Recuperiamo la lista di tutti i professionisti passata dalla Servlet
-        List<Utente> listaProfessionisti = (List<Utente>) request.getAttribute("listaUtenti");
+        List<Utente> listaProfessionisti = (List<Utente>) request.getAttribute("listaProfessionisti");
+    	List<Professione> listaProfessioni= (List<Professione>) request.getAttribute("listaProfessioni");
 
         if (listaProfessionisti != null && !listaProfessionisti.isEmpty()) {
             for (Utente u : listaProfessionisti) {
@@ -23,13 +24,16 @@
         <div class="card-professionista">
             <h3><%= u.getNome() %> <%= u.getCognome() %></h3>
             
-            <p><strong>Competenze:</strong> 
-                <% 
-                for(Professione p : u.getProfessioni()) { 
-                %>
-                    [<%= p.getNome() %>] 
-                <% } %>
-            </p>
+            <strong>Competenze:</strong><br>
+                                
+                                <% for(Long id : u.getProfessioni()) { %>
+                                <% for( Professione p : listaProfessioni) { %>
+                                if(p.getId()=id){
+                                    <span class="badge-skill"><%= p.getNome() %></span>
+                                    break;
+                                    }
+                                    <% } %>   
+                                <% } %>           
 
             <div class="form-richiesta">
                 <form action="<%=request.getContextPath()%>/richiesta" method="post">
@@ -38,9 +42,14 @@
                     <label>Scegli il servizio:</label>
                     <select name="nomeProfessione" required>
                         <option value="">-- Seleziona --</option>
-                        <% for(Professione p : u.getProfessioni()) { %>
-                            <option value="<%= p.getNome() %>"><%= p.getNome() %></option>
-                        <% } %>
+                        <% for(Long id : u.getProfessioni()) { %>
+                                <% for( Professione p : listaProfessioni) { %>
+                                if(p.getId()=id){
+                                    <option value="<%= p.getNome() %>"><%= p.getNome() %></option>
+                                    break;
+                                    }
+                                    <% } %>   
+                                <% } %>  
                     </select>
 
                     <br>
@@ -62,7 +71,7 @@
     %>
 
     <hr>
-    <a href="<%=request.getContextPath()%>/index.jsp">Torna alla home</a>
+    <a href="<%=request.getContextPath()%>/homeBase">Torna alla home</a>
 
 </body>
 </html></html>
