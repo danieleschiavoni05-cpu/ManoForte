@@ -88,9 +88,9 @@ public class Utility {
         }else if(resultSet.getInt("ruolo") == Ruolo.UTENTE_BASE.ordinal()){
             return new Utente(
                     resultSet.getString("email"),
+                    resultSet.getString("password"),
                     resultSet.getString("nome"),
                     resultSet.getString("cognome"),
-                    resultSet.getString("password"),
                     resultSet.getDate("data_nascita").toLocalDate(),
                     resultSet.getString("codice_fiscale"),
                     resultSet.getLong("id_citta")
@@ -99,9 +99,9 @@ public class Utility {
             ProfessioneDAO professioneDAO = new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
             return new Utente(
                     resultSet.getString("email"),
+                    resultSet.getString("password"),
                     resultSet.getString("nome"),
                     resultSet.getString("cognome"),
-                    resultSet.getString("password"),
                     resultSet.getDate("data_nascita").toLocalDate(),
                     resultSet.getString("codice_fiscale"),
                     resultSet.getLong("id_citta"),
