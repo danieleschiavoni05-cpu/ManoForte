@@ -1,1 +1,124 @@
-@charset "UTF-8";
+/* Palette Colori Gemini Dark:
+   - Sfondo: #0f172a (Slate 900)
+   - Card: #1e293b (Slate 800)
+   - Accento: Gradiente Violet/Blue
+   - Bordi: rgba(255, 255, 255, 0.1)
+*/
+
+body {
+    background: radial-gradient(circle at top right, #1e2a4a, #0f172a);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    color: #f8fafc;
+    margin: 0;
+}
+
+.profile-card {
+    background: rgba(30, 41, 59, 0.7); /* Blu scuro semitrasparente */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.profile-header h2 {
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border-radius: 20px; /* Più squadrato/moderno */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
+
+.text-muted {
+    color: #94a3b8 !important;
+}
+
+.form-label {
+    font-weight: 500;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin-bottom: 0.5rem;
+}
+
+/* Input stile Dark Mode */
+.form-control {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border: 1px solid rgba(78, 115, 223, 0.3) !important;
+    color: #f8fafc !important;
+    border-radius: 12px;
+    padding: 12px 16px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    background: rgba(15, 23, 42, 0.8) !important;
+    border-color: #6366f1 !important;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2) !important;
+}
+
+.form-text {
+    color: #64748b;
+}
+
+/* Pulsante Salva con gradiente animato */
+.btn-save {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border: none;
+    padding: 14px;
+    font-weight: 600;
+    color: white;
+    border-radius: 12px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(124, 58, 237, 0.4);
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+}
+
+.btn-back {
+    color: #94a3b8;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1.5rem;
+    transition: color 0.2s;
+}
+
+.btn-back:hover {
+    color: #f8fafc;
+}
+
+/* Supporto per icone nel testo */
+.fa-solid {
+    background: linear-gradient(135deg, #818cf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}

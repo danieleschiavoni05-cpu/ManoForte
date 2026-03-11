@@ -29,4 +29,6 @@ public interface UtenteDAO {
     Boolean checkCFAvailability(String codice_fiscale) throws SQLException;
 
     Map<Long, String> findAllUsersMap() throws SQLException;
+    
+    List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception;
 }
