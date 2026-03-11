@@ -1,15 +1,11 @@
 :root {
-    /* Il grigio "Code Block" di Gemini come base */
-    --main-bg: #0d0d0d;           /* Sfondo ultra-dark */
-    --sidebar-bg: #1e1e1e;        /* Il grigio dei codici (colore primario) */
-    --card-bg: #1e1e1e;           /* Card coerenti con la sidebar */
-
-    --text-white: #e2e8f0;        /* Bianco sporco per non affaticare la vista */
+    --main-bg: #0d0d0d;
+    --sidebar-bg: #1e1e1e;
+    --card-bg: #1e1e1e;
+    --text-white: #e2e8f0;
     --border-color: #334155;
-
     --primary-color: var(--accent);
     --secondary-color: #64748b;
-
     --bg-dark: #0d1117;
     --bg-glass: rgba(13, 17, 23, 0.85);
     --text-muted: #8b949e;

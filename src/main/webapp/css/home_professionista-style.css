@@ -1,0 +1,184 @@
+/* FATTO DA GEMINI PERCHÈ È FIGO*/
+
+/* 1. Definiamo una variabile CSS per l'angolo */
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 235deg;
+    inherits: false;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    /* 2. Usiamo la variabile nel nostro gradiente */
+    background: linear-gradient(var(--gradient-angle), #ad4689 0%, #ed5c86 100%);
+
+    /* 3. Applichiamo l'animazione */
+    animation: rotate-gradient 1s linear infinite;
+
+    /* Aggiunte consigliate per coprire tutta la pagina */
+    min-height: 100vh;
+    margin: 0;
+    width: 100%;
+}
+
+/* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
+@keyframes rotate-gradient {
+    0% {
+        --gradient-angle: 0deg;
+    }
+    100% {
+        --gradient-angle: 360deg;
+    }
+}
+
+/* FATTO DA ME PERCHÈ SONO TROPPO FORTE*/
+
+.container-home {
+    min-height: 100vh;
+    padding: 0;
+}
+
+.welcome-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    padding: 100px 0 20px 0;
+}
+
+.welcome-text h2 {
+    color: purple;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.welcome-text p {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.button-edit {
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.button-edit:hover {
+    transform: translateY(-2px);
+    color: white;
+}
+
+.news-row {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 0;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.label-novita {
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.action-column{
+    background-color: rgba(255, 255, 255, 0.64);
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.task-column{
+    background-color: rgba(255, 255, 255, 0.64);
+    border-radius: 15px;
+    padding: 40px;
+}
+
+.section-title{
+    font-family: 'Poppins', sans-serif;
+    color: #2c3e50;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.section-title h2{
+    margin-bottom: 0;
+}
+
+.section-title.pending{
+    border-left: 5px solid yellow;
+}
+
+.section-title.running{
+    border-left: 5px solid #3498db;
+}
+
+.section-title.completed{
+    border-left: 5px solid red;
+}
+
+.news-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    padding: 0 15px;
+}
+
+.news-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(92, 115, 206, 0.3);
+    padding: 12px 15px;
+    border-radius: 20px;
+    gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.icon-container, .button-info-container {
+    background: white;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--black03);
+    flex-shrink: 0;
+}
+
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.text .titolo {
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+}
+
+.text .subtitle {
+    font-size: 12px;
+    color: #666;
+}
+
+.button-info-container .button-info-arrow {
+    border: none;
+    background: none;
+}
