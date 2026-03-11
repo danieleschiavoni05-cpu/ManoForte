@@ -18,14 +18,7 @@
     <%List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioniList");%>
     <%Map<Long, String> utenti = (Map<Long, String>) request.getAttribute("listaUtenti");%>
 
-<header>
-    <a href="Homepage" class="logo">ManoForte</a>
-    <nav>
-        <a href="Homepage">Home</a>
-        <a href="ListaProfessionisti">Esplora</a>
-        <a href="login" style="color: var(--primary);">Area Riservata</a>
-    </nav>
-</header>
+<%@include file="/includes/header.jsp"%>
 
 <div class="carousel">
     <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1581578731522-7455051462c1?auto=format&fit=crop&w=1350&q=80')">
@@ -102,19 +95,7 @@
     </div>
 </div>
 
-<footer>
-    <div class="footer-grid">
-        <div class="footer-col">
-            <span class="logo" style="color: white; margin-bottom: 20px; display: block;">ManoForte</span>
-            <p>Fiducia e qualità garantite per i tuoi lavori domestici.</p>
-        </div>
-        <div class="footer-col">
-            <h4>Link Utili</h4>
-            <a href="Homepage" style="color:#bdc3c7; text-decoration:none">Home</a><br>
-            <a href="Servizi" style="color:#bdc3c7; text-decoration:none">Servizi</a>
-        </div>
-    </div>
-</footer>
+<%@include file="/includes/footer.jsp"%>
 
 <script>
     let currentSlide = 0;
