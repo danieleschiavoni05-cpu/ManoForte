@@ -12,7 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcProfessioneDAO implements ProfessioneDAO {
-    private DataSource dataSource;
+
+    private final DataSource dataSource;
 
     public JdbcProfessioneDAO(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -30,21 +31,29 @@ public class JdbcProfessioneDAO implements ProfessioneDAO {
 
     @Override
     public void inserisciProfessione(String nome) throws Exception {
-
+        // da implementare se serve
     }
 
     @Override
     public List<Professione> getAllProfessioni() throws SQLException {
+
         List<Professione> professioni = new ArrayList<>();
-        try(Connection connection = dataSource.getConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM professione");
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Professione p = new Professione(resultSet.getLong("id"), resultSet.getString("nome"));
+
+        String sql = "SELECT id, nome FROM professione ORDER BY nome";
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet rs = statement.executeQuery()) {
+
+            while (rs.next()) {
+                Professione p = new Professione(
+                        rs.getLong("id"),
+                        rs.getString("nome")
+                );
                 professioni.add(p);
             }
         }
+
         return professioni;
     }
-
 }

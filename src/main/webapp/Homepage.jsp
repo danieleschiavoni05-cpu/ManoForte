@@ -79,7 +79,6 @@
                     <div class="rec-card">
                         <div class="stars">
                             <%
-                               // Mostriamo le stelle in base al voto (se il voto è su base 5 o 10)
                                int numStelle = (r.getVoto() > 5) ? r.getVoto()/2 : r.getVoto();
                                for(int i=0; i<5; i++) { %>
                                     <%=(i < numStelle ? "★" : "☆")%>
@@ -97,7 +96,7 @@
               <%}
             } else {%>
                 <div style="grid-column: 1/-1; text-align: center; padding: 50px; background: white; border-radius: 15px;">
-                    <p>Nessuna recensione disponibile. Passa dalla Servlet /Homepage per caricarle!</p>
+                    <p>Nessuna recensione disponibile.</p>
                 </div>
             <% } %>
     </div>
@@ -106,7 +105,7 @@
 <footer>
     <div class="footer-grid">
         <div class="footer-col">
-            <span class="logo" style="color: white; margin-bottom: 20px; display: block;">TaskFinder</span>
+            <span class="logo" style="color: white; margin-bottom: 20px; display: block;">ManoForte</span>
             <p>Fiducia e qualità garantite per i tuoi lavori domestici.</p>
         </div>
         <div class="footer-col">
