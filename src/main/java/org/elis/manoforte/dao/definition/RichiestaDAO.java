@@ -12,7 +12,7 @@ public interface RichiestaDAO {
 
     List<Richiesta> findRecensioneByIdProfessionista(long id)throws Exception;
 
-    List<Richiesta> updateRichiesta(long id)throws Exception;
+    void updateRichiesta(Richiesta richiesta)throws Exception;
 
     Richiesta getRichiestaById(long id) throws Exception;
 }

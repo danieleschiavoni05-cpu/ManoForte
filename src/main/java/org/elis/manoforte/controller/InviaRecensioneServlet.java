@@ -12,10 +12,16 @@ import java.io.IOException;
 import java.time.LocalDate;
 
 import org.elis.manoforte.dao.definition.RecensioneDAO;
+import org.elis.manoforte.dao.definition.RichiestaDAO;
+import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
+import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
 import org.elis.manoforte.model.Recensione;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.utility.DataSourceConfig;
 
 /**
  * Servlet implementation class InviaRecensioneServlet
@@ -45,43 +51,49 @@ public class InviaRecensioneServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		
 		HttpSession session = request.getSession(true);
 		Utente utenteLoggato=(Utente) session.getAttribute("utenteLoggato");
 		
-        Long id = Long.parseLong(request.getParameter("idRichiesta"));
-        String descrizione = request.getParameter("descrizione");
-        int voto = Integer.parseInt(request.getParameter("voto"));
-        LocalDate data = LocalDate.parse(request.getParameter("campoData"));
-        Long id_cliente= Long.parseLong(request.getParameter("id_cliente"));
-        Long id_professionista= Long.parseLong(request.getParameter("id_professionista"));
+		if (utenteLoggato == null) {
+	        response.sendRedirect(request.getContextPath() + "/login.jsp");
+	        return;
+	    }
 
-        // Trova la richiesta
-        Richiesta richiesta = null;
-        for(Richiesta r : Database.richieste){
-            if(r.getId() == id){
-                richiesta = r;
-                break;
-            }
-        }
+	    try {
+	        // 2. Recupero e parsing parametri
+	        Long idRichiesta = Long.parseLong(request.getParameter("idRichiesta"));
+	        String descrizione = request.getParameter("descrizione");
+	        int voto = Integer.parseInt(request.getParameter("voto"));
+	        LocalDate data = LocalDate.parse(request.getParameter("campoData"));
+	        Long id_cliente = Long.parseLong(request.getParameter("id_cliente"));
+	        Long id_professionista = Long.parseLong(request.getParameter("id_professionista"));
 
-        if (richiesta != null && richiesta.getStatoRichiesta().equals(StatoRichiesta.COMPLETA)) { 
-            
-            
-            Recensione rec = new Recensione(id, descrizione, voto, data, id_cliente, id_professionista);
-           
-            Database.recensione.add(rec); 
-            
-            // 2. Aggiunta alla lista dell'utente professionista
-            // ASSICURATI che getId_professionista() restituisca un oggetto Utente e non solo un Long
-            if (richiesta.getIdProfessionista() != 0) {
-                richiesta.getIdProfessionista().getRecensioni().add(rec);
-            }
-            
-            // 3. Persistenza su DB reale
-            RecensioneDao.inserisciRecensione(rec);
-        }
+	        // 3. Inizializzazione DAO
+	        RichiestaDAO richiestaDao = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
+	        RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
 
-        response.sendRedirect(request.getContextPath() + "/HomeServlet");
+	        // 4. Verifica della richiesta (metodo diretto invece del loop)
+	        Richiesta richiesta = richiestaDao.getRichiestaById(idRichiesta);
+
+	        // 5. Logica di business: si può recensire solo se la richiesta è COMPLETA
+	        if (richiesta != null && StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta())) {
+	            
+	            Recensione rec = new Recensione(idRichiesta, descrizione, voto, data, id_cliente, id_professionista);
+	            
+	            // Uso dell'istanza del DAO
+	            recensioneDao.inserisciRecensione(rec);
+	            
+	            // Opzionale: impostare un messaggio di successo
+	            session.setAttribute("messaggio", "Recensione inviata con successo!");
+	        }
+
+	    } catch (Exception e) {
+	        // Gestione errore formattazione dati
+	        e.printStackTrace();
+	    }
+
+	    // 6. Redirect finale
+	    response.sendRedirect(request.getContextPath() + "/HomeServlet");
 	}
-
 }

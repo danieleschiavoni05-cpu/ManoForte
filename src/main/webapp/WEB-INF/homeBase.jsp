@@ -1,250 +1,110 @@
 <%@page import="org.elis.manoforte.model.StatoRichiesta"%>
 <%@page import="org.elis.manoforte.model.Richiesta"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="org.elis.manoforte.model.Professione"%>
 <%@page import="java.util.List"%>
-<%@page import="org.elis.manoforte.model.StatoRichiesta"%>
 <%@page import="org.elis.manoforte.model.Recensione"%>
 <%@page import="org.elis.manoforte.model.Utente"%>
+
 <!DOCTYPE html>
-<html>
+<html lang="it">
 <head>
-<meta charset="UTF-8">
-<title>Home Utente</title>
-<style>
-    :root {
-        --sidebar-bg: #1e293b;
-        --main-bg: #0f172a;
-        --accent: #38bdf8;
-        --text-white: #f8fafc;
-        --text-muted: #94a3b8;
-        --card-bg: #1e293b;
-    }
-
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background-color: var(--main-bg);
-        color: var(--text-white);
-        margin: 0;
-        display: flex;
-        min-height: 100vh;
-    }
-
-    /* Sidebar Sinistra */
-    .sidebar {
-        width: 280px;
-        background-color: var(--sidebar-bg);
-        padding: 30px 20px;
-        display: flex;
-        flex-direction: column;
-        border-right: 1px solid #334155;
-    }
-
-    .sidebar h2 {
-        font-size: 1.2rem;
-        color: var(--accent);
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 40px;
-    }
-
-    .nav-link {
-        color: var(--text-white);
-        text-decoration: none;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 10px;
-        transition: 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .nav-link:hover {
-        background: rgba(56, 189, 248, 0.1);
-        color: var(--accent);
-    }
-
-    .nav-link.active {
-        background: var(--accent);
-        color: var(--main-bg);
-        font-weight: bold;
-    }
-
-    /* Area Contenuto Principale */
-    .main-content {
-        flex: 1;
-        padding: 50px;
-        overflow-y: auto;
-    }
-
-    .header-section {
-        margin-bottom: 40px;
-    }
-
-    /* Grid Professioni Migliorata */
-    .grid-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-
-    .profession-card {
-        background: var(--card-bg);
-        border: 1px solid #334155;
-        border-radius: 16px;
-        padding: 25px;
-        text-align: center;
-        transition: 0.3s;
-        cursor: pointer;
-        text-decoration: none;
-        color: var(--text-white) !important;
-    }
-
-    .profession-card:hover {
-        border-color: var(--accent);
-        transform: translateY(-5px);
-        background: #243147;
-    }
-
-    .profession-card i {
-        font-size: 2rem;
-        color: var(--accent);
-        display: block;
-        margin-bottom: 15px;
-    }
-</style><style>
-    :root {
-        --primary-color: #2563eb;
-        --secondary-color: #64748b;
-        --bg-color: #f8fafc;
-        --card-bg: #ffffff;
-        --text-color: #1e293b;
-    }
-
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-        line-height: 1.6;
-        margin: 0;
-        padding: 40px 20px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    h1 {
-        color: var(--primary-color);
-        margin-bottom: 10px;
-    }
-
-    .container {
-        max-width: 800px;
-        width: 100%;
-    }
-
-    /* Griglia Professioni */
-    .professioni-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 20px;
-        padding: 0;
-        list-style: none;
-        margin: 30px 0;
-    }
-
-    .professioni-grid li a {
-        display: block;
-        background: var(--card-bg);
-        padding: 20px;
-        text-align: center;
-        text-decoration: none;
-        color: var(--primary-color);
-        font-weight: 600;
-        border-radius: 12px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        transition: transform 0.2s, box-shadow 0.2s;
-        border: 1px solid #e2e8f0;
-    }
-
-    .professioni-grid li a:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        background-color: var(--primary-color);
-        color: white;
-    }
-
-    /* Pulsanti di Azione */
-    .actions {
-        display: flex;
-        gap: 15px;
-        margin-top: 30px;
-        justify-content: center;
-    }
-
-    .btn {
-        padding: 12px 24px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: 500;
-        transition: opacity 0.2s;
-    }
-
-    .btn-profilo {
-        background-color: var(--primary-color);
-        color: white;
-    }
-
-    .btn-back {
-        background-color: var(--secondary-color);
-        color: white;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-    }
-
-    .empty-msg {
-        text-align: center;
-        color: var(--secondary-color);
-        font-style: italic;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Utente | ManoForte</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/style-homeBase.css">
+    
+    
 </head>
 <body>
 
-	<h1>Benvenuto Utente</h1>
-	<p>Scegli una professione:</p>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-handshake-angle me-2"></i>MANOFORTE</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="<%=request.getContextPath()%>/index.jsp">Home</a>
+                    </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-	<ul>
-		<%
-List<Professione> professioni = (List<Professione>) request.getAttribute("professioni");
-List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 fw-bold">Benvenuto Utente</h1>
+            <p class="lead">Di quale professionista hai bisogno oggi?</p>
+        </div>
+    </header>
 
-if (professioni == null || professioni.isEmpty()) {
-%>
-		<p>Nessuna professione disponibile.</p>
-		<%
-} else {
-    for (Professione p : professioni) {
-%>
-		<li><a
-			href="<%=request.getContextPath()%>/professionisti?nome=<%=p.getNome()%>">
-				<%= p.getNome() %>
-		</a></li>
-		<%
-    }
-}
-%>
-	</ul>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 mb-4">
+                <div class="card border-none shadow-sm p-3 border-radius-15">
+                    <h5 class="fw-bold mb-3 px-2">Azioni rapide</h5>
+                    <a href="<%=request.getContextPath()%>/RecensioniProfessionisti" class="sidebar-link mb-2">
+                        <i class="fa-solid fa-star me-2 text-warning"></i> Vedi Recensioni
+                    </a>
+                    <a href="<%=request.getContextPath()%>/ModificaProfilo" class="sidebar-link mb-2">
+                        <i class="fa-solid fa-pen-to-square me-2"></i> Modifica Dati
+                    </a>
+                    <hr>
+                    <a href="<%=request.getContextPath()%>/Homepage.jsp" class="sidebar-link text-danger">
+                        <i class="fa-solid fa-arrow-left me-2"></i> Esci alla Home
+                    </a>
+                </div>
+            </div>
 
+            <div class="col-lg-9">
+                <div class="row g-4">
+                    <%
+                    List<Professione> professioni = (List<Professione>) request.getAttribute("professioni");
+                    if (professioni == null || professioni.isEmpty()) {
+                    %>
+                        <div class="col-12 text-center py-5">
+                            <div class="alert alert-info">
+                                <i class="fa-solid fa-circle-info me-2"></i> Nessuna professione disponibile al momento.
+                            </div>
+                        </div>
+                    <%
+                    } else {
+                        for (Professione p : professioni) {
+                    %>
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card h-100 profession-card p-3">
+                                <div class="card-body text-center">
+                                    <div class="icon-box mx-auto">
+                                        <i class="fa-solid fa-briefcase"></i>
+                                    </div>
+                                    <h5 class="card-title fw-bold text-dark"><%= p.getNome() %></h5>
+                                    <p class="card-text text-muted small">Trova i migliori esperti in <%= p.getNome() %> della tua zona.</p>
+                                    <a href="<%=request.getContextPath()%>/professionisti?nome=<%=p.getNome()%>" 
+                                       class="btn btn-outline-primary btn-sm rounded-pill px-4 mt-2">
+                                        Esplora
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <%
+                        }
+                    }
+                    %>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<a href="<%=request.getContextPath()%>/ModificaProfilo"
-		class="btn-profilo"> Modifica Profilo </a>
+    <footer class="text-center py-4 mt-5 text-muted">
+        <small>&copy; 2024 ManoForte - Tutti i diritti riservati</small>
+    </footer>
 
-	<a href="<%=request.getContextPath()%>/index.jsp">Torna alla home</a>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

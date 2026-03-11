@@ -1,0 +1,15 @@
+:root {
+    /* Il grigio "Code Block" di Gemini come base */
+    --main-bg: #0d0d0d;           /* Sfondo ultra-dark */
+    --sidebar-bg: #1e1e1e;        /* Il grigio dei codici (colore primario) */
+    --card-bg: #1e1e1e;           /* Card coerenti con la sidebar */
+    
+    /* Colori di contrasto e accento */
+    --accent: #38bdf8;            /* Un azzurro vivido per link e icone */
+    --text-white: #e2e8f0;        /* Bianco sporco per non affaticare la vista */
+    --border-color: #334155;      /* Grigio per bordi sottili */
+    
+    /* Altri colori di utilità */
+    --primary-color: var(--accent);
+    --secondary-color: #64748b;
+}
