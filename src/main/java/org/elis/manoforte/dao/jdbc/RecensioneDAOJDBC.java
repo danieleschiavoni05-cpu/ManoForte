@@ -1,7 +1,8 @@
 package org.elis.manoforte.dao.jdbc;
 
 import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.model.Recensione;
+import org.elis.manoforte.model.*;
+import org.elis.manoforte.utility.SqlQuery;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -81,7 +82,29 @@ public class RecensioneDAOJDBC implements RecensioneDAO {
         }
         return lista;
     }
-    
+
+    @Override
+    public List<CardRecensione> getRecensioneByEmailProfessionistaLimit(String email, int i) throws SQLException{
+        List<CardRecensione> richieste = new ArrayList<>();
+        try (Connection conn = dataSource.getConnection()){
+            PreparedStatement statement = conn.prepareStatement(SqlQuery.elencoRecensioniByEmailProfessionistaLimit);
+            statement.setString(1, email);
+            statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                CardRecensione card = new CardRecensione();
+                card.setId(rs.getLong("id_recensione"));
+                card.setData(rs.getDate("data_recensione").toLocalDate());
+                card.setCliente(
+                        new Utente(rs.getString("nome"),
+                                rs.getString("cognome"),
+                                rs.getString("email")));
+                richieste.add(card);
+            }
+        }
+        return richieste;
+    }
+
     public void delete(long id) {
         String sql = "DELETE FROM recensione WHERE id = ?";
         try (Connection conn = dataSource.getConnection()){

@@ -1,3 +1,5 @@
+<%@ page import="org.elis.manoforte.model.Utente" %>
+<%@ page import="org.elis.manoforte.model.Ruolo" %>
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
 <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
 <nav class="navbar">
