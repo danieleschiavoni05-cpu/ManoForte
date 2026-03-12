@@ -59,7 +59,8 @@ public class RichiestaServlet extends HttpServlet {
 				LocalTime.now(), 
 				LocalTime.now().plusHours(10), // Esempio: durata 1 ora
 				indirizzo, 
-				StatoRichiesta.IN_ATTESA_DI_CONFERMA, // Stato 1 = "Inviata/In Attesa"
+				StatoRichiesta.IN_ATTESA_DI_CONFERMA,// Stato 1 = "Inviata/In Attesa"
+				null,
 				null, 
 				idProfessionista
 				);

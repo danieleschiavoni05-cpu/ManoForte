@@ -40,6 +40,7 @@ public class JdbcCittaDAO implements CittaDAO {
     public Citta getCittaById(long id) throws Exception {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM citta WHERE id=?");
+            statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()) {
                 return new Citta(resultSet.getLong("id"), resultSet.getString("nome"));

@@ -1,16 +1,13 @@
-<%@page import="org.elis.manoforte.model.Richiesta"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@page import="java.util.List"%>
-<%@page import="org.elis.manoforte.model.Recensione"%>
-<%@page import="org.elis.manoforte.model.Utente"%>
-<%@ page import="java.util.Map" %>
+<%@ page import="org.elis.manoforte.model.*" %>
 
 <!DOCTYPE html>
 <html lang="it">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Dashboard Professionista | ManoForte</title>
+        <title>Professionista | ManoForte</title>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
@@ -19,9 +16,10 @@
 <body>
 
     <% Utente utente = (Utente) request.getSession().getAttribute("utenteLoggato");%>
-    <% List<Richiesta> richieste = (List<Richiesta>) request.getAttribute("richieste");%>
-    <% List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni");%>
-    <% Map<Long, String> listaClienti = (Map<Long, String>) request.getAttribute("listaClienti");%>
+    <% List<CardRichiesta> richiesteInAttesa = (List<CardRichiesta>) request.getAttribute("richiesteInAttesa");%>
+    <% List<CardRichiesta> richiesteInCorso = (List<CardRichiesta>) request.getAttribute("richiesteInCorso");%>
+    <% List<CardRichiesta> richiesteCompletate = (List<CardRichiesta>) request.getAttribute("richiesteComplete");%>
+    <% List<CardRecensione> recensioni = (List<CardRecensione>) request.getAttribute("recensioni");%>
 
     <%@include file="/includes/header.jsp"%>
 
@@ -50,16 +48,12 @@
                 </div>
                 <div class="row">
                     <div class="news-grid">
-                        <%for(int i=0; i<15; i++){%>
-                        <div class="news-card">
-                            <div class="text">
-                                <span class="titolo">Nuova richiesta da Ciao</span>
-                                <span class="subtitle">Per il 12-12-2000</span>
-                            </div>
-                            <div class="button-info-container">
-                                <button type="button" class="button-info-arrow"> > </button>
-                            </div>
-                        </div>
+                        <%if(richiesteInAttesa!=null && !richiesteInAttesa.isEmpty()){
+                            for(CardRichiesta r:richiesteInAttesa){ %>
+                                <%=createCard(request.getContextPath(), r)%>
+                            <%}%>
+                        <%}else{%>
+                            <p>Nessuna nuova richiesta!</p>
                         <%}%>
                     </div>
                 </div>
@@ -75,16 +69,12 @@
                 </div>
                 <div class="row mt-2">
                     <div class="news-grid">
-                        <%for(int i=0; i<4; i++){%>
-                        <div class="news-card">
-                            <div class="text">
-                                <span class="titolo">Nuova richiesta da Ciao</span>
-                                <span class="subtitle">Per il 12-12-2000</span>
-                            </div>
-                            <div class="button-info-container">
-                                <button type="button" class="button-info-arrow"> > </button>
-                            </div>
-                        </div>
+                        <%if(richiesteInCorso!=null && !richiesteInCorso.isEmpty()){
+                            for(CardRichiesta r:richiesteInCorso){ %>
+                                <%=createCard(request.getContextPath(), r)%>
+                            <%}
+                        }else{%>
+                            <p>Nessuna richiesta in corso!</p>
                         <%}%>
                     </div>
                 </div>
@@ -100,17 +90,9 @@
                 </div>
                 <div class="row mt-2">
                     <div class="news-grid">
-                        <%if(richieste!=null){
-                            for(Richiesta r:richieste){%>
-                                <div class="news-card">
-                                    <div class="text">
-                                        <span class="titolo">Richiesta di <%=listaClienti.get(r.getId_cliente())%></span>
-                                        <span class="subtitle">Per il 12-12-2000</span>
-                                    </div>
-                                    <div class="button-info-container">
-                                        <button type="button" class="button-info-arrow"> > </button>
-                                    </div>
-                                </div>
+                        <%if(richiesteCompletate!=null && !richiesteCompletate.isEmpty()){
+                            for(CardRichiesta r: richiesteCompletate){%>
+                                <%=createCard(request.getContextPath(), r)%>
                             <%}
                         }else{%>
                             <p>Nessuna richiesta completata!</p>
@@ -135,6 +117,25 @@
 
     <%@include file="/includes/footer.jsp"%>
 
+    <%!public String createCard(String path, CardRichiesta r) {
+        return "<div class=\"news-card\">" +
+                "<div class=\"text\">" +
+                "<span class=\"titolo\">Richiesta di " + r.getCliente().getNome() + " " + r.getCliente().getCognome().charAt(0) + ".</span>" +
+                "<span class=\"subtitle\">Data: " + r.getData() + "</span>" +
+                "</div>" +
+                "<div class=\"button-info-container\">" +
+                "<form action=\""+ path +"/homeprofessionista\" method=\"post\" style=\"margin: 0; width: 100%; height: 100%;\">"+
+                "" +
+                "<input type=\"hidden\" name=\"id_richiesta\" value=\"" + r.getId() + "\">"+
+                "<button type=\"submit\" class=\"button-info-arrow\">" +
+                "+" +
+                "</button>" +
+                "</form>"+
+                "</div>" +
+                "</div>";
+    }%>
+
+    <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -48,6 +48,36 @@ public class Utente {
 		this.veicoli = null;
 	}
 
+	// costruttore Cliente - Card Richiesta
+	public Utente(String nome, String cognome, String email, Long id_citta){
+		this.email = email;
+		this.password = null;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataNascita = null;
+		this.codice_fiscale = null;
+		this.ruolo = Ruolo.UTENTE_BASE;
+		this.id_citta = id_citta;
+		this.professioni = null;
+		this.tariffa = null;
+		this.veicoli = null;
+	}
+
+	// costruttore Cliente - Card Recensione
+	public Utente(String nome, String cognome, String email){
+		this.email = email;
+		this.password = null;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataNascita = null;
+		this.codice_fiscale = null;
+		this.ruolo = Ruolo.UTENTE_BASE;
+		this.id_citta = null;
+		this.professioni = null;
+		this.tariffa = null;
+		this.veicoli = null;
+	}
+
 	//costruttore Professionista
 	public Utente(String email, String password, String nome,
 				  String cognome, LocalDate dataNascita, String codice_fiscale, Long id_citta,

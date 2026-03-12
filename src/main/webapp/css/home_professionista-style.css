@@ -1,5 +1,11 @@
 /* FATTO DA GEMINI PERCHÈ È FIGO*/
-
+:root {
+    /* Impostiamo dei colori di base (verranno sovrascritti subito dal JS) */
+    --color1: #ad4689;
+    --color2: #ed5c86;
+    --color3: #3c72e7;
+    --color4: #aee73c;
+}
 /* 1. Definiamo una variabile CSS per l'angolo */
 @property --gradient-angle {
     syntax: "<angle>";
@@ -10,10 +16,10 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     /* 2. Usiamo la variabile nel nostro gradiente */
-    background: linear-gradient(var(--gradient-angle), #ad4689 0%, #ed5c86 100%);
+    background: linear-gradient(var(--gradient-angle), var(--color1) 0%, var(--color2) 100%);
 
     /* 3. Applichiamo l'animazione */
-    animation: rotate-gradient 1s linear infinite;
+    animation: rotate-gradient1 3s linear infinite;
 
     /* Aggiunte consigliate per coprire tutta la pagina */
     min-height: 100vh;
@@ -21,15 +27,16 @@ body {
     width: 100%;
 }
 
-/* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
-@keyframes rotate-gradient {
-    0% {
-        --gradient-angle: 0deg;
-    }
-    100% {
-        --gradient-angle: 360deg;
-    }
+.custom-button{
+    font-family: Arial, Helvetica, sans-serif;
+    /* 2. Usiamo la variabile nel nostro gradiente */
+    background: linear-gradient(var(--gradient-angle), var(--color3) 0%, var(--color4) 100%);
+
+    /* 3. Applichiamo l'animazione */
+    animation: rotate-gradient2 1s linear infinite;
+
 }
+
 
 /* FATTO DA ME PERCHÈ SONO TROPPO FORTE*/
 
@@ -129,15 +136,28 @@ body {
 }
 
 .news-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
     width: 100%;
-    padding: 0 15px;
+    padding: 10px 15px;
 }
 
+.news-card{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px 25px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+/*
 .news-card {
     display: flex;
     align-items: center;
@@ -147,9 +167,9 @@ body {
     border-radius: 20px;
     gap: 12px;
     border: 1px solid rgba(255, 255, 255, 0.2);
-}
+}*/
 
-.icon-container, .button-info-container {
+.icon-container {
     background: white;
     width: 30px;
     height: 30px;
@@ -159,6 +179,26 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 6px var(--black03);
     flex-shrink: 0;
+}
+
+.button-info-container {
+    background: linear-gradient(var(--gradient-angle), var(--color1) 0%, var(--color2) 100%);
+    animation: rotate-gradient1 1s linear infinite;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; /* Il cerchio perfetto è più elegante */
+    box-shadow: 0 4px 10px rgba(60, 114, 231, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
+
+.button-info-container form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .text{
@@ -180,5 +220,85 @@ body {
 
 .button-info-container .button-info-arrow {
     border: none;
-    background: none;
+    background: transparent;
+    font-size: 1rem;
+    color: white;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.news-card:hover .button-info-container {
+    background: var(--color1); /* Cambia colore (dal blu al magenta) */
+    transform: scale(1.05);
+}
+
+/* Dettagli richiesta */
+.detail-card{
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 4px 6px var(--black03);
+    margin-top: 20px;
+}
+
+.detail-group{
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.detail-label{
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #666;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.detail-value{
+    font-size: 1.2rem;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.description-box{
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 5px solid #ad4689;
+    margin-top: 10px;
+}
+
+.section-title.request-detail{
+    border-left: 5px solid #ad4689;
+    margin-bottom: 30px;
+}
+
+/* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
+@keyframes rotate-gradient1 {
+    0% {
+        --gradient-angle: 0deg;
+    }
+    100% {
+        --gradient-angle: 360deg;
+    }
+}
+
+/* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
+@keyframes rotate-gradient2 {
+    0% {
+        --gradient-angle: 360deg;
+    }
+    100% {
+        --gradient-angle: 0deg;
+    }
+}
+
+
