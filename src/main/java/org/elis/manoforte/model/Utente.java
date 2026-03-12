@@ -66,6 +66,10 @@ public class Utente {
 	}
 
 
+	public Utente() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Ruolo getRuolo() {
 		return ruolo;
 	}

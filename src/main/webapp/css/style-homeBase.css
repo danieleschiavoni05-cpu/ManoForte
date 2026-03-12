@@ -1,54 +1,127 @@
-        :root {
-            --primary-color: #0d6efd;
-            --bg-light: #f8f9fa;
-        }
-        body {
-            background-color: var(--bg-light);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
-            color: white;
-            padding: 60px 0;
-            margin-bottom: 40px;
-            border-radius: 0 0 50% 50% / 10%;
-        }
-        .profession-card {
-            transition: all 0.3s ease;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .profession-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            background-color: #fff;
-        }
-        .icon-box {
-            width: 60px;
-            height: 60px;
-            background: rgba(13, 110, 253, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-color);
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-        }
-        .sidebar-link {
-            text-decoration: none;
-            color: #495057;
-            padding: 10px 15px;
-            border-radius: 8px;
-            display: block;
-            transition: 0.2s;
-        }
-        .sidebar-link:hover {
-            background: rgba(13, 110, 253, 0.1);
-            color: var(--primary-color);
-        }
+:root {
+    /* Palette Gemini Dark */
+    --gemini-bg: #0f172a;          /* Sfondo scuro profondo */
+    --gemini-card: #1e293b;        /* Sfondo card (leggermente più chiaro) */
+    --gemini-accent: #6366f1;      /* Indaco per icone e hover */
+    --gemini-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    --text-main: #f8fafc;          /* Bianco sporco per testi principali */
+    --text-muted: #94a3b8;        /* Grigio azzurrato per testi secondari */
+}
+
+body {
+    background-color: var(--gemini-bg);
+    color: var(--text-main);
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    margin: 0;
+}
+
+/* Navbar */
+.navbar {
+    background: rgba(15, 23, 42, 0.9) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+    background: var(--gemini-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Header/Hero Section */
+.hero-section {
+    background: radial-gradient(circle at center, #1e2a4a 0%, #0f172a 100%);
+    color: white;
+    padding: 60px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 0; /* Rimosso l'effetto arrotondato per un look più tech */
+}
+
+.hero-section h1 {
+    background: linear-gradient(90deg, #fff, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Card delle Professioni */
+.profession-card {
+    background-color: var(--gemini-card);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+}
+
+.profession-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    border-color: rgba(99, 102, 241, 0.4);
+    background-color: #243147; /* Leggermente più chiaro al passaggio */
+}
+
+.profession-card .card-title {
+    color: var(--text-main) !important;
+}
+
+.profession-card .card-text {
+    color: var(--text-muted) !important;
+}
+
+/* Box Icona */
+.icon-box {
+    width: 60px;
+    height: 60px;
+    background: rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #818cf8; /* Colore icona */
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+/* Sidebar e Link Rapidi */
+.card.border-none {
+    background-color: var(--gemini-card);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-main);
+}
+
+.sidebar-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    padding: 12px 15px;
+    border-radius: 12px;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--gemini-accent);
+}
+
+.sidebar-link i {
+    width: 20px;
+}
+
+/* Bottoni */
+.btn-outline-primary {
+    color: #818cf8;
+    border-color: #818cf8;
+}
+
+.btn-outline-primary:hover {
+    background: var(--gemini-gradient);
+    border-color: transparent;
+    color: white;
+}
+
+hr {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+

@@ -14,7 +14,10 @@
 
 <body style="background: linear-gradient(180deg, #D7EDFF 0%, #A8D8FF 50%, #7BC2FF 100%);">
 
+
     <jsp:include page="/Navbar.jsp"/>
+
+
 
     <% List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioniList"); %>
     <% Map<Long, String> utenti = (Map<Long, String>) request.getAttribute("listaUtenti"); %>
@@ -107,6 +110,7 @@
             <% } %>
     </div>
 </div>
+
 
 <script>
     let currentSlide = 0;

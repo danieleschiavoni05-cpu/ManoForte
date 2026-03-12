@@ -3,13 +3,17 @@
     --main-bg: #0d0d0d;           /* Sfondo ultra-dark */
     --sidebar-bg: #1e1e1e;        /* Il grigio dei codici (colore primario) */
     --card-bg: #1e1e1e;           /* Card coerenti con la sidebar */
-    
-    /* Colori di contrasto e accento */
-    --accent: #38bdf8;            /* Un azzurro vivido per link e icone */
+
     --text-white: #e2e8f0;        /* Bianco sporco per non affaticare la vista */
-    --border-color: #334155;      /* Grigio per bordi sottili */
-    
-    /* Altri colori di utilità */
+    --border-color: #334155;
+
     --primary-color: var(--accent);
     --secondary-color: #64748b;
+
+    --bg-dark: #0d1117;
+    --bg-glass: rgba(13, 17, 23, 0.85);
+    --text-muted: #8b949e;
+    --accent: #2f81f7;
+    --light-accent: #6ba0f5;
+    --border: rgba(255, 255, 255, 0.1);
 }
