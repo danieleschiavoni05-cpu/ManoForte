@@ -24,7 +24,7 @@ import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.utility.DTOResponse;
+import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
@@ -132,7 +132,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             emptyError.printStackTrace();
             emptyError.buildEmptyErrorMessage();
 
-            DTOResponse risposta = new DTOResponse(false,
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Alcuni dei campi non sono stati compilati", emptyError.getMessages());
             outJson.print(mapper.writeValueAsString(risposta));
             outJson.flush();
@@ -146,7 +146,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
                     citta, professioni, veicoli, tariffa, password, confermaPassword);
             utenteDAO.inserisciProfessionista(professionista);
 
-            DTOResponse risposta = new DTOResponse(true,
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(true,
                     "Registrazione completata con successo.", null);
             outJson.print(mapper.writeValueAsString(risposta));
 
@@ -154,19 +154,19 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             e.printStackTrace();
             e.buildErrorMessage();
 
-            DTOResponse risposta = new DTOResponse(false,
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore inserimento dati dell'utente.", e.getMessages());
             outJson.print(mapper.writeValueAsString(risposta));
 
         }catch(SQLException e) {
             e.printStackTrace();
 
-            DTOResponse risposta = new DTOResponse(false,
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore inserimento nel database, riprovare più tardi.", null);
             outJson.print(mapper.writeValueAsString(risposta));
         }catch (Exception e){
             e.printStackTrace();
-            DTOResponse risposta = new DTOResponse(false,
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore imprevisto, riprovare.", null);
             outJson.print(mapper.writeValueAsString(risposta));
         }

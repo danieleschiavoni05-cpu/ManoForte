@@ -16,6 +16,8 @@ public interface RichiestaDAO {
 
     void updateRichiesta(Richiesta richiesta)throws Exception;
 
+    void updateStatoRichiesta(long id, StatoRichiesta stato) throws Exception;
+
     Richiesta getRichiestaById(long id) throws Exception;
 
     List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws Exception;

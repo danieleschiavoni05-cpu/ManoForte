@@ -281,6 +281,42 @@ body {
     margin-bottom: 30px;
 }
 
+.task-column .nav-pills .nav-link{
+    color: var(--text-white);
+    border-radius: 8px;
+    margin-right: 10px;
+    font-weight: 600;
+    padding:10px 20px;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.task-column .nav-pills .nav-link:hover{
+    color: var(--text-white);
+    background-color: var(--border-color);
+}
+
+.task-column .nav-pills .nav-link:active{
+    background-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(47, 129, 247, 0.3);
+    border-color: var(--accent);
+}
+
+.task-column-box{
+    background-color: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.task-content-box .section-title h2{
+    color: var(--black06);
+    font-size: 1.3rem;
+    margin-bottom: 0;
+}
+
 /* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
 @keyframes rotate-gradient1 {
     0% {

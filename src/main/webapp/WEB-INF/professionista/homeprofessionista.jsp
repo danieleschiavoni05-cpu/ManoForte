@@ -30,10 +30,12 @@
                 <p>Cosa vuoi fare oggi?</p>
             </div>
             <div class="col-md-2">
-                <button type="button" class="button-edit">Modifica profilo</button>
+                <a style="text-decoration: none;" href="<%=request.getContextPath()%>/modificaProfiloProfessionista">
+                    <button type="button" class="button-edit">Modifica profilo</button>
+                </a>
             </div>
-
         </div>
+
         <div class="row mt-2 mb-4">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -41,74 +43,82 @@
             </div>
             <div class="col-md-2"></div>
         </div>
+
         <div class="row">
             <div class="col-md-9 gap-2 task-column">
-                <div class="row section-title pending">
-                    <h2>Richieste in attesa</h2>
-                </div>
-                <div class="row">
-                    <div class="news-grid">
-                        <%if(richiesteInAttesa!=null && !richiesteInAttesa.isEmpty()){
-                            for(CardRichiesta r:richiesteInAttesa){ %>
-                                <%=createCard(request.getContextPath(), r)%>
-                            <%}%>
-                        <%}else{%>
-                            <p>Nessuna nuova richiesta!</p>
-                        <%}%>
+                <nav class="mb-4">
+                    <div class="nav nav-pills" id="nav-request" role="tablist">
+                        <a class="nav-item nav-link active" id="nav-pending-tab" data-bs-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="true">
+                            Richieste in attesa
+                        </a>
+                        <a class="nav-item nav-link" id="nav-running-tab" data-bs-toggle="tab" href="#nav-running" role="tab" aria-controls="nav-running" aria-selected="false">
+                            Richieste in corso
+                        </a>
+                        <a class="nav-item nav-link" id="nav-completed-tab" data-bs-toggle="tab" href="#nav-completed" role="tab" aria-controls="nav-completed" aria-selected="false">
+                            Richieste completate
+                        </a>
                     </div>
-                </div>
-                <div class="row mt-1 mb-1">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <hr style="border-color: black; border-width: 1px; align-self: center">
+                </nav>
+
+                <div class="tab-content task-content-box" id="nav-tabContent">
+                    <div class="tab-pane fade show active" id="nav-pending" role="tabpanel" aria-labelledby="nav-pending-tab">
+                        <div class="row section-title pending mb-3">
+                            <h2>Richieste in attesa</h2>
+                        </div>
+                        <div class="row">
+                            <div class="news-grid" id="pendingTasks">
+                                <%if(richiesteInAttesa!=null && !richiesteInAttesa.isEmpty()){
+                                    for(CardRichiesta r:richiesteInAttesa){ %>
+                                        <%=createCard(r)%>
+                                    <%}
+                                }else{%>
+                                <p class="text-muted" id="noPending">Nessuna nuova richiesta!</p>
+                                <%}%>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row mt-2 section-title running">
-                    <h2>Richieste in corso</h2>
-                </div>
-                <div class="row mt-2">
-                    <div class="news-grid">
-                        <%if(richiesteInCorso!=null && !richiesteInCorso.isEmpty()){
-                            for(CardRichiesta r:richiesteInCorso){ %>
-                                <%=createCard(request.getContextPath(), r)%>
-                            <%}
-                        }else{%>
-                            <p>Nessuna richiesta in corso!</p>
-                        <%}%>
+                    <div class="tab-pane fade" id="nav-running" role="tabpanel" aria-labelledby="nav-running-tab">
+                        <div class="row section-title running mb-3">
+                            <h2>Richieste in corso</h2>
+                        </div>
+                        <div class="row">
+                            <div class="news-grid" id="runningTasks">
+                                <%if(richiesteInCorso!=null && !richiesteInCorso.isEmpty()){
+                                    for(CardRichiesta r:richiesteInCorso){ %>
+                                        <%=createCard(r)%>
+                                    <%}
+                                }else{%>
+                                    <p class="text-muted" id="noRunning">Nessuna richiesta in corso!</p>
+                                <%}%>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row mt-1 mb-1">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <hr style="border-color: black; border-width: 1px; align-self: center">
-                    </div>
-                    <div class="col-md-2"></div>
-                </div>
-                <div class="row mt-3 section-title completed">
-                    <h2>Richieste completate</h2>
-                </div>
-                <div class="row mt-2">
-                    <div class="news-grid">
-                        <%if(richiesteCompletate!=null && !richiesteCompletate.isEmpty()){
-                            for(CardRichiesta r: richiesteCompletate){%>
-                                <%=createCard(request.getContextPath(), r)%>
-                            <%}
-                        }else{%>
-                            <p>Nessuna richiesta completata!</p>
-                        <%}%>
+                    <div class="tab-pane fade" id="nav-completed" role="tabpanel" aria-labelledby="nav-completed-tab">
+                        <div class="row section-title completed mb-3">
+                            <h2>Richieste completate</h2>
+                        </div>
+                        <div class="row">
+                            <div class="news-grid" id="completedTasks">
+                                <%if(richiesteCompletate!=null && !richiesteCompletate.isEmpty()){
+                                    for(CardRichiesta r: richiesteCompletate){%>
+                                <%=createCard(r)%>
+                                <%} }else{%>
+                                <p class="text-muted" id="noCompleted">Nessuna richiesta completata!</p>
+                                <%}%>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-3 ">
                 <div class="card border-none shadow-sm p-3 border-radius-15 action-column">
                     <h5 class="fw-bold mb-3 px-2">Azioni rapide</h5>
-                    <a href="<%=request.getContextPath()%>/ModificaProfilo" class="sidebar-link mb-2">
-                        <i class="fa-solid fa-pen-to-square me-2"></i> Modifica Dati
+                    <a href="<%=request.getContextPath()%>/" class="sidebar-link mb-2">
+                        ---------------
                     </a>
                     <hr>
                     <a href="<%=request.getContextPath()%>/logout" class="sidebar-link text-danger">
-                        <i class="fa-solid fa-arrow-left me-2"></i> Logout
+                        Logout
                     </a>
                 </div>
             </div>
@@ -117,25 +127,94 @@
 
     <%@include file="/includes/footer.jsp"%>
 
-    <%!public String createCard(String path, CardRichiesta r) {
-        return "<div class=\"news-card\">" +
+    <div class="modal fade" id="dettaglioModal" tabindex="-1" aria-labelledby="dettaglioModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: rgba(255, 255, 255, 0.90); backdrop-filter: blur(15px); border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);">
+
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0,0,0,0.1);">
+                    <h5 class="modal-title section-title request-detail" id="dettaglioModalLabel" style="margin-bottom: 0; font-size: 1.5rem; border-left-color: var(--color1);">
+                        Dettagli Richiesta
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="detail-group">
+                                <span class="detail-label">Committente</span>
+                                <div class="detail-value" id="committente">--</div>
+                            </div>
+                            <div class="detail-group">
+                                <span class="detail-label">Città</span>
+                                <div class="detail-value" id="citta">--</div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="detail-group">
+                                        <span class="detail-label">Data Intervento</span>
+                                        <div class="detail-value" id="dataIntervento">--</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="detail-group">
+                                        <span class="detail-label">Ora inizio</span>
+                                        <div class="detail-value" id="oraInizio">--</div>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="detail-group">
+                                        <span class="detail-label">Ora fine</span>
+                                        <div class="detail-value" id="oraFine">--</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="detail-group" style="border-bottom: none; margin-bottom: 0;">
+                                <span class="detail-label">Descrizione del Lavoro</span>
+                                <div class="description-box" id="descrizione">
+                                    Caricamento dettagli in corso...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between" style="border-top: 1px solid rgba(0,0,0,0.1);">
+                    <p class="d-none" id="response"></p>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="border-radius: 10px;">Chiudi</button>
+                    <button type="button" class="btn custom-button px-4 d-none" id="btnCompletato" data-id="" style="border-radius: 10px; color: white; font-weight: bold; border: none;">Segna come completo</button>
+                    <button type="button" class="btn custom-button px-4 d-none" id="btnAccetta" data-id="" style="border-radius: 10px; color: white; font-weight: bold; border: none;">Accetta Lavoro</button>
+                </div>
+            </div>
+        </div>
+    </div
+
+    <%!public String createCard(CardRichiesta r) {
+        return "<div class=\"news-card\" id=\"richiesta-"+r.getId()+"\">" +
                 "<div class=\"text\">" +
                 "<span class=\"titolo\">Richiesta di " + r.getCliente().getNome() + " " + r.getCliente().getCognome().charAt(0) + ".</span>" +
                 "<span class=\"subtitle\">Data: " + r.getData() + "</span>" +
                 "</div>" +
                 "<div class=\"button-info-container\">" +
-                "<form action=\""+ path +"/homeprofessionista\" method=\"post\" style=\"margin: 0; width: 100%; height: 100%;\">"+
-                "" +
-                "<input type=\"hidden\" name=\"id_richiesta\" value=\"" + r.getId() + "\">"+
-                "<button type=\"submit\" class=\"button-info-arrow\">" +
-                "+" +
+                "<button type=\"button\" class=\"button-info-arrow btn-apri-modale\" "+
+                "data-id=\""+r.getId()+"\">" +
                 "</button>" +
-                "</form>"+
                 "</div>" +
                 "</div>";
     }%>
 
-    <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+    <script src="<%=request.getContextPath()%>/js/dettagliRichieste.js"></script>
 </body>
 </html>
