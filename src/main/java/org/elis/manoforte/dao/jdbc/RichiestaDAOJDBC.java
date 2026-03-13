@@ -17,7 +17,6 @@ import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.SqlQuery;
-import org.elis.manoforte.utility.Utility;
 
 public class RichiestaDAOJDBC implements RichiestaDAO{
 	DataSource dataSource;
@@ -69,7 +68,7 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 			ps.setTime(2, Time.valueOf(richiesta.getOra_inizio()));
 			ps.setTime(3, Time.valueOf(richiesta.getOra_fine()));
 			ps.setString(4, richiesta.getIndirizzo());
-			ps.setString(5, StatoRichiesta.IN_ATTESA_DI_CONFERMA.name());
+			ps.setLong(5, StatoRichiesta.IN_ATTESA_DI_CONFERMA.ordinal());
 			ps.setLong(6, richiesta.getId_cliente());
 			ps.setLong(7, richiesta.getId_professionista());
 
@@ -96,6 +95,19 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 
 			ps.executeUpdate();
 		}
+	}
+
+	@Override
+	public void updateStatoRichiesta(long id, StatoRichiesta stato) throws Exception{
+		String sql = "UPDATE richiesta SET stato=? WHERE id=?";
+
+		try(Connection conn = dataSource.getConnection()){
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setLong(1, stato.ordinal());
+			ps.setLong(2, id);
+			ps.executeUpdate();
+		}
+
 	}
 
 	@Override

@@ -10,12 +10,11 @@ import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
 import org.elis.manoforte.dao.definition.RichiestaDAO;
-import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
 import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.DataSourceConfig;
+import org.elis.manoforte.utility.Utility;
 
 import javax.sql.DataSource;
 
@@ -37,6 +36,9 @@ public class HomeProfessionistaServlet extends HttpServlet {
 
         if(loggedUser == null){
             response.sendRedirect(request.getContextPath()+"/login");
+            return;
+        }else if(loggedUser.getRuolo()!=Ruolo.PROFESSIONISTA){
+            response.sendRedirect(request.getContextPath()+"/"+Utility.getUserHomePage(loggedUser));
             return;
         }
 
@@ -67,11 +69,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        if(request.getParameter("id_richiesta") != null){
-            request.getSession().setAttribute("id_richiesta", request.getParameter("id_richiesta"));
-            response.sendRedirect(request.getContextPath()+"/dettagliRichiesta");
-            return;
-        }
+
 
         doGet(request, response);
     }

@@ -2,12 +2,12 @@ package org.elis.manoforte.utility;
 
 import java.util.List;
 
-public class DTOResponse {
+public class DTOResponseRegistrazione {
     private boolean successo;
     private String messaggio;
     private List<String> listaErrori;
 
-    public DTOResponse(boolean successo, String messaggio, List<String> listaErrori) {
+    public DTOResponseRegistrazione(boolean successo, String messaggio, List<String> listaErrori) {
         this.successo = successo;
         this.messaggio = messaggio;
         this.listaErrori = listaErrori;
