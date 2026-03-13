@@ -120,19 +120,7 @@
     </div>
 </div>
 
-<footer style="
-    background: #7F7F80;
-    padding: 40px 20px;
-    color: white;
-    margin-top: 60px;
-">
-    <div class="footer-grid" style="display:flex; justify-content:center;">
-        <div class="footer-col" style="text-align:center;">
-            <span class="logo" style="color: white; font-size:22px; font-weight:bold;">ManoForte</span>
-            <p style="opacity:0.9;">Fiducia e qualità garantite.</p>
-        </div>
-    </div>
-</footer>
+<jsp:include page="/Footer.jsp"/>
 
 </body>
 </html>
