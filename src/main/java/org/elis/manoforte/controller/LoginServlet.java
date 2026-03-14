@@ -8,8 +8,11 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
 import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.definition.VeicoloDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
+import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
@@ -65,6 +68,11 @@ public class LoginServlet extends HttpServlet {
 
         try {
             Utente utente = utenteDAO.findByEmailPassword(email, password);
+
+            if(utente.getRuolo().equals(Ruolo.PROFESSIONISTA)){
+                VeicoloDAO  veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
+                utente.setVeicoli(veicoloDAO.getVeicoliByEmailProfessionista(utente.getEmail()));
+            }
 
             HttpSession session = request.getSession();
             session.setAttribute("utenteLoggato", utente);

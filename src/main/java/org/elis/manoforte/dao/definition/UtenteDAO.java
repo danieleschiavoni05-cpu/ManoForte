@@ -24,9 +24,11 @@ public interface UtenteDAO {
 
     Utente delete(Utente utente) throws Exception;
 
-    Boolean checkEmailAvailability(String email) throws SQLException;
+    Boolean checkEmailAvailability(String email) throws Exception;
 
-    Boolean checkCFAvailability(String codice_fiscale) throws SQLException;
+    Boolean checkCFAvailability(String codice_fiscale) throws Exception;
 
-    Map<Long, String> findAllUsersMap() throws SQLException;
+    Map<Long, String> findAllUsersMap() throws Exception;
+
+    void modificaProfessionista(Utente professionista) throws Exception;
 }

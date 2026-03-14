@@ -109,21 +109,29 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             tariffa = new BigDecimal(request.getParameter("tariffa"));
 
         DatiErratiException emptyError = new DatiErratiException();
+
         if(email==null || email.trim().isEmpty())
             emptyError.setErrEmail();
+
         if(nome==null || nome.trim().isEmpty())
             emptyError.setErrNome();
+
         if(cognome==null || cognome.trim().isEmpty())
-            emptyError.setErrCognome();;
+            emptyError.setErrCognome();
+
         if(data_nascita==null)
             emptyError.setErrData();
+
         if(codice_fiscale==null || codice_fiscale.trim().isEmpty())
             emptyError.setErrCF();
+
         if(password==null||confermaPassword==null ||
                 confermaPassword.trim().isEmpty() || password.trim().isEmpty())
             emptyError.setErrPassword();
+
         if(professioni.isEmpty())
             emptyError.setErrProfessioni();
+
         if(tariffa==null||tariffa.compareTo(BigDecimal.ZERO)<=0)
             emptyError.setErrTariffa();
 
@@ -134,6 +142,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Alcuni dei campi non sono stati compilati", emptyError.getMessages());
+
             outJson.print(mapper.writeValueAsString(risposta));
             outJson.flush();
             return;

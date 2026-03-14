@@ -2,8 +2,10 @@ package org.elis.manoforte.utility;
 
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.definition.VeicoloDAO;
 import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
@@ -31,7 +33,7 @@ public class Utility {
     }
 
     public static DatiErratiException checkInput(String email, LocalDate data_nascita, String codice_fiscale,
-                                                 String password, String confermaPassword) throws SQLException {
+                                                 String password, String confermaPassword) throws Exception {
 
         DatiErratiException e = new DatiErratiException();
         UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
@@ -57,7 +59,7 @@ public class Utility {
 
     public static Utente checkInputProfessionista(String nome, String cognome, String email, LocalDate data_nascita, String codice_fiscale,
                                                   Long citta, List<Long> professioni, List<Long> veicoli,
-                                                  BigDecimal tariffa, String password, String confermaPassword) throws SQLException, DatiErratiException {
+                                                  BigDecimal tariffa, String password, String confermaPassword) throws Exception {
 
         DatiErratiException e = checkInput(email, data_nascita, codice_fiscale, password, confermaPassword);
 
@@ -106,9 +108,71 @@ public class Utility {
                     resultSet.getString("codice_fiscale"),
                     resultSet.getLong("id_citta"),
                     professioneDAO.findProfessioniByIdProfessionista(resultSet.getLong("id")),
-                    null,
+                    resultSet.getBigDecimal("tariffa"),
                     null
             );
         }
+    }
+
+    public static Utente checkInputEditProfessionista(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
+                                                        String codiceFiscale, Long citta, List<Long> veicoli, BigDecimal tariffa,
+                                                        String nuovaPassword, String password, String confermaPassword) throws Exception{
+
+        DatiErratiException e;
+        if(codiceFiscale.equals(utenteLoggato.getCodiceFiscale()))
+            e = checkEditInput(dataNascita, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+        else e = checkEditInput(dataNascita, codiceFiscale, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+
+        if(!Utility.checkTariffa(tariffa)) e.setErrTariffa();
+
+        if(e.checkErrors()) throw e;
+
+        return new Utente(utenteLoggato.getEmail(), password, nome, cognome, dataNascita, codiceFiscale, citta, utenteLoggato.getProfessioni(), tariffa, veicoli);
+    }
+
+    public static DatiErratiException checkEditInput(LocalDate data_nascita, String codice_fiscale,
+                                                       String nuovaPassword, String vecchiaPassword,
+                                                        String confermaPassword, String savedPassword) throws Exception {
+
+        DatiErratiException e = new DatiErratiException();
+        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+
+        if(nuovaPassword!=null&&!nuovaPassword.isEmpty()&&!nuovaPassword.equals(confermaPassword)){
+            e.setErrConfermaPassword();
+        }
+
+        if(!vecchiaPassword.equals(savedPassword))
+            e.setErrPassword();
+
+        if(!Pattern.compile(patternCodiceFiscale).matcher(codice_fiscale).matches()&&
+                !Pattern.compile(patternPIVA).matcher(codice_fiscale).matches()){
+            e.setErrCF();
+        }else if(!utenteDAO.checkCFAvailability(codice_fiscale)){
+            e.setErrCFGiaPresente();
+        }
+        if(!Utility.checkData(data_nascita))
+            e.setErrData();
+
+        return e;
+    }
+
+    public static DatiErratiException checkEditInput(LocalDate data_nascita, String nuovaPassword,
+                                                     String vecchiaPassword, String confermaPassword,
+                                                     String savedPassword) throws Exception {
+
+        DatiErratiException e = new DatiErratiException();
+        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+
+        if(nuovaPassword!=null&&!nuovaPassword.isEmpty()&&!nuovaPassword.equals(confermaPassword)){
+            e.setErrConfermaPassword();
+        }
+
+        if(!vecchiaPassword.equals(savedPassword))
+            e.setErrPassword();
+
+        if(!Utility.checkData(data_nascita))
+            e.setErrData();
+
+        return e;
     }
 }

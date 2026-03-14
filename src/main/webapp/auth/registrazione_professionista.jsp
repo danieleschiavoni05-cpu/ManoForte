@@ -35,22 +35,27 @@
                         <label class="section-title" for="nome">Nome</label>
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="Inserire un nome">
                     </div> <%-- Nome --%>
+
                     <div class="col-md-6">
                         <label class="section-title" for="cognome">Cognome</label>
                         <input type="text" class="form-control" id="cognome" name="cognome"  placeholder="Inserire un cognome">
                     </div> <%-- Cognome --%>
+
                     <div class="col-md-8">
                         <label class="section-title" for="email">Email</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="Inserire un indirizzo email">
                     </div> <%-- Email --%>
+
                     <div class="col-md-4">
                         <label class="section-title" for="data">Data</label>
                         <input type="date" class="form-control" id="data" name="data_nascita">
                     </div> <%-- Data di nascita --%>
+
                     <div class="col-md-10">
                         <label class="section-title" for="codice_fiscale">Codice fiscale/Partita IVA</label>
                         <input type="text" class="form-control" id="codice_fiscale" name="codice_fiscale" maxlength="16" placeholder="Inserire un codice fiscale/partita IVA">
                     </div> <%-- Email --%>
+
                     <div class="col-12">
                         <label class="section-title" for="citta">Città di residenza</label>
                         <select class="form-select" name="citta" id="citta">
@@ -62,6 +67,7 @@
                             <%}%>
                         </select>
                     </div> <%-- Citta --%>
+
                     <div class="col-12">
                         <label class="section-title">Professioni praticate</label>
                         <div class="checkbox-box shadow-sm">
@@ -77,6 +83,7 @@
                             <%}%>
                         </div>
                     </div> <%-- Professioni --%>
+
                     <div class="col-12">
                         <label class="section-title">Veicoli utilizzati (lasciare libero se non si utilizzano veicoli)</label>
                         <div class="checkbox-box shadow-sm">
@@ -92,6 +99,7 @@
                             <%}%>
                         </div>
                     </div> <%-- Veicoli --%>
+
                     <div class="col-md-12">
                         <label class="section-title" for="tariffa">Inserire una tariffa oraria</label>
                         <div class="input-group mb-0 w-50">
@@ -99,24 +107,29 @@
                             <span class="input-group-text">€/h</span>
                         </div>
                     </div> <%-- Tariffa --%>
+
                     <div class="col-md-6">
                         <label class="section-title" for="password">Password</label>
                         <input type="password" class="form-control" id="password" name="password" placeholder="Inserire una password">
                     </div> <%-- Password --%>
+
                     <div class="col-md-6">
                         <label class="section-title" for="conferma_password">Conferma password</label>
                         <input type="password" class="form-control" id="conferma_password" name="conferma_password" placeholder="Reinserire la password">
                     </div> <%-- Conferma password --%>
+
                     <div class="col-12 mt-4 d-none" id="containerErrori">
                         <div class="alert alert-danger text-center shadow-sm" role="alert">
                             <ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
                         </div>
                     </div> <%-- Lista errori --%>
+
                     <div class="col-12 mt-4 d-none" id="containerSuccesso">
-                        <div class="alert alert-danger text-center shadow-sm" role="alert">
+                        <div class="alert alert-successo text-center shadow-sm" role="alert">
                             <ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
                         </div>
-                    </div> <%-- Lista errori --%>
+                    </div> <%-- Lista successo --%>
+
                 </div>
                 <button type="submit" class="login-register-button">Registrati</button>
             </form>

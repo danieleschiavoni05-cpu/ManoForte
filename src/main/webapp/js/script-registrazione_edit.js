@@ -64,7 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let path = executeFetch("registrazioneprofessionista", formData);
             console.log(path);
-
         });
     }
 
