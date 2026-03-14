@@ -48,6 +48,23 @@ public class JdbcUtenteDAO implements UtenteDAO {
     }
 
     @Override
+    public void modificaProfessionista(Utente professionista) throws Exception{
+        try(Connection connection = dataSource.getConnection()){
+            PreparedStatement statement = connection.prepareStatement(
+                    "UPDATE utente SET nome=?, cognome=?, password=?, data_nascita=?, codice_fiscale=?, id_citta=? WHERE email=?");
+
+            statement.setString(1, professionista.getNome());
+            statement.setString(2, professionista.getCognome());
+            statement.setString(3, professionista.getPassword());
+            statement.setDate(4, Date.valueOf(professionista.getDataNascita()));
+            statement.setString(5, professionista.getCodiceFiscale());
+            statement.setLong(6, professionista.getIdCitta());
+            statement.setString(7, professionista.getEmail());
+            statement.executeUpdate();
+        }
+    }
+
+    @Override
     public void inserisciUtente(Utente utente) throws Exception {
 
     }

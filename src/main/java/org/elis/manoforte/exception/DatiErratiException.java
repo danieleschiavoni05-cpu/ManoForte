@@ -7,6 +7,7 @@ public class DatiErratiException extends RuntimeException {
     private int count;
     private boolean errEmail;
     private boolean errPassword;
+    private boolean errConfermaPassword;
     private Boolean errData;
     private boolean errMailGiaPresente;
     private boolean errCFGiaPresente;
@@ -43,6 +44,11 @@ public class DatiErratiException extends RuntimeException {
 
     public void setErrEmail() {
         this.errEmail = true;
+        count++;
+    }
+
+    public void setErrConfermaPassword(){
+        this.errConfermaPassword = true;
         count++;
     }
 
@@ -90,6 +96,10 @@ public class DatiErratiException extends RuntimeException {
         return errEmail || errPassword || errData || errMailGiaPresente || errCFGiaPresente || errProfessioni || errCF || errTariffa;
     }
 
+    public boolean checkEditErrors(){
+        return errPassword || errData || errCFGiaPresente || errCF || errTariffa || errConfermaPassword;
+    }
+
     public void buildErrorMessage(){
         messages = new ArrayList<>();
         if(count>=3){
@@ -115,13 +125,28 @@ public class DatiErratiException extends RuntimeException {
         if(errEmail) messages.add("Inserire una mail.");
         if(errNome) messages.add("Inserire un nome.");
         if(errCognome) messages.add("Inserire un cognome.");
+        if(errConfermaPassword) messages.add("Confermare la password inserita.");
         if(errPassword) messages.add("Inserire una password.");
         if(errCitta) messages.add("Selezionare almeno una città.");
         if(errData!=null&&errData) messages.add("Inserire una data.");
         if(errCF) messages.add("Inserire un codice fiscale.");
         if(errTariffa) messages.add("La tariffa deve essere maggiore di 0.");
         if(errProfessioni) messages.add("Selezionare almeno una professione.");
-        System.out.println(messages);
+
+    }
+
+    public void buildErrorEditMessage(){
+        messages = new ArrayList<>();
+        if(count>=3){
+            messages.add("Controllare i campi inseriti.");
+            return;
+        }
+        if(errConfermaPassword) messages.add("Le password non coincidono.");
+        if(errPassword) messages.add("La password corrente è errata.");
+        if(errData!=null&&errData) messages.add("La data inserita non è valida.");
+        if(errCFGiaPresente) messages.add("Codice fiscale già registrato.");
+        if(errCF) messages.add("Codice fiscale non valido.");
+        if(errTariffa) messages.add("La tariffa deve essere maggiore di 0.");
     }
 
     public List<String> getMessages() {

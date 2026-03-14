@@ -11,4 +11,8 @@ public interface VeicoloDAO {
     void inserisciVeicolo(String nome) throws Exception;
 
     List<Veicolo> getAllVeicolo() throws Exception;
+
+    void updateVeicoli(String email, List<Long> veicoli) throws Exception;
+
+    List<Long> getVeicoliByEmailProfessionista(String email) throws Exception;
 }
