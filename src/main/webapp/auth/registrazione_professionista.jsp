@@ -29,7 +29,7 @@
             <h2>
                 REGISTRAZIONE PROFESSIONISTA
             </h2>
-            <form method="post" id="formRegistrazione">
+            <form method="post" id="formRegistrazioneProfessionista">
                 <div class="row g-3 <%=(errore!=null||messaggi!=null)?' ':"mb-4"%>" id="mainRow">
                     <div class="col-md-6">
                         <label class="section-title" for="nome">Nome</label>
@@ -112,6 +112,11 @@
                             <ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
                         </div>
                     </div> <%-- Lista errori --%>
+                    <div class="col-12 mt-4 d-none" id="containerSuccesso">
+                        <div class="alert alert-danger text-center shadow-sm" role="alert">
+                            <ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
+                        </div>
+                    </div> <%-- Lista errori --%>
                 </div>
                 <button type="submit" class="login-register-button">Registrati</button>
             </form>
@@ -124,7 +129,7 @@
     </div>
 </div>
 
-<script src="<%=request.getContextPath()%>/js/script-registrazione.js"></script>
+<script src="<%=request.getContextPath()%>/js/script-registrazione_edit.js"></script>
 </body>
 </html>
 

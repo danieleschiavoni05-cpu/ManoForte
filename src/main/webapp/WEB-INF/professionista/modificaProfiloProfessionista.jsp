@@ -30,7 +30,7 @@
             <h2>
                 MODIFICA PROFILO
             </h2>
-            <form method="post" id="formRegistrazione">
+            <form method="post" id="formModificaProfiloProfessionista">
                 <div class="row g-3 <%=(errore!=null||messaggi!=null)?' ':"mb-4"%>" id="mainRow">
                     <div class="col-md-6">
                         <label class="section-title" for="nome">Nome</label>
@@ -120,7 +120,7 @@
 </div>
 
 <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
-<script src="<%=request.getContextPath()%>/js/script-registrazione.js"></script>
+<script src="<%=request.getContextPath()%>/js/script-edit.js"></script>
 </body>
 </html>
 
