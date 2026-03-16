@@ -5,37 +5,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.elis.manoforte.dao.definition.AdminDAO;
+
 import java.io.IOException;
+import java.util.List;
 
-/**
- * Servlet implementation class HomeAdminServlet
- */
-@WebServlet("/HomeAdminServlet")
+@WebServlet("/HomeAdmin")
 public class HomeAdminServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public HomeAdminServlet() {
-        super();
-        // TODO Auto-generated constructor stub
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        List<Object[]> citta = AdminDAO.getCitta();
+        List<Object[]> professioni = AdminDAO.getProfessioni();
+
+        request.setAttribute("citta", citta);
+        request.setAttribute("professioni", professioni);
+
+        request.getRequestDispatcher("/HomeAdmin.jsp").forward(request, response);
     }
-
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }
