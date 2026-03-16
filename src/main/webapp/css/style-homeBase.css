@@ -1,127 +1,69 @@
-:root {
-    /* Palette Gemini Dark */
-    --gemini-bg: #0f172a;          /* Sfondo scuro profondo */
-    --gemini-card: #1e293b;        /* Sfondo card (leggermente più chiaro) */
-    --gemini-accent: #6366f1;      /* Indaco per icone e hover */
-    --gemini-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    --text-main: #f8fafc;          /* Bianco sporco per testi principali */
-    --text-muted: #94a3b8;        /* Grigio azzurrato per testi secondari */
-}
-
-body {
-    background-color: var(--gemini-bg);
-    color: var(--text-main);
-    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
-    margin: 0;
-}
-
-/* Navbar */
-.navbar {
-    background: rgba(15, 23, 42, 0.9) !important;
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.navbar-brand {
-    font-weight: 700;
-    letter-spacing: 1px;
-    background: var(--gemini-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Header/Hero Section */
-.hero-section {
-    background: radial-gradient(circle at center, #1e2a4a 0%, #0f172a 100%);
-    color: white;
-    padding: 60px 0;
-    margin-bottom: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 0; /* Rimosso l'effetto arrotondato per un look più tech */
-}
-
-.hero-section h1 {
-    background: linear-gradient(90deg, #fff, #818cf8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Card delle Professioni */
-.profession-card {
-    background-color: var(--gemini-card);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-}
-
-.profession-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-    border-color: rgba(99, 102, 241, 0.4);
-    background-color: #243147; /* Leggermente più chiaro al passaggio */
-}
-
-.profession-card .card-title {
-    color: var(--text-main) !important;
-}
-
-.profession-card .card-text {
-    color: var(--text-muted) !important;
-}
-
-/* Box Icona */
-.icon-box {
-    width: 60px;
-    height: 60px;
-    background: rgba(99, 102, 241, 0.15);
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #818cf8; /* Colore icona */
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    border: 1px solid rgba(99, 102, 241, 0.2);
-}
-
-/* Sidebar e Link Rapidi */
-.card.border-none {
-    background-color: var(--gemini-card);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--text-main);
-}
-
-.sidebar-link {
-    text-decoration: none;
+/* Custom Table Style */
+.table-dark-gemini {
+    --bs-table-bg: transparent;
+    --bs-table-border-color: rgba(255, 255, 255, 0.05);
     color: var(--text-muted);
-    padding: 12px 15px;
-    border-radius: 12px;
-    display: block;
+}
+
+.table-dark-gemini thead th {
+    background: rgba(255, 255, 255, 0.02);
+    color: var(--gemini-accent);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    border-top: none;
+}
+
+/* Badges Personalizzati */
+.badge-gemini {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+.badge-confirm { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.badge-process { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.badge-complete { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+.badge-muted { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+
+/* Pulsante Recensione */
+.btn-review {
+    background: var(--gemini-gradient);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 15px;
     transition: 0.3s;
 }
-
-.sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--gemini-accent);
+.btn-review:hover {
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    transform: scale(1.05);
 }
 
-.sidebar-link i {
-    width: 20px;
+/* Modale Dark */
+.gemini-modal {
+    background-color: var(--gemini-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
-
-/* Bottoni */
-.btn-outline-primary {
-    color: #818cf8;
-    border-color: #818cf8;
-}
-
-.btn-outline-primary:hover {
-    background: var(--gemini-gradient);
-    border-color: transparent;
+.dark-input {
+    background-color: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
 }
-
-hr {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+.dark-input:focus {
+    background-color: rgba(15, 23, 42, 0.8);
+    border-color: var(--gemini-accent);
+    box-shadow: none;
+    color: white;
 }
+.btn-gemini-submit {
+    background: var(--gemini-gradient);
+    border: none;
+    color: white;
+    padding: 10px 20px;
+}
+.border-bottom-dark { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+.border-top-dark { border-top: 1px solid rgba(255, 255, 255, 0.05); }
+.text-accent { color: var(--gemini-accent); }
+.text-main { color: var(--text-main); }
 

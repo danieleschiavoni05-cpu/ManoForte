@@ -1,36 +1,35 @@
 package org.elis.manoforte.controller;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
 import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.DataSourceConfig;
 
 /**
- * Servlet implementation class professionisti
+ * Servlet implementation class Pagina_lista_professioni
  */
-@WebServlet("/professionisti")
-public class professionisti extends HttpServlet {
+@WebServlet("/lista_professioni")
+public class PaginaListaProfessioniServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public professionisti() {
+    public PaginaListaProfessioniServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -42,8 +41,6 @@ public class professionisti extends HttpServlet {
 		String nomeProfessione = request.getParameter("nome");
 		UtenteDAO utente= new JdbcUtenteDAO(DataSourceConfig.getDataSource());
 		ProfessioneDAO professione=new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
-		
-		System.out.println("Cerco professionisti per: [" + nomeProfessione + "]");
 		
 		
         try {
@@ -60,9 +57,9 @@ public class professionisti extends HttpServlet {
             request.setAttribute("errore", "Impossibile recuperare i professionisti.");
         }
 
-        request.getRequestDispatcher("/WEB-INF/professionisti.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/pagina_lis_professioni.jsp").forward(request, response);
     }
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

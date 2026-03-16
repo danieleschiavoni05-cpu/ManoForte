@@ -67,8 +67,35 @@ public class JdbcUtenteDAO implements UtenteDAO {
 
     @Override
     public void inserisciUtente(Utente utente) throws Exception {
+        String sql = "INSERT INTO utente (email, password, nome, cognome, data_nascita, codice_fiscale, id_citta, ruolo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, utente.getEmail());
+            ps.setString(2, utente.getPassword());
+            ps.setString(3, utente.getNome());
+            ps.setString(4, utente.getCognome());
+            ps.setDate(5, Date.valueOf(utente.getDataNascita()));
+            ps.setString(6, utente.getCodiceFiscale());
+            
+            // Handling the nullable foreign key for id_citta
+            if (utente.getIdCitta() != 0) {
+                ps.setLong(7, utente.getIdCitta());
+            } else {
+                ps.setNull(7, java.sql.Types.BIGINT);
+            }
+            
+            ps.setInt(8, utente.getRuolo().ordinal());
 
+            // Execute inside the try-with-resources to ensure 'ps' is open
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            // It's usually better to log the error or wrap it in a custom exception
+            throw new Exception("Error inserting user: " + e.getMessage(), e);
+        }
     }
+    
 
     @Override
     public Utente findByEmailPassword(String email, String password) throws Exception {
@@ -119,7 +146,39 @@ public class JdbcUtenteDAO implements UtenteDAO {
 
     @Override
     public Utente update(Utente utente) throws Exception {
-        return null;
+        // Usiamo l'email come identificatore univoco per l'aggiornamento
+        String sql = "UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, password = ?, tariffa = ?, codice_fiscale = ?, id_citta = ? WHERE email = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, utente.getNome());
+            ps.setString(2, utente.getCognome());
+            ps.setDate(3, Date.valueOf(utente.getDataNascita()));
+            ps.setString(4, utente.getPassword());
+            ps.setBigDecimal(5, utente.getTariffa());
+            ps.setString(6, utente.getCodiceFiscale());
+            
+            if (utente.getIdCitta() != 0) {
+                ps.setLong(7, utente.getIdCitta());
+            } else {
+                ps.setNull(7, Types.BIGINT);
+            }
+            
+            ps.setString(8, utente.getEmail());
+            
+            int rowsAffected = ps.executeUpdate();
+            
+            if (rowsAffected == 0) {
+                throw new UtenteNonTrovatoException("Impossibile aggiornare: utente con email " + utente.getEmail() + " non trovato.");
+            }
+
+            // Restituiamo l'oggetto utente aggiornato
+            return utente;
+
+        } catch (SQLException e) {
+            throw new Exception("Errore durante l'aggiornamento dell'utente: " + e.getMessage(), e);
+        }
     }
 
     @Override
@@ -199,7 +258,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
         String sql = "SELECT u.* FROM utente u " +
                      "JOIN utente_professione up ON u.id = up.id_utente " +
                      "JOIN professione p ON p.id = up.id_professione " +
-                     "WHERE p.nome = ?";
+                     "WHERE LOWER(p.nome) = LOWER(?) AND u.ruolo = 1 ";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -216,6 +275,82 @@ public class JdbcUtenteDAO implements UtenteDAO {
         }
         return professionisti;
     }
+
+	@Override
+	public Utente getUtentebyEmail(String emailProfessionista) throws Exception {
+	    
+	    // Querying the 'utente' table where the email matches
+	    String sql = "SELECT * FROM utente WHERE email = ?";
+
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        
+	        ps.setString(1, emailProfessionista);
+	        
+	        ResultSet rs=ps.executeQuery();
+	            if (rs.next()) {
+	                 return Utility.createUserObj(rs);
+	            }
+	            throw new Exception("Utente non trovato");
+	        
+	    } catch (SQLException e) {
+	        throw new Exception("Errore durante la ricerca dell'utente con email: " + emailProfessionista, e);
+	    }
+	    
+	   
+	}
+
+	@Override
+	public long trovaIdProfessionistaPerEmail(String email) throws Exception {
+	    String sql = "SELECT id FROM utente WHERE email = ?";
+	    
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        
+	        ps.setString(1, email);
+	        
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                return rs.getLong("id");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        // Logga l'errore e rilancia l'eccezione come dichiarato nella firma del metodo
+	        e.printStackTrace();
+	        throw new Exception("Errore durante il recupero dell'ID per l'email: " + email, e);
+	    }
+	    
+	    // Se arrivi qui, l'utente non è stato trovato. 
+	    // Puoi lanciare un'eccezione specifica o restituire un valore sentinella (es. -1)
+	    throw new Exception("Nessun professionista trovato con email: " + email);
+	}
+
+	@Override
+	public long trovaIdBasePerEmail(String email) throws Exception {
+	    String sql = "SELECT id FROM utente WHERE email = ?";
+	    
+	    // Inizializziamo a -1 (valore "non trovato")
+	    long id = -1; 
+	    
+	    try (Connection conn = dataSource.getConnection();
+	         PreparedStatement ps = conn.prepareStatement(sql)) {
+	        
+	        ps.setString(1, email);
+	       
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                id = rs.getLong("id");
+	                return id; // Trovato! Esco subito
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new Exception("Errore nel recupero ID per email: " + email, e);
+	    }
+	    
+	    // Se il ResultSet era vuoto, restituirà -1
+	    return id; 
+	}
 
 
 }

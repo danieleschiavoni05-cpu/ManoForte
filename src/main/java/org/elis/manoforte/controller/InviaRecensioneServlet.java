@@ -50,50 +50,55 @@ public class InviaRecensioneServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
-		HttpSession session = request.getSession(true);
-		Utente utenteLoggato=(Utente) session.getAttribute("utenteLoggato");
-		
-		if (utenteLoggato == null) {
-	        response.sendRedirect(request.getContextPath() + "/login.jsp");
-	        return;
-	    }
+		    HttpSession session = request.getSession();
+		    Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
 
-	    try {
-	        // 2. Recupero e parsing parametri
-	        Long idRichiesta = Long.parseLong(request.getParameter("idRichiesta"));
-	        String descrizione = request.getParameter("descrizione");
-	        int voto = Integer.parseInt(request.getParameter("voto"));
-	        LocalDate data = LocalDate.parse(request.getParameter("campoData"));
-	        Long id_cliente = Long.parseLong(request.getParameter("id_cliente"));
-	        Long id_professionista = Long.parseLong(request.getParameter("id_professionista"));
+		    if (utenteLoggato == null) {
+		        response.sendRedirect(request.getContextPath() + "/login.jsp");
+		        return;
+		    }
 
-	        // 3. Inizializzazione DAO
-	        RichiestaDAO richiestaDao = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
-	        RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
+		    try {
+		    	UtenteDAO utentedao = new JdbcUtenteDAO(DataSourceConfig.getDataSource()); 
+		    	
+		        // Recupero parametri
+		        long idRichiesta = Long.parseLong(request.getParameter("idRichiesta"));
+		        String descrizione = request.getParameter("descrizione");
+		        int voto = Integer.parseInt(request.getParameter("voto"));
+		        // Se possibile, genera la data internamente invece di riceverla dal form
+		        LocalDate data = LocalDate.now(); 
+		        
+		        long idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
+		        Utente utenteSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
+		        String emailBase = utenteSessione.getEmail();
+		        Long idBase=utentedao.trovaIdBasePerEmail(emailBase);
+		        
 
-	        // 4. Verifica della richiesta (metodo diretto invece del loop)
-	        Richiesta richiesta = richiestaDao.getRichiestaById(idRichiesta);
+		        RichiestaDAO richiestaDao = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
+		        RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
 
-	        // 5. Logica di business: si può recensire solo se la richiesta è COMPLETA
-	        if (richiesta != null && StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta())) {
-	            
-	            Recensione rec = new Recensione(idRichiesta, descrizione, voto, data, id_cliente, id_professionista);
-	            
-	            // Uso dell'istanza del DAO
-	            recensioneDao.inserisciRecensione(rec);
-	            
-	            // Opzionale: impostare un messaggio di successo
-	            session.setAttribute("messaggio", "Recensione inviata con successo!");
-	        }
+		        Richiesta richiesta = richiestaDao.getRichiestaById(idRichiesta);
 
-	    } catch (Exception e) {
-	        // Gestione errore formattazione dati
-	        e.printStackTrace();
-	    }
+		        // Controllo di business e di proprietà (il cliente che recensisce deve essere quello della richiesta)
+		        if (richiesta != null && 
+		            StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta()) && 
+		            richiesta.getId_cliente() == idBase) {
 
-	    // 6. Redirect finale
-	    response.sendRedirect(request.getContextPath() + "/HomeServlet");
+		            Recensione rec = new Recensione(idRichiesta, descrizione, voto, data, idBase, idProfessionista);
+		            recensioneDao.inserisciRecensione(rec);
+		            session.setAttribute("messaggioSuccesso", "Recensione inviata con successo!");
+		            
+		        } else {
+		            session.setAttribute("messaggioErrore", "Impossibile inviare la recensione: stato non valido.");
+		        }
+
+		    
+		    } catch (Exception e) {
+		        session.setAttribute("messaggioErrore", "Errore durante il salvataggio.");
+		        e.printStackTrace();
+		    }
+
+		    response.sendRedirect(request.getContextPath() + "/homeBase");
+		}
 	}
-}

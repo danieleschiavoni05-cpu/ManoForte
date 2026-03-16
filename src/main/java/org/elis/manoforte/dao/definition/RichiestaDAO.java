@@ -10,9 +10,9 @@ public interface RichiestaDAO {
 
     void inserisciRichiesta(Richiesta richiesta) throws Exception;
 
-    List<Richiesta> findRecensioneByIdCliente(long id) throws Exception;
+    List<Richiesta> findRichiestaByIdCliente(long id) throws Exception;
 
-    List<Richiesta> findRecensioneByIdProfessionista(long id)throws Exception;
+    List<Richiesta> findRichiestaByIdProfessionista(long id)throws Exception;
 
     void updateRichiesta(Richiesta richiesta)throws Exception;
 

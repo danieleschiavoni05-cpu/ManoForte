@@ -8,9 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.elis.manoforte.dao.definition.RecensioneDAO;
+import org.elis.manoforte.dao.definition.UtenteDAO;
+import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
+import org.elis.manoforte.model.Professione;
+import org.elis.manoforte.model.Recensione;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.DataSourceConfig;
 
@@ -32,21 +37,48 @@ public class RecensioniProfessionistiServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		HttpSession session = request.getSession(true);
-		Utente utenteLoggato=(Utente) session.getAttribute("utenteLoggato");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false); // Meglio false se verifichi solo l'esistenza
+        Utente utenteLoggato = (session != null) ? (Utente) session.getAttribute("utenteLoggato") : null;
+        
+        
+
+        if (utenteLoggato == null) {
+            response.sendRedirect(request.getContextPath() + "/login.jsp");
+            return;
+        }
+        try {
+        // Inizializzo i DAO
+        UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+        RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
+        
+
+        // Recupero tutte le recensioni
+        List<Recensione> recensioni = recensioneDao.findAll();
+        
+        // Recupero tutti gli utenti per poter estrarre i nomi nella JSP
+        // (In alternativa dovresti creare un metodo nel DAO che fa una JOIN SQL)
+        List<Utente> tuttiUtenti;
 		
-		if (utenteLoggato == null) {
-	        response.sendRedirect(request.getContextPath() + "/login.jsp");
-	        return;
-	    }
-		RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
-		request.setAttribute("recensioni", recensioneDao.findAll());
-		
-	
-		request.getRequestDispatcher( "/WEB-INF/recensioniPro.jsp").forward(request, response);
-	}
+			tuttiUtenti = utenteDao.findAllProfessionisti();
+			for(Utente u : tuttiUtenti) {
+				String emailProfessionista = u.getEmail();
+				Long idProfessionista=utenteDao.trovaIdProfessionistaPerEmail(emailProfessionista);
+				request.setAttribute("idProfessionista", idProfessionista);
+				
+			}
+			
+			
+			 request.setAttribute("listaUtenti", tuttiUtenti);
+			 request.setAttribute("recensioni", recensioni);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+        
+
+        request.getRequestDispatcher("/WEB-INF/recensioniPro.jsp").forward(request, response);
+    }
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

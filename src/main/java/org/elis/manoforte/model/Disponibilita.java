@@ -5,7 +5,7 @@ import java.time.LocalTime;
 
 public class Disponibilita {
     private Long id;
-    private LocalDate data;
+	private LocalDate data;
     private LocalTime ora_inizio;
     private LocalTime ora_fine;
     private Long id_utente;
@@ -18,7 +18,11 @@ public class Disponibilita {
         this.id_utente = id_utente;
     }
 
-    public Long getId() {
+    public Disponibilita() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -37,4 +41,20 @@ public class Disponibilita {
     public Long getId_utente() {
         return id_utente;
     }
+    public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+
+	public void setOra_inizio(LocalTime ora_inizio) {
+		this.ora_inizio = ora_inizio;
+	}
+
+	public void setOra_fine(LocalTime ora_fine) {
+		this.ora_fine = ora_fine;
+	}
+
 }

@@ -169,4 +169,24 @@ public class Utente {
 		this.nome = nome;
 	}
 
+	public void setCognome(String cognome) {
+		// TODO Auto-generated method stub
+		this.cognome=cognome;
+	}
+
+	public void setCodiceFiscale(String codice_fiscale) {
+		// TODO Auto-generated method stub
+		this.codice_fiscale=codice_fiscale;
+	}
+
+	public void setEmail(String email) {
+		// TODO Auto-generated method stub
+		this.email=email;
+	}
+
+	public void setPassword(String password) {
+		// TODO Auto-generated method stub
+		this.password=password;
+	}
+
 }

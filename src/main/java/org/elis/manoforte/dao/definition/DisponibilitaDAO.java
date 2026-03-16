@@ -15,4 +15,6 @@ public interface DisponibilitaDAO {
     List<Disponibilita> findDisponibilitaByDataOra(LocalDateTime dataora) throws Exception;
 
     void inserisciDisponibilita(Disponibilita disponibilita) throws Exception;
+    
+     List<Disponibilita> findDisponibilitaByEmailProfessionista(String email) throws Exception;
 }
