@@ -1,4 +1,3 @@
-
 package org.elis.manoforte.controller;
 
 import jakarta.servlet.*;
@@ -20,10 +19,11 @@ public class EliminaCitta extends HttpServlet {
         response.sendRedirect("HomeAdmin");
     }
 
+   
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws ServletException, IOException {
         doGet(request, response);
-
     }
 }

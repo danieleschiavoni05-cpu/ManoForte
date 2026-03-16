@@ -54,17 +54,33 @@ public class AdminDAO {
 
     public static void eliminaCitta(int id) {
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM citta WHERE id=?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            PreparedStatement ps1 = conn.prepareStatement(
+                "UPDATE utente SET id_citta=NULL WHERE id_citta=?"
+            );
+            ps1.setInt(1, id);
+            ps1.executeUpdate();
+
+            PreparedStatement ps2 = conn.prepareStatement(
+                "DELETE FROM citta WHERE id=?"
+            );
+            ps2.setInt(1, id);
+            ps2.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
 
     public static void eliminaProfessione(int id) {
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM professione WHERE id=?");
-            ps.setInt(1, id);
-            ps.executeUpdate();
+            PreparedStatement ps1 = conn.prepareStatement(
+                "DELETE FROM utente_professione WHERE id_professione=?"
+            );
+            ps1.setInt(1, id);
+            ps1.executeUpdate();
+
+            PreparedStatement ps2 = conn.prepareStatement(
+                "DELETE FROM professione WHERE id=?"
+            );
+            ps2.setInt(1, id);
+            ps2.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
 
