@@ -65,7 +65,21 @@
 
 <body>
 
-<jsp:include page="/includes/Navbar.jsp"/>
+<header style="
+    background: #7F7F80;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+">
+    <a href="Homepage" class="logo" style="color:white; font-size:24px; font-weight:bold; text-decoration:none;">ManoForte</a>
+
+    <nav style="display:flex; gap:20px;">
+        <a href="Homepage" style="color:white; text-decoration:none;">Home</a>
+        <a href="ListaProfessionisti" style="color:#DFF1FF; text-decoration:none; font-weight:bold;">Esplora</a>
+        <a href="login" style="color:#DFF1FF;">Area Riservata</a>
+    </nav>
+</header>
 
 <div class="filter-section" 
      style="background: #279AF1; padding:30px 0;">

@@ -24,6 +24,6 @@ public class HomeAdminServlet extends HttpServlet {
         request.setAttribute("citta", citta);
         request.setAttribute("professioni", professioni);
 
-        request.getRequestDispatcher("/HomeAdmin.jsp").forward(request, response);
+        request.getRequestDispatcher("/HomeAdmin").forward(request, response);
     }
 }
