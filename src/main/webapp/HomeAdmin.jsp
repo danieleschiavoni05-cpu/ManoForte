@@ -44,16 +44,18 @@
             <% if (citta != null) {
                    for (Object[] c : citta) { %>
                 <li class="admin-list-item">
-                    <!-- Mostro solo il nome, non l'ID -->
                     <strong><%= c[1] %></strong>
-                    <div class="admin-actions">
-                        <a href="EliminaCitta?id=<%= c[0] %>" class="admin-delete-link">Elimina</a>
-                        <form action="ModificaCitta" method="post" class="admin-inline-form">
-                            <input type="hidden" name="id" value="<%= c[0] %>">
-                            <input type="text" name="nome" placeholder="Nuovo nome">
-                            <button type="submit" class="admin-btn-small">Modifica</button>
-                        </form>
-                    </div>
+
+                    <form action="EliminaCitta" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= c[0] %>">
+                        <button type="submit" class="admin-delete-link">Elimina</button>
+                    </form>
+
+                    <form action="ModificaCitta" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= c[0] %>">
+                        <input type="text" name="nome" placeholder="Nuovo nome">
+                        <button type="submit" class="admin-btn-small">Modifica</button>
+                    </form>
                 </li>
             <% } } %>
         </ul>
@@ -71,16 +73,18 @@
             <% if (professioni != null) {
                    for (Object[] p : professioni) { %>
                 <li class="admin-list-item">
-                    <!-- Mostro solo il nome -->
                     <strong><%= p[1] %></strong>
-                    <div class="admin-actions">
-                        <a href="EliminaProfessione?id=<%= p[0] %>" class="admin-delete-link">Elimina</a>
-                        <form action="ModificaProfessione" method="post" class="admin-inline-form">
-                            <input type="hidden" name="id" value="<%= p[0] %>">
-                            <input type="text" name="nome" placeholder="Nuovo nome">
-                            <button type="submit" class="admin-btn-small">Modifica</button>
-                        </form>
-                    </div>
+
+                    <form action="EliminaProfessione" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= p[0] %>">
+                        <button type="submit" class="admin-delete-link">Elimina</button>
+                    </form>
+
+                    <form action="ModificaProfessione" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= p[0] %>">
+                        <input type="text" name="nome" placeholder="Nuovo nome">
+                        <button type="submit" class="admin-btn-small">Modifica</button>
+                    </form>
                 </li>
             <% } } %>
         </ul>

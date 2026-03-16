@@ -41,6 +41,17 @@
     color: var(--muted-silver);
 }
 
+.admin-delete-link {
+    background: none;
+    border: none;
+    color: #d9534f;
+    cursor: pointer;
+    padding: 0;
+    font-size: inherit;
+    text-decoration: underline;
+}
+
+
 .admin-card {
     max-width: 900px;
     margin: 40px auto;
