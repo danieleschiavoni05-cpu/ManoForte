@@ -16,6 +16,8 @@ import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.model.CardRichiesta;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
+import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.utility.SqlQuery;
 
 public class RichiestaDAOJDBC implements RichiestaDAO{
 	DataSource dataSource;
@@ -143,16 +145,42 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 	}
 
 	@Override
-	public void updateStatoRichiesta(long id, StatoRichiesta stato) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void updateStatoRichiesta(long id, StatoRichiesta stato) throws Exception{
+		String sql = "UPDATE richiesta SET stato=? WHERE id=?";
+
+		try(Connection conn = dataSource.getConnection()){
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setLong(1, stato.ordinal());
+			ps.setLong(2, id);
+			ps.executeUpdate();
+		}
+
 	}
 
 	@Override
-	public List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato)
-			throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws SQLException {
+		List<CardRichiesta> richieste = new ArrayList<>();
+		try (Connection conn = dataSource.getConnection()){
+			PreparedStatement statement = conn.prepareStatement(SqlQuery.elencoRichiesteByIdProfessionistaAndStato);
+			statement.setString(1, email);
+			statement.setInt(2, stato.ordinal());
+			statement.executeQuery();
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				CardRichiesta card = new CardRichiesta();
+				card.setId(rs.getLong("id_richiesta"));
+				card.setData(rs.getDate("data_richiesta").toLocalDate());
+				card.setStatoRichiesta(StatoRichiesta.values()[rs.getInt("stato")]);
+				card.setCliente(
+						new Utente(rs.getString("nome"),
+								rs.getString("cognome"),
+								rs.getString("email"),
+								rs.getLong("id_citta")));
+				richieste.add(card);
+			}
+		}
+		return richieste;
 	}
+
 
 }
