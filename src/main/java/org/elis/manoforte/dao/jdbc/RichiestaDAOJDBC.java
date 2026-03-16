@@ -13,6 +13,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.elis.manoforte.dao.definition.RichiestaDAO;
+import org.elis.manoforte.model.CardRichiesta;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 
@@ -139,6 +140,19 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 	    }
 	    
 	    return r;
+	}
+
+	@Override
+	public void updateStatoRichiesta(long id, StatoRichiesta stato) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato)
+			throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -196,7 +196,7 @@
                 </div>
             </div>
         </div>
-    </div
+    </div>
 
     <%!public String createCard(CardRichiesta r) {
         return "<div class=\"news-card\" id=\"richiesta-"+r.getId()+"\">" +
