@@ -14,18 +14,18 @@
 <nav style="background:#7F7F80; padding:15px; display:flex; justify-content:space-between; align-items:center; font-family:sans-serif;">
     
     <div style="font-size:22px; font-weight:bold;">
-        <a href="Homepage.jsp" style="color:white; text-decoration:none;">ManoForte</a>
+        <a href="Homepage" style="color:white; text-decoration:none;">ManoForte</a>
     </div>
 
     <ul style="list-style:none; display:flex; gap:25px; margin:0; padding:0;">
 
        
-        <li><a href="Homepage.jsp" style="color:white; text-decoration:none;">Home</a></li>
+        <li><a href="Homepage" style="color:white; text-decoration:none;">Home</a></li>
         <li><a href="ListaProfessionisti.jsp" style="color:white; text-decoration:none;">Servizi</a></li>
 
         
         <% if (ruolo == Ruolo.UTENTE_BASE) { %>
-            <li><a href="ListaProfessionisti.jsp" style="color:white; text-decoration:none;">Trova Professionisti</a></li>
+            <li><a href="ListaProfessionisti" style="color:white; text-decoration:none;">Trova Professionisti</a></li>
         <% } %>
 
         <% if (ruolo == Ruolo.PROFESSIONISTA) { %>
@@ -39,13 +39,13 @@
         
         <% if (ruolo == Ruolo.UTENTE_BASE) { %>
             <li><a href="MyRequests" style="color:white; text-decoration:none;">Le mie richieste</a></li>
-            <li><a href="Profile" style="color:white; text-decoration:none;">Profilo</a></li>
+            <li><a href="homeBase" style="color:white; text-decoration:none;">Profilo</a></li>
         <% } %>
 
        
         <% if (ruolo == Ruolo.PROFESSIONISTA) { %>
-            <li><a href="Jobs" style="color:white; text-decoration:none;">Lavori disponibili</a></li>
-            <li><a href="MyJobs" style="color:white; text-decoration:none;">I miei lavori</a></li>
+            <li><a href="homeprofessionista" style="color:white; text-decoration:none;">Profilo</a></li>
+            <li><a href="professioniProfessionista" style="color:white; text-decoration:none;">I miei lavori</a></li>
         <% } %>
 
         
@@ -56,7 +56,7 @@
 
         
         <% if (user == null) { %>
-            <li><a href="auth/login.jsp" style="color:white; text-decoration:none;">Accedi</a></li>
+            <li><a href="login" style="color:white; text-decoration:none;">Accedi</a></li>
         <% } else { %>
             <li><a href="Logout" style="color:white; text-decoration:none;">Logout</a></li>
         <% } %>
