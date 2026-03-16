@@ -12,128 +12,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Admin - ManoForte</title>
+
+    <link rel="stylesheet" type="text/css"
+          href="<%=request.getContextPath()%>/css/HomeAdmin.css">
 </head>
 
-<body style="background:#E6F4FF;">
+<body>
 
-<header style="
-    background:#7F7F80;
-    padding:20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-">
-    <a href="Homepage" style="color:white; font-size:33px; font-weight:bold; text-decoration:none;">ManoForte</a>
+<jsp:include page="/Navbar.jsp"/>
 
-    <nav style="display:flex; gap:20px;">
-        <a href="Homepage" style="color:white; text-decoration:none;">Home</a>
-        <a href="ListaProfessionisti" style="color:#DFF1FF; text-decoration:none;">Esplora</a>
-        <a href="HomeAdmin.jsp" style="color:#6EC6FF; font-weight:bold;">Admin</a>
-    </nav>
-</header>
+<div class="homeadmin-container">
 
-<div style="
-    background:#279AF1;
-    padding:40px;
-    text-align:center;
-    color:white;
-">
-    <h1>Area Amministratore</h1>
-    <p>Gestisci città e professioni della piattaforma</p>
-</div>
+    <div class="homeadmin-header">
+        <h1>Area Amministratore</h1>
+        <p>Gestisci città e professioni della piattaforma</p>
+    </div>
 
-<div style="
-    max-width:900px;
-    margin:auto;
-    margin-top:40px;
-    padding:30px;
-    background:#F2F2F2;
-    border-radius:15px;
-">
+    <div class="admin-card">
 
-    <!-- AGGIUNGI CITTÀ -->
-    <h2 style="color:#3A3A3B;">Aggiungi una Città</h2>
+        <h2>Aggiungi una Città</h2>
 
-    <form action="AggiungiCitta" method="post" 
-          style="display:flex; gap:10px; margin-top:15px;">
-        <input type="text" name="nomeCitta" placeholder="Nome città"
-               style="padding:12px; border-radius:10px; border:none; flex:1;">
-        <button type="submit"
-                style="background:#279AF1; color:white; padding:12px 20px;
-                       border:none; border-radius:10px; font-weight:bold;">
-            Aggiungi
-        </button>
-    </form>
+        <form action="AggiungiCitta" method="post" class="admin-form">
+            <input type="text" name="nomeCitta" placeholder="Nome città">
+            <button type="submit" class="admin-btn-primary">Aggiungi</button>
+        </form>
 
-    <!-- LISTA CITTÀ -->
-    <h3 style="margin-top:25px;">Città inserite:</h3>
-    <ul>
-        <% for (Object[] c : citta) { %>
-            <li style="margin-bottom:10px;">
-                <strong><%= c[1] %></strong>
+        <h3>Città inserite:</h3>
+        <ul class="admin-list">
+            <% for (Object[] c : citta) { %>
+                <li class="admin-list-item">
+                    <strong><%= c[1] %></strong>
 
-                <!-- ELIMINA -->
-                <a href="EliminaCitta?id=<%= c[0] %>" 
-                   style="color:red; margin-left:10px; font-weight:bold;">
-                    Elimina
-                </a>
+                    <a href="EliminaCitta?id=<%= c[0] %>" class="admin-delete-link">
+                        Elimina
+                    </a>
 
-                <!-- MODIFICA -->
-                <form action="ModificaCitta" method="post" style="display:inline; margin-left:10px;">
-                    <input type="hidden" name="id" value="<%= c[0] %>">
-                    <input type="text" name="nome" placeholder="Nuovo nome"
-                           style="padding:5px; border-radius:5px; border:1px solid #CCC;">
-                    <button type="submit"
-                            style="background:#279AF1; color:white; border:none; padding:5px 10px; border-radius:5px;">
-                        Modifica
-                    </button>
-                </form>
-            </li>
-        <% } %>
-    </ul>
+                    <form action="ModificaCitta" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= c[0] %>">
+                        <input type="text" name="nome" placeholder="Nuovo nome">
+                        <button type="submit" class="admin-btn-small">Modifica</button>
+                    </form>
+                </li>
+            <% } %>
+        </ul>
 
-    <hr style="margin:40px 0; border:1px solid #CCC;">
+        <hr class="admin-hr">
 
-    <!-- AGGIUNGI PROFESSIONE -->
-    <h2 style="color:#3A3A3B;">Aggiungi una Professione</h2>
+        <h2>Aggiungi una Professione</h2>
 
-    <form action="AggiungiProfessione" method="post" 
-          style="display:flex; gap:10px; margin-top:15px;">
-        <input type="text" name="nomeProfessione" placeholder="Nome professione"
-               style="padding:12px; border-radius:10px; border:none; flex:1;">
-        <button type="submit"
-                style="background:#6EC6FF; color:white; padding:12px 20px;
-                       border:none; border-radius:10px; font-weight:bold;">
-            Aggiungi
-        </button>
-    </form>
+        <form action="AggiungiProfessione" method="post" class="admin-form">
+            <input type="text" name="nomeProfessione" placeholder="Nome professione">
+            <button type="submit" class="admin-btn-primary">Aggiungi</button>
+        </form>
 
-    <!-- LISTA PROFESSIONI -->
-    <h3 style="margin-top:25px;">Professioni inserite:</h3>
-    <ul>
-        <% for (Object[] p : professioni) { %>
-            <li style="margin-bottom:10px;">
-                <strong><%= p[1] %></strong>
+        <h3>Professioni inserite:</h3>
+        <ul class="admin-list">
+            <% for (Object[] p : professioni) { %>
+                <li class="admin-list-item">
+                    <strong><%= p[1] %></strong>
 
-                <!-- ELIMINA -->
-                <a href="EliminaProfessione?id=<%= p[0] %>" 
-                   style="color:red; margin-left:10px; font-weight:bold;">
-                    Elimina
-                </a>
+                    <a href="EliminaProfessione?id=<%= p[0] %>" class="admin-delete-link">
+                        Elimina
+                    </a>
 
-                <!-- MODIFICA -->
-                <form action="ModificaProfessione" method="post" style="display:inline; margin-left:10px;">
-                    <input type="hidden" name="id" value="<%= p[0] %>">
-                    <input type="text" name="nome" placeholder="Nuovo nome"
-                           style="padding:5px; border-radius:5px; border:1px solid #CCC;">
-                    <button type="submit"
-                            style="background:#6EC6FF; color:white; border:none; padding:5px 10px; border-radius:5px;">
-                        Modifica
-                    </button>
-                </form>
-            </li>
-        <% } %>
-    </ul>
+                    <form action="ModificaProfessione" method="post" class="admin-inline-form">
+                        <input type="hidden" name="id" value="<%= p[0] %>">
+                        <input type="text" name="nome" placeholder="Nuovo nome">
+                        <button type="submit" class="admin-btn-small">Modifica</button>
+                    </form>
+                </li>
+            <% } %>
+        </ul>
+
+    </div>
 
 </div>
 

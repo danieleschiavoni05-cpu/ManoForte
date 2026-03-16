@@ -10,7 +10,7 @@ import org.elis.manoforte.dao.definition.AdminDAO;
 public class EliminaProfessione extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
         int id = Integer.parseInt(request.getParameter("id"));
