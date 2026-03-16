@@ -12,11 +12,14 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/modifica_professionista-style.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professionista | ManoForte</title>
 </head>
 <body>
+
 
 <% Utente utente = (Utente) request.getAttribute("utenteLoggato");%>
 <% List<String> messaggi = (List<String>) request.getAttribute("messages"); %>
@@ -24,14 +27,15 @@
 <% List<Citta> citta = (List<Citta>) request.getAttribute("citta"); %>
 <% List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");%>
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12 task-column">
+
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center container-form">
+        <div class="col-md-12">
             <h2>
                 MODIFICA PROFILO
             </h2>
             <form method="post" id="formModificaProfiloProfessionista">
-                <div class="row g-3 <%=(errore!=null||messaggi!=null)?' ':"mb-4"%>" id="mainRow">
+                <div class="row g-3" id="mainRow">
                     <div class="col-md-6">
                         <label class="section-title" for="nome">Nome</label>
                         <input type="text" class="form-control" id="nome" name="nome" value="<%=utente.getNome()%>" placeholder="Inserire un nome">
@@ -61,13 +65,13 @@
                         <label class="section-title" for="citta">Città di residenza</label>
                         <select class="form-select" name="citta" id="citta">
                             <%if(citta!=null && !citta.isEmpty()){%>
-                                <%for(Citta c: citta){%>
-                                    <%if(c.getId()==utente.getIdCitta()){%>
-                                        <option selected value="<%=c.getId()%>"><%=c.getNome()%></option>
-                                    <%}else{%>
-                                        <option value="<%=c.getId()%>"><%=c.getNome()%></option>
-                                    <%}%>
-                                <%}%>
+                            <%for(Citta c: citta){%>
+                            <%if(c.getId()==utente.getIdCitta()){%>
+                            <option selected value="<%=c.getId()%>"><%=c.getNome()%></option>
+                            <%}else{%>
+                            <option value="<%=c.getId()%>"><%=c.getNome()%></option>
+                            <%}%>
+                            <%}%>
                             <%}%>
                         </select>
                     </div> <%-- Citta --%>
@@ -76,16 +80,16 @@
                         <label class="section-title">Veicoli utilizzati (lasciare libero se non si utilizzano veicoli)</label>
                         <div class="checkboxes-container shadow-sm">
                             <% if(veicoli!=null) { %>
-                                <% for(Veicolo veicolo:veicoli){ %>
-                                    <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
-                                        <%=veicolo.getNome()%>
-                                        <%if(utente.getVeicoli()!=null&&utente.getVeicoli().contains(veicolo.getId())){%>
-                                            <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
-                                        <%}else{%>
-                                            <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
-                                        <%}%>
-                                    </label>
+                            <% for(Veicolo veicolo:veicoli){ %>
+                            <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
+                                <%=veicolo.getNome()%>
+                                <%if(utente.getVeicoli()!=null&&utente.getVeicoli().contains(veicolo.getId())){%>
+                                <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                                <%}else{%>
+                                <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
                                 <%}%>
+                            </label>
+                            <%}%>
                             <%}%>
                         </div>
                     </div> <%-- Veicoli --%>
@@ -93,7 +97,7 @@
                     <div class="col-md-12">
                         <label class="section-title" for="tariffa">Inserire una tariffa oraria</label>
                         <div class="input-group mb-0 w-50">
-                            <input type="number" name="tariffa" id="tariffa" min="0" class="form-control" value="<%=utente.getTariffa()%>">
+                            <input type="number" name="tariffa" id="tariffa" min="0" step="0.25" class="form-control" value="<%=utente.getTariffa()%>">
                             <span class="input-group-text">€/h</span>
                         </div>
                     </div> <%-- Tariffa --%>
@@ -126,21 +130,14 @@
                     </div> <%-- Lista errori --%>
 
                 </div>
-                <button type="submit" class="login-register-button">Registrati</button>
+                <button type="submit" class="login-register-button">Modifica profilo</button>
             </form>
-
-            <hr style="color: white;">
-            <div class="text-center">
-                <p class="mb-0">Hai già un account? <a href="<%=request.getContextPath()%>/login">Accedi ora!</a></p>
-                <p class="mt-1">Sei un cliente? <a href="<%=request.getContextPath()%>/registazionecliente">Registrati qui!</a></p>
-            </div>
-
         </div>
     </div>
 </div>
 
 <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
-<script src="<%=request.getContextPath()%>/js/script-edit.js"></script>
+<script src="<%=request.getContextPath()%>/js/script-registrazione_edit.js"></script>
 </body>
 </html>
 

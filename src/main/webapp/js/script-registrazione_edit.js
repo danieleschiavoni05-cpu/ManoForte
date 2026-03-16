@@ -6,10 +6,14 @@ function executeFetch(servlet, data){
 
     const containerErrori = document.getElementById("containerErrori");
     const listaErrori = document.getElementById("listaErrori");
+    const listaSuccessi = document.getElementById("listaSuccessi");
+    const containerSuccesso = document.getElementById("containerSuccesso");
     const mainRow = document.getElementById("mainRow");
 
     containerErrori.classList.add("d-none");
     listaErrori.innerHTML = "";
+    containerSuccesso.classList.add("d-none");
+    listaSuccessi.innerHTML = "";
 
     fetch(servlet,{
         method: "POST",
@@ -18,7 +22,7 @@ function executeFetch(servlet, data){
         console.log("Risposta dal server:", data);
         if(data.successo === false){
             data.listaErrori.forEach(errore => {
-                document.getElementById("containerSuccesso").classList.add("d-none");
+                containerSuccesso.classList.add("d-none");
                 const li = document.createElement("li");
                 li.textContent = errore;
                 listaErrori.appendChild(li);
@@ -30,8 +34,8 @@ function executeFetch(servlet, data){
             if(servlet.includes("modifica")){
                 const li = document.createElement("li");
                 li.textContent = "Profilo modificato con successo.";
-                document.getElementById("containerSuccesso").appendChild(li);
-                document.getElementById("containerSuccesso").classList.remove("d-none");
+                listaSuccessi.appendChild(li);
+                containerSuccesso.classList.remove("d-none");
                 return getContextPath()+"/modificaProfiloProfessionista";
             }else{
                 return getContextPath()+"/login";
@@ -63,11 +67,8 @@ document.addEventListener('DOMContentLoaded', () => {
             let formData = new URLSearchParams(temp);
 
             let path = executeFetch("registrazioneprofessionista", formData);
-            console.log(path);
         });
-    }
-
-    if(formModificaProfessionista!=null){
+    }else if(formModificaProfessionista!=null){
         formModificaProfessionista.addEventListener("submit", (e) => {
             e.preventDefault();
 
@@ -75,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let formData = new URLSearchParams(temp);
 
             let path = executeFetch("modificaProfiloProfessionista", formData);
-            console.log(path);
         })
     }
 });
