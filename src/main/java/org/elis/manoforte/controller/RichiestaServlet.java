@@ -109,9 +109,9 @@ public class RichiestaServlet extends HttpServlet {
 					LocalTime.now().plusHours(1), 
 					indirizzo, 
 					StatoRichiesta.IN_ATTESA_DI_CONFERMA, 
-					descrizione, 
-					idProfessionista,
-					idCliente
+					descrizione,
+					idCliente,
+					idProfessionista
 					);
 			
 			System.out.println("--- Dettagli Nuova Richiesta ---");
