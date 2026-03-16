@@ -31,11 +31,6 @@ public interface UtenteDAO {
     Map<Long, String> findAllUsersMap() throws SQLException;
 
     List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception;
-<<<<<<< Updated upstream
-
-    Map<Long, String> findAllUsersMap() throws Exception;
-=======
->>>>>>> Stashed changes
 
     void modificaProfessionista(Utente professionista) throws Exception;
 }
