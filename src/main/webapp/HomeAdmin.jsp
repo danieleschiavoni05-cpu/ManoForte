@@ -44,6 +44,7 @@
             <% if (citta != null) {
                    for (Object[] c : citta) { %>
                 <li class="admin-list-item">
+                    <!-- Mostro solo il nome, non l'ID -->
                     <strong><%= c[1] %></strong>
                     <div class="admin-actions">
                         <a href="EliminaCitta?id=<%= c[0] %>" class="admin-delete-link">Elimina</a>
@@ -70,6 +71,7 @@
             <% if (professioni != null) {
                    for (Object[] p : professioni) { %>
                 <li class="admin-list-item">
+                    <!-- Mostro solo il nome -->
                     <strong><%= p[1] %></strong>
                     <div class="admin-actions">
                         <a href="EliminaProfessione?id=<%= p[0] %>" class="admin-delete-link">Elimina</a>

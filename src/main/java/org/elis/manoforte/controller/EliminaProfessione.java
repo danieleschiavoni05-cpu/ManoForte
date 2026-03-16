@@ -28,4 +28,10 @@ public class EliminaProfessione extends HttpServlet {
 
         response.sendRedirect("HomeAdmin");
     }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
+    }
 }

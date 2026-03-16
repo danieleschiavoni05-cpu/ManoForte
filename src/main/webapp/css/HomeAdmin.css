@@ -31,6 +31,9 @@
     font-weight: 700;
     color: var(--craft-gold);
 }
+.hidden-col {
+    display: none;
+}
 
 .homeadmin-header p {
     margin-top: 10px;
