@@ -11,6 +11,8 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione professionista</title>
@@ -61,9 +63,9 @@
                         <select class="form-select" name="citta" id="citta">
                             <option selected disabled>Scegliere una città</option>
                             <%if(citta!=null && !citta.isEmpty()){%>
-                            <%for(Citta c: citta){%>
-                            <option value="<%=c.getId()%>"><%=c.getNome()%></option>
-                            <%}%>
+                                <%for(Citta c: citta){%>
+                                    <option value="<%=c.getId()%>"><%=c.getNome()%></option>
+                                <%}%>
                             <%}%>
                         </select>
                     </div> <%-- Citta --%>
@@ -72,29 +74,27 @@
                         <label class="section-title">Professioni praticate</label>
                         <div class="checkbox-box shadow-sm">
                             <% if(professioni!=null) { %>
-                            <% for(Professione professione:professioni){ %>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="<%=professione.getId()%>" name="professioni" id="professione_<%=professione.getNome()%>">
-                                <label class="form-check-label" for="professione_<%=professione.getNome()%>">
-                                    <%=professione.getNome()%>
-                                </label>
-                            </div>
-                            <%}%>
+                                <% for(Professione professione:professioni){ %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="<%=professione.getId()%>" name="professioni" id="professione_<%=professione.getNome()%>">
+                                        <label class="form-check-label" for="professione_<%=professione.getNome()%>">
+                                            <%=professione.getNome()%>
+                                        </label>
+                                    </div>
+                                <%}%>
                             <%}%>
                         </div>
                     </div> <%-- Professioni --%>
 
                     <div class="col-12">
                         <label class="section-title">Veicoli utilizzati (lasciare libero se non si utilizzano veicoli)</label>
-                        <div class="checkbox-box shadow-sm">
+                        <div class="checkboxes-container shadow-sm">
                             <% if(veicoli!=null) { %>
                                 <% for(Veicolo veicolo:veicoli){ %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
-                                        <label class="form-check-label" for="veicolo_<%=veicolo.getNome()%>">
-                                            <%=veicolo.getNome()%>
-                                        </label>
-                                    </div>
+                                    <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
+                                        <%=veicolo.getNome()%>
+                                        <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                                    </label>
                                 <%}%>
                             <%}%>
                         </div>
@@ -103,7 +103,7 @@
                     <div class="col-md-12">
                         <label class="section-title" for="tariffa">Inserire una tariffa oraria</label>
                         <div class="input-group mb-0 w-50">
-                            <input type="number" name="tariffa" id="tariffa" class="form-control">
+                            <input type="number" name="tariffa" id="tariffa" min="0" step="0.25" class="form-control">
                             <span class="input-group-text">€/h</span>
                         </div>
                     </div> <%-- Tariffa --%>
@@ -143,6 +143,6 @@
 </div>
 
 <script src="<%=request.getContextPath()%>/js/script-registrazione_edit.js"></script>
+<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
 </body>
 </html>
-

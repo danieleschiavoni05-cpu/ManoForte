@@ -121,6 +121,9 @@ String nomeUtente = (u != null) ? u.getNome() : "Ospite";
 		</div>
 	</div>
 
+    <footer class="text-center py-4 mt-5 text-muted">
+        <small>&copy; 2026 ManoForte - Tutti i diritti riservati</small>
+    </footer>
 
 
 	<script

@@ -12,6 +12,7 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
     </head>
 <body>
 

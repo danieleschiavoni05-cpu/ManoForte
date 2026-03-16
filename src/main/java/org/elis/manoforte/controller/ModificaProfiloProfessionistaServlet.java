@@ -193,10 +193,9 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore imprevisto, riprovare.", null);
             outJson.print(mapper.writeValueAsString(risposta));
-
+        }finally{
+            outJson.flush();
         }
-
-        outJson.flush();
 
     }
 }
