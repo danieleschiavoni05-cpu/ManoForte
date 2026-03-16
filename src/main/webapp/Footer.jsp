@@ -28,9 +28,9 @@
             <h4 style="margin-bottom: 10px; color:white;">Link Utili</h4>
             <ul style="list-style: none; padding: 0; line-height: 1.8;">
                 <li><a href="Homepage" style="color:white; text-decoration:none;">Home</a></li>
-                <li><a href="Services" style="color:white; text-decoration:none;">Servizi</a></li>
+                <li><a href="ListaProfessionisti" style="color:white; text-decoration:none;">Servizi</a></li>
                 <li><a href="ListaProfessionisti" style="color:white; text-decoration:none;">Professionisti</a></li>
-                <li><a href="Login" style="color:white; text-decoration:none;">Accedi</a></li>
+                <li><a href="auth/login.jsp" style="color:white; text-decoration:none;">Accedi</a></li>
             </ul>
         </div>
 
