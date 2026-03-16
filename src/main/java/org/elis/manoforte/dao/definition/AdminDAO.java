@@ -32,7 +32,7 @@ public class AdminDAO {
 
     public static void aggiungiProfessione(String nome) {
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO professioni (nome) VALUES (?)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO professione (nome) VALUES (?)");
             ps.setString(1, nome);
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
@@ -55,7 +55,7 @@ public class AdminDAO {
     public static List<Object[]> getProfessioni() {
         List<Object[]> lista = new ArrayList<>();
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("SELECT id, nome FROM professioni ORDER BY nome");
+            PreparedStatement ps = conn.prepareStatement("SELECT id, nome FROM professione ORDER BY nome");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 lista.add(new Object[]{rs.getInt("id"), rs.getString("nome")});
@@ -76,7 +76,7 @@ public class AdminDAO {
 
     public static void eliminaProfessione(int id) {
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("DELETE FROM professioni WHERE id=?");
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM professione WHERE id=?");
             ps.setInt(1, id);
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
@@ -95,7 +95,7 @@ public class AdminDAO {
 
     public static void modificaProfessione(int id, String nome) {
         try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("UPDATE professioni SET nome=? WHERE id=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE professione SET nome=? WHERE id=?");
             ps.setString(1, nome);
             ps.setInt(2, id);
             ps.executeUpdate();

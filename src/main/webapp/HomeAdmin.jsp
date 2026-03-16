@@ -23,12 +23,12 @@
     justify-content:space-between;
     align-items:center;
 ">
-    <a href="Homepage" style="color:white; font-size:24px; font-weight:bold; text-decoration:none;">ManoForte</a>
+    <a href="Homepage" style="color:white; font-size:33px; font-weight:bold; text-decoration:none;">ManoForte</a>
 
     <nav style="display:flex; gap:20px;">
         <a href="Homepage" style="color:white; text-decoration:none;">Home</a>
         <a href="ListaProfessionisti" style="color:#DFF1FF; text-decoration:none;">Esplora</a>
-        <a href="HomeAdmin" style="color:#6EC6FF; font-weight:bold;">Admin</a>
+        <a href="HomeAdmin.jsp" style="color:#6EC6FF; font-weight:bold;">Admin</a>
     </nav>
 </header>
 
@@ -137,16 +137,7 @@
 
 </div>
 
-<footer style="
-    background:#7F7F80;
-    padding:40px 20px;
-    color:white;
-    margin-top:60px;
-    text-align:center;
-">
-    <span style="font-size:22px; font-weight:bold;">ManoForte</span>
-    <p style="opacity:0.9;">Pannello amministratore</p>
-</footer>
+<jsp:include page="/Footer.jsp"/>
 
 </body>
 </html>
