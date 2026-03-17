@@ -15,13 +15,17 @@
 	rel="stylesheet">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/style-modificaProfilo.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
 
 </head>
-<body>
+<body style="margin: 0; padding: 0;">
+
+    <jsp:include page="/includes/Navbar.jsp"/>
 
 	<% Utente utente = (Utente) request.getAttribute("utenteLoggato"); %>
 
-	<div class="container d-flex justify-content-center">
+	<div class="container d-flex justify-content-center" style="margin-top: 2rem;">
 		<div class="profile-card shadow">
 
 			<div class="profile-header">
@@ -132,6 +136,8 @@
 			</a>
 		</div>
 	</div>
+
+    <jsp:include page="/includes/Footer.jsp"/>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

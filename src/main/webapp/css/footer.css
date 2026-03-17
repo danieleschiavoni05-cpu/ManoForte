@@ -1,4 +1,7 @@
 .footer {
-    background: #000;
+    width: 100%;
+    background: var(--obsidian-base);
     text-align: center;
+    border-top: 1px solid var(--steel-variant);
+    color: var(--muted-silver);
 }

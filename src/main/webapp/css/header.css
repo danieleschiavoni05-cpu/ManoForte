@@ -1,21 +1,26 @@
 .navbar {
-    top: 0 ;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
-    background: var(--bg-glass);
+    background: var(--obsidian-base);
     backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    border-bottom: 1px solid var(--steel-variant);
     z-index: 1000;
     padding: 0.8rem 0;
-    color: var(--text-white);
+    color: var(--light-silver);
+    box-sizing: border-box;
 }
 
 .nav-container {
     width: 100%;
+    max-width: 1200px; /* Imposta una larghezza massima per il contenuto della navbar */
     margin: 0 auto;
     padding: 0 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-sizing: border-box;
 }
 
 .nav-left-group {
@@ -29,7 +34,7 @@
     align-items: center;
     gap: 0.7rem;
     text-decoration: none;
-    color: var(--text-white) ;
+    color: var(--white-text);
     font-weight: 700;
     font-size: 1.25rem;
 }
@@ -37,7 +42,7 @@
 .logo-icon {
     width: 32px;
     height: 32px;
-    background: var(--accent);
+    background: var(--craft-gold);
     border-radius: 8px;
 }
 
@@ -51,29 +56,28 @@
 
 .nav-links a {
     text-decoration: none;
-    color: var(--text-muted);
+    color: var(--muted-silver);
     font-size: 0.95rem;
     font-weight: 500;
     transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
-    color: var(--text-white);
+    color: var(--gold-variant);
 }
 
 .btn-login {
-    background: var(--accent);
-    color: white;
+    background: var(--craft-gold);
+    color: var(--obsidian-base);
     padding: 0.5rem 1.2rem;
     border-radius: 6px;
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 600;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .btn-login:hover {
-    background: var(--light-accent);
-    color: black;
-    opacity: 0.9;
+    background: var(--gold-variant);
+    color: var(--obsidian-base);
 }

@@ -1,17 +1,11 @@
 :root {
-    --main-bg: #0d0d0d;
-    --sidebar-bg: #1e1e1e;
-    --card-bg: #1e1e1e;
-    --text-white: #e2e8f0;
-    --border-color: #334155;
-    --primary-color: var(--accent);
-    --secondary-color: #64748b;
-    --bg-dark: #0d1117;
-    --black03: rgba(0, 0, 0, 0.3);
-    --black06: rgba(0, 0, 0, 0.6);
-    --bg-glass: rgba(13, 17, 23, 0.85);
-    --text-muted: #8b949e;
-    --accent: #2f81f7;
-    --light-accent: #6ba0f5;
-    --border: rgba(255, 255, 255, 0.1);
+    --obsidian-base: #0B0D11;   /* Super dark for deep contrast */
+    --deep-steel: #191D24;      /* Secondary dark background */
+    --steel-variant: #2B323D;   /* Hover, borders, light accents */
+    --craft-gold: #D4AF37;      /* Bright gold for buttons, links, primary accents */
+    --gold-variant: #F6E05E;    /* Even brighter gold for hover states */
+    --gold-dark: #977326;       /* Darker gold if needed */
+    --muted-silver: #A0AEC0;    /* Muted text for subtitles */
+    --light-silver: #E2E8F0;    /* Main readable text on dark backgrounds */
+    --white-text: #FFFFFF;      /* Titles and highlights */
 }

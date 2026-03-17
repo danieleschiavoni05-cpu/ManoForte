@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const formRegistrazioneProfessionista = document.getElementById("formRegistrazioneProfessionista");
     const formModificaProfessionista = document.getElementById("formModificaProfiloProfessionista");
 
+
     let localDateNow = new Date();
 
     //Codice per impostare la data massima a un età maggiorenne

@@ -7,122 +7,107 @@
 <head>
     <meta charset="UTF-8">
     <title>Esplora Professioni - ManoForte</title>
-
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <style>
+        .prof-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .prof-card {
+            background: var(--obsidian-base);
+            padding: 20px;
+            border-radius: 12px;
+            color: var(--light-silver);
+            border: 1px solid var(--steel-variant);
+        }
+        .prof-card h3 {
+            color: var(--craft-gold);
+        }
+        .prof-card p {
+            color: var(--muted-silver);
+            font-size: 0.9rem;
+        }
+        .prof-footer a {
+            background: var(--craft-gold);
+            color: var(--obsidian-base);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .prof-footer a:hover {
+            background: var(--gold-variant);
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background: var(--deep-steel);
+            border-radius: 12px;
+            color: var(--light-silver);
+        }
+        .no-results a {
+            color: var(--craft-gold);
+            font-weight: bold;
+        }
+        .filter-section {
+            background: var(--deep-steel);
+            padding: 30px 0;
+            border-bottom: 1px solid var(--steel-variant);
+        }
+    </style>
 </head>
 
-<body style="background: #E6F4FF;">
+<body>
 
-<header style="
-    background: #7F7F80;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-">
-    <a href="Homepage" class="logo" style="color:white; font-size:24px; font-weight:bold; text-decoration:none;">ManoForte</a>
+<jsp:include page="/includes/Navbar.jsp"/>
 
-    <nav style="display:flex; gap:20px;">
-        <a href="Homepage.jsp" style="color:white; text-decoration:none;">Home</a>
-        <a href="ListaProfessionisti" style="color:#DFF1FF; text-decoration:none; font-weight:bold;">Esplora</a>
-        <a href="login" style="color:#DFF1FF;">Area Riservata</a>
-    </nav>
-</header>
-
-<div class="filter-section" 
-     style="background: #279AF1; padding:30px 0;">
-    <div class="container">
-        <form class="search-box" action="ListaProfessionisti" method="get" 
-              style="display:flex; gap:10px; justify-content:center;">
-
+<div class="filter-section">
+    <div class="container" style="margin-top: 0; margin-bottom: 0;">
+        <form class="search-box" action="ListaProfessionisti" method="get" style="margin: 0 auto; display: table;">
             <%
                 String cerca = request.getParameter("cercaNome");
                 if (cerca == null) cerca = "";
             %>
-
-            <input type="text" 
-                   name="cercaNome" 
-                   placeholder="Cerca per nome..." 
-                   value="<%= cerca %>"
-                   style="
-                       padding:12px 15px;
-                       border-radius:10px;
-                       border:none;
-                       width:280px;
-                       background: #FFFFFF;
-                       color:#2A2A2A;
-                       font-size:1rem;
-                   ">
-
-            <button type="submit"
-                    style="
-                        background:#6EC6FF;
-                        color:white;
-                        padding:12px 20px;
-                        border:none;
-                        border-radius:10px;
-                        font-size:1rem;
-                        cursor:pointer;
-                        font-weight:bold;
-                    ">
-                Cerca
-            </button>
-
+            <input type="text" name="cercaNome" placeholder="Cerca per nome..." value="<%= cerca %>">
+            <button type="submit">Cerca</button>
         </form>
     </div>
 </div>
 
-<div class="container" 
-     style="min-height: 60vh; background: #F2F2F2;
-            padding:40px; border-radius:15px; margin-top:40px;">
-    <h2 style="margin-top: 20px; color:#3A3A3B;">Professioni Disponibili</h2>
+<div class="container">
+    <h2 style="margin-top: 20px;">Professioni Disponibili</h2>
 
-    <div class="prof-grid" style="display:grid; grid-template-columns:repeat(auto-fill, minmax(250px,1fr)); gap:20px; margin-top:30px;">
+    <div class="prof-grid">
         <%
             List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessionisti");
         %>
 
         <% if (professioni != null && !professioni.isEmpty()) { %>
-
             <% for (Professione p : professioni) { %>
-
-                <div class="prof-card"
-                     style="background: #6EC6FF;
-                            padding:20px; border-radius:12px; color:white;">
-
+                <div class="prof-card">
                     <h3><%= p.getNome() %></h3>
-
-                    <p style="color:#F0F8FF; font-size: 0.9rem;">
-                        Nessuna descrizione disponibile.
-                    </p>
-
+                    <p>Nessuna descrizione disponibile.</p>
                     <div class="prof-footer" style="margin-top:15px;">
-                        <a href="DettaglioProfessionista?id=<%= p.getId() %>" 
-                           style="background:#279AF1; color:white; padding:10px 15px; border-radius:8px; text-decoration:none;">
-                           Vedi Profilo
-                        </a>
+                        <a href="DettaglioProfessionista?id=<%= p.getId() %>">Vedi Profilo</a>
                     </div>
                 </div>
-
             <% } %>
-
         <% } else { %>
-
-            <div class="no-results"
-                 style="grid-column:1/-1; text-align:center; padding:40px;
-                        background: #7F7F80;
-                        border-radius:12px; color:white;">
+            <div class="no-results">
                 <h3>Nessun risultato trovato</h3>
-                <a href="ListaProfessionisti" style="color:#6EC6FF; font-weight:bold;">Mostra tutti</a>
+                <a href="ListaProfessionisti">Mostra tutti</a>
             </div>
-
         <% } %>
     </div>
 </div>
 
-<jsp:include page="/Footer.jsp"/>
+<jsp:include page="/includes/Footer.jsp"/>
 
 </body>
 </html>
-
-

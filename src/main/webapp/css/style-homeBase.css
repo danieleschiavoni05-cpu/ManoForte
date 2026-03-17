@@ -2,12 +2,12 @@
 .table-dark-gemini {
     --bs-table-bg: transparent;
     --bs-table-border-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
+    color: var(--light-silver);
 }
 
 .table-dark-gemini thead th {
-    background: rgba(255, 255, 255, 0.02);
-    color: var(--gemini-accent);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--craft-gold);
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 1px;
@@ -28,42 +28,50 @@
 
 /* Pulsante Recensione */
 .btn-review {
-    background: var(--gemini-gradient);
-    color: white;
+    background: var(--craft-gold);
+    color: var(--obsidian-base);
     border: none;
     border-radius: 8px;
     padding: 6px 15px;
     transition: 0.3s;
+    font-weight: bold;
 }
 .btn-review:hover {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
     transform: scale(1.05);
+    background: var(--gold-variant);
 }
 
 /* Modale Dark */
 .gemini-modal {
-    background-color: var(--gemini-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--deep-steel);
+    border: 1px solid var(--steel-variant);
+    color: var(--light-silver);
 }
 .dark-input {
-    background-color: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: var(--obsidian-base);
+    border: 1px solid var(--steel-variant);
+    color: var(--white-text);
 }
 .dark-input:focus {
-    background-color: rgba(15, 23, 42, 0.8);
-    border-color: var(--gemini-accent);
-    box-shadow: none;
-    color: white;
+    background-color: var(--obsidian-base);
+    border-color: var(--craft-gold);
+    box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+    color: var(--white-text);
 }
 .btn-gemini-submit {
-    background: var(--gemini-gradient);
+    background: var(--craft-gold);
     border: none;
-    color: white;
+    color: var(--obsidian-base);
     padding: 10px 20px;
+    font-weight: bold;
 }
-.border-bottom-dark { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-.border-top-dark { border-top: 1px solid rgba(255, 255, 255, 0.05); }
-.text-accent { color: var(--gemini-accent); }
-.text-main { color: var(--text-main); }
+.btn-gemini-submit:hover {
+    background: var(--gold-variant);
+    color: var(--obsidian-base);
+}
 
+.border-bottom-dark { border-bottom: 1px solid var(--steel-variant); }
+.border-top-dark { border-top: 1px solid var(--steel-variant); }
+.text-accent { color: var(--craft-gold); }
+.text-main { color: var(--light-silver); }
