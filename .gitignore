@@ -39,3 +39,8 @@ build/
 ### Mac OS ###
 .DS_Store
 pom.xml
+*.md
+src/main/java/org/elis/manoforte/controller/ErrorServlet.java
+src/main/webapp/WEB-INF/web.xml
+src/main/webapp/error.jsp
+src/main/webapp/WEB-INF/web.xml
