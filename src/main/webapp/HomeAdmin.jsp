@@ -33,6 +33,7 @@
 
     <div class="admin-card">
 
+        <!-- Aggiungi Città -->
         <h2>Aggiungi una Città</h2>
         <form action="AggiungiCitta" method="post" class="admin-form">
             <input type="text" name="nomeCitta" placeholder="Nome città" required>
@@ -62,6 +63,7 @@
 
         <hr class="admin-hr">
 
+        <!-- Aggiungi Professione -->
         <h2>Aggiungi una Professione</h2>
         <form action="AggiungiProfessione" method="post" class="admin-form">
             <input type="text" name="nomeProfessione" placeholder="Nome professione" required>
