@@ -37,9 +37,11 @@ function executeFetch(servlet, data){
                 listaSuccessi.appendChild(li);
                 containerSuccesso.classList.remove("d-none");
                 return getContextPath()+"/modificaProfiloProfessionista";
-            }else{
-                return getContextPath()+"/login";
             }
+				console.log(getContextPath());
+                let path= getContextPath()+"/login";
+				window.location.href = path;
+            
         }
     }).catch(e => {
         console.error("Errore durante l'esecuzione della fetch: ", e);
@@ -51,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formRegistrazioneProfessionista = document.getElementById("formRegistrazioneProfessionista");
     const formModificaProfessionista = document.getElementById("formModificaProfiloProfessionista");
+	const formRegistrazioneUtenteBase=document.getElementById("formRegistrazioneUtenteBase");
+	const formModificaProfiloUtenteBase = document.getElementById("formModificaProfiloUtenteBase");
 
     let localDateNow = new Date();
 
@@ -77,5 +81,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let path = executeFetch("modificaProfiloProfessionista", formData);
         })
-    }
+    }else if(formRegistrazioneUtenteBase!=null){
+		formRegistrazioneUtenteBase.addEventListener("submit", (e) => {
+		            e.preventDefault();
+
+		            let temp = new FormData(formRegistrazioneUtenteBase);
+		            let formData = new URLSearchParams(temp);
+
+		            let path = executeFetch("registerBase", formData);
+					console.log(path);
+		        })
+	}else if(formModificaProfiloUtenteBase!=null){
+					formModificaProfiloUtenteBase.addEventListener("submit", (e) => {
+					            e.preventDefault();
+
+					            let temp = new FormData(formModificaProfiloUtenteBase);
+					            let formData = new URLSearchParams(temp);
+
+					            let path = executeFetch("ModificaProfilo", formData);
+					        })
+				}
 });

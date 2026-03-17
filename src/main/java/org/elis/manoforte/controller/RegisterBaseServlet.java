@@ -123,19 +123,26 @@ public class RegisterBaseServlet extends HttpServlet {
 		        utenteDao.inserisciUtente(u);
 
 		        // 5. Risposta JSON (Il redirect lo farà il frontend)
-		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(true, "Registrazione completata con successo!", null)));
+		       outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(true, "Registrazione completata con successo!", null)));
+		       
 
 		    } catch(DatiErratiException e) {
 		        e.buildErrorMessage();
 		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Dati non validi", e.getMessages())));
+		        
 		    } catch(SQLException e) {
 		        e.printStackTrace();
 		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Errore database (forse email o CF già esistenti)", null)));
+		      
 		    } catch (Exception e){
 		        e.printStackTrace();
 		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Errore imprevisto", null)));
+		     
 		    } finally {
 		        outJson.flush();
+		        
 		    }
+		     
+
 		}
 }

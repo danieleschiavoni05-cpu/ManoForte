@@ -121,9 +121,13 @@ public class ModificaProfiloServlet extends HttpServlet {
 	        }
 
 	        if(emptyError.checkEditErrors()){
+	            emptyError.printStackTrace();
 	            emptyError.buildEmptyErrorMessage();
-	            outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
-	                "Campi mancanti o non coerenti.", emptyError.getMessages())));
+
+	            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
+	                    "Alcuni dei campi non sono stati compilati.", emptyError.getMessages());
+	            outJson.print(mapper.writeValueAsString(risposta));
+	            outJson.flush();
 	            return;
 	        }
 	       
@@ -136,21 +140,33 @@ public class ModificaProfiloServlet extends HttpServlet {
 	        // Aggiornamento Sessione
 	        request.getSession().setAttribute("utenteLoggato", utenteBase);
 	        
-	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(true, 
-	            "Modifica completata con successo.", null)));
+	        DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(true,
+                    "Modifica completata con successo.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
 
-	    } catch(DatiErratiException e) {
-	        e.buildErrorMessage();
-	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
-	            "Errore dati: " + e.getMessage(), e.getMessages())));
-	    } catch(SQLException e) {
-	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
-	            "Errore database, riprovare più tardi.", null)));
-	    } catch (Exception e){
-	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
-	            "Errore imprevisto.", null)));
-	    } finally {
-	        outJson.flush();
-	    }
+        }catch(DatiErratiException e) {
+            e.printStackTrace();
+            e.buildErrorEditMessageBase();
+
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
+                    "Errore inserimento dati dell'utente.", e.getMessages());
+            outJson.print(mapper.writeValueAsString(risposta));
+
+        }catch(SQLException e) {
+            e.printStackTrace();
+
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
+                    "Errore nel caricamento delle modifiche, riprovare più tardi.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
+
+        }catch (Exception e){
+            e.printStackTrace();
+
+            DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
+                    "Errore imprevisto, riprovare.", null);
+            outJson.print(mapper.writeValueAsString(risposta));
+        }finally{
+            outJson.flush();
+        }
 	}
 }

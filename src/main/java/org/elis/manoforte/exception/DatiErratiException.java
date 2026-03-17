@@ -152,5 +152,20 @@ public class DatiErratiException extends RuntimeException {
     public List<String> getMessages() {
         return messages;
     }
+    
+    public void buildErrorEditMessageBase(){
+        messages = new ArrayList<>();
+        if(count>=3){
+            messages.add("Controllare i campi inseriti.");
+            return;
+        }
+        if(errConfermaPassword) messages.add("Le password non coincidono.");
+        if(errPassword) messages.add("La password corrente è errata.");
+        if(errData!=null&&errData) messages.add("La data inserita non è valida.");
+        if(errCFGiaPresente) messages.add("Codice fiscale già registrato.");
+        if(errCF) messages.add("Codice fiscale non valido.");
+        
+    }
+
 
 }

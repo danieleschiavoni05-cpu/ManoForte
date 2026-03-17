@@ -1,121 +1,147 @@
-
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <%@ page import="java.util.List"%>
 <%@ page import="org.elis.manoforte.model.Citta"%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Registrazione Utente Base</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Registrazione Utente Base</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    	<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
-    
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
+
 </head>
 <body>
 
-    <div class="container my-5">
-        <div class="row justify-content-center">
-            <div class="col-12 col-md-10 col-lg-8 col-xl-7">
-                
-                <div class="register-card">
-                    
-                    <div class="text-center mb-5">
-                        <h1 class="display-6 fw-bold text-primary">Crea il tuo Account</h1>
-                        <p class="text-muted">Compila i campi sottostanti per registrarti come Utente Base</p>
-                    </div>
+	<% List<String> messaggi = (List<String>) request.getAttribute("messages"); %>
+	<% String errore = (String) request.getAttribute("errore");%>
+	<% List<Citta> citta = (List<Citta>) request.getAttribute("listaCitta"); %>
 
-                    <form action="<%=request.getContextPath()%>/registerBase" method="post">
+	<div class="container my-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10 col-lg-8 col-xl-7">
 
-                        <div class="row g-4">
-                            <div class="col-md-6">
-                                <label class="form-label">Nome</label>
-                                <input type="text" class="form-control form-control-lg" placeholder="es. Mario" name="campoNome" required>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label class="form-label">Cognome</label>
-                                <input type="text" class="form-control form-control-lg" placeholder="es. Rossi" name="campoCognome" required>
-                            </div>
+				<div class="register-card">
 
-                            <div class="col-12">
-                                <label class="form-label">Codice Fiscale</label>
-                                <input type="text" class="form-control form-control-lg text-uppercase" placeholder="Inserisci il tuo codice fiscale" name="campoCodiceFiscale" required>
-                            </div>
+					<div class="text-center mb-5">
+						<h1 class="display-6 fw-bold text-primary">Crea il tuo
+							Account</h1>
+						<p class="text-muted">Compila i campi sottostanti per
+							registrarti come Utente Base</p>
+					</div>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Email Professionale</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fa-solid fa-envelope text-primary"></i></span>
-                                    <input type="email" class="form-control form-control-lg" placeholder="nome@esempio.it" name="campoEmail" required>
-                                </div>
-                            </div>
+					<form method="post" id="formRegistrazioneUtenteBase">
+						<div
+							class="row g-3 <%=(errore!=null||messaggi!=null)?' ':"mb-4"%>"
+							id="mainRow">
+							<div class="col-md-6">
+								<label class="section-title" for="nome">Nome</label> <input
+									type="text" class="form-control" id="nome" name="campoNome"
+									placeholder="Inserire un nome">
+							</div>
+							<%-- Nome --%>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-primary"></i></span>
-                                    <input type="password" class="form-control form-control-lg" placeholder="********" name="campoPassword" required>
-                                </div>
-                            </div>
-                            
-                            <div class="col-md-6">
-                                <label class="form-label">Conferma Password</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-primary"></i></span>
-                                    <input type="password" class="form-control form-control-lg" placeholder="********" name="campoConfermaPassword" required>
-                                </div>
-                            </div>
+							<div class="col-md-6">
+								<label class="section-title" for="cognome">Cognome</label> <input
+									type="text" class="form-control" id="cognome" name="campoCognome"
+									placeholder="Inserire un cognome">
+							</div>
+							<%-- Cognome --%>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Città di Residenza</label>
-                                <select name="campoCitta" class="form-select form-select-lg" required>
-                                    <option value="" disabled selected>Seleziona...</option>
-                                    <%
-                                        List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
-                                        if (listaCitta != null) {
-                                            for (Citta c : listaCitta) {
-                                    %>
-                                        <option value="<%= c.getId() %>"><%= c.getNome() %></option>
-                                    <% 
-                                            }
-                                        } 
-                                    %>
-                                </select>
-                            </div>
+							<div class="col-md-8">
+								<label class="section-title" for="email">Email</label> <input
+									type="email" class="form-control" id="email" name="campoEmail"
+									placeholder="Inserire un indirizzo email">
+							</div>
+							<%-- Email --%>
 
-                            <div class="col-md-6">
-                                <label class="form-label">Data di Nascita</label>
-                                <input type="date" class="form-control form-control-lg" name="campoData" required>
-                            </div>
+							<div class="col-md-4">
+								<label class="section-title" for="data">Data</label> <input
+									type="date" class="form-control" id="data" name="campoData">
+							</div>
+							<%-- Data di nascita --%>
 
-                            <div class="col-12 mt-5">
-                                <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold shadow-sm">
-                                    REGISTRATI ORA
-                                </button>
-                            </div>
-                        </div>
+							<div class="col-md-10">
+								<label class="section-title" for="codice_fiscale">Codice
+									fiscale</label> <input type="text" class="form-control"
+									id="campoCodiceFiscale" name="campoCodiceFiscale" maxlength="16"
+									placeholder="Inserire un codice fiscale/partita IVA">
+							</div>
+							
+							<div class="col-12">
+                        <label class="section-title" for="citta">Città di residenza</label>
+                        <select class="form-select" name="campoCitta" id="citta">
+                            <option selected disabled>Scegliere una città</option>
+                            <%if(citta!=null && !citta.isEmpty()){%>
+                                <%for(Citta c: citta){%>
+                                    <option value="<%=c.getId()%>"><%=c.getNome()%></option>
+                                <%}%>
+                            <%}%>
+                        </select>
+                    </div> <%-- Citta --%>
+							
 
-                        <hr class="my-5">
+							<div class="col-md-6">
+								<label class="section-title" for="password">Password</label> <input
+									type="password" class="form-control" id="password"
+									name="campoPassword" placeholder="Inserire una password">
+							</div>
+							<%-- Password --%>
 
-                        <div class="text-center">
-                            <p class="text-secondary">
-                                Hai già un account? <a href="<%=request.getContextPath()%>/login" class="text-decoration-none fw-bold">Accedi qui</a>
-                            </p>
-                            <a href="<%=request.getContextPath()%>/Homepage.jsp" class="btn btn-link text-decoration-none text-muted mt-2">
-                                <i class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
-                            </a>
-                        </div>
+							<div class="col-md-6">
+								<label class="section-title" for="conferma_password">Conferma
+									password</label> <input type="password" class="form-control"
+									id="conferma_password" name="campoConfermaPassword"
+									placeholder="Reinserire la password">
+							</div>
+							<%-- Conferma password --%>
 
-                    </form>
-                </div> </div>
-        </div>
-    </div>
+							<div class="col-12 mt-4 d-none" id="containerErrori">
+								<div class="alert alert-danger text-center shadow-sm"
+									role="alert">
+									<ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
+								</div>
+							</div>
+							<%-- Lista errori --%>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+							<div class="col-12 mt-4 d-none" id="containerSuccesso">
+								<div class="alert alert-successo text-center shadow-sm"
+									role="alert">
+									<ul id="listaSuccessi" class="list-unstyled mb-0 fw-bold"></ul>
+								</div>
+							</div>
+							<%-- Lista successo --%>
+
+						</div>
+						<button type="submit" class="login-register-button">Registrati</button>
+					</form>
+
+					<hr class="my-5">
+
+					<div class="text-center">
+						<p class="text-secondary">
+							Hai già un account? <a href="<%=request.getContextPath()%>/login"
+								class="text-decoration-none fw-bold">Accedi qui</a>
+						</p>
+						<a href="<%=request.getContextPath()%>/Homepage.jsp"
+							class="btn btn-link text-decoration-none text-muted mt-2"> <i
+							class="fa-solid fa-arrow-left me-2"></i>Torna alla Home
+						</a>
+					</div>
+
+					
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+<script src="<%=request.getContextPath()%>/js/script-registrazione_edit.js"></script>
+<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
 </body>
 </html>
