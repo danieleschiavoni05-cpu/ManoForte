@@ -86,7 +86,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
                 ps.setNull(7, java.sql.Types.BIGINT);
             }
             
-            ps.setInt(8, utente.getRuolo().ordinal());
+            ps.setInt(8, utente.getRuolo().UTENTE_BASE.ordinal());
 
             // Execute inside the try-with-resources to ensure 'ps' is open
             ps.executeUpdate();
@@ -146,20 +146,29 @@ public class JdbcUtenteDAO implements UtenteDAO {
 
     @Override
     public Utente update(Utente utente) throws Exception {
-        // Usiamo l'email come identificatore univoco per l'aggiornamento
-        String sql = "UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, password = ?, tariffa = ?, codice_fiscale = ?, id_citta = ? WHERE email = ?";
+        // Suggerimento: usa l'ID se lo hai, è più performante e sicuro
+        String sql = "UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, password = ?, " +
+                     "tariffa = ?, codice_fiscale = ?, id_citta = ? WHERE email = ?";
         
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, utente.getNome());
             ps.setString(2, utente.getCognome());
-            ps.setDate(3, Date.valueOf(utente.getDataNascita()));
+            
+            // Gestione null per la data (buona pratica)
+            if (utente.getDataNascita() != null) {
+                ps.setDate(3, java.sql.Date.valueOf(utente.getDataNascita()));
+            } else {
+                ps.setNull(3, Types.DATE);
+            }
+
             ps.setString(4, utente.getPassword());
             ps.setBigDecimal(5, utente.getTariffa());
             ps.setString(6, utente.getCodiceFiscale());
             
-            if (utente.getIdCitta() != 0) {
+            // Se idCitta è Long (oggetto), controlla il null. Se è long (primitivo), ok lo 0.
+            if (utente.getIdCitta() != 0 && utente.getIdCitta() > 0) {
                 ps.setLong(7, utente.getIdCitta());
             } else {
                 ps.setNull(7, Types.BIGINT);
@@ -170,14 +179,14 @@ public class JdbcUtenteDAO implements UtenteDAO {
             int rowsAffected = ps.executeUpdate();
             
             if (rowsAffected == 0) {
-                throw new UtenteNonTrovatoException("Impossibile aggiornare: utente con email " + utente.getEmail() + " non trovato.");
+                throw new UtenteNonTrovatoException("Aggiornamento fallito: " + utente.getEmail() + " non esiste.");
             }
 
-            // Restituiamo l'oggetto utente aggiornato
             return utente;
 
         } catch (SQLException e) {
-            throw new Exception("Errore durante l'aggiornamento dell'utente: " + e.getMessage(), e);
+            // Logga l'errore qui o rilancialo con un messaggio chiaro
+            throw new Exception("Errore SQL durante l'update: " + e.getErrorCode(), e);
         }
     }
 

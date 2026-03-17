@@ -7,12 +7,16 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import tools.jackson.databind.ObjectMapper;
 
+import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
@@ -20,6 +24,7 @@ import java.util.List;
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Citta;
@@ -68,32 +73,69 @@ public class RegisterBaseServlet extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		UtenteDAO utenteDao= new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)	 */
+		protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		    response.setContentType("application/json");
+		    response.setCharacterEncoding("UTF-8");
+		    
+		    PrintWriter outJson = response.getWriter();
+		    ObjectMapper mapper = new ObjectMapper();
+		    UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
 
-		String nome = request.getParameter("campoNome");
-		String cognome = request.getParameter("campoCognome");
-		BigDecimal tariffa = new BigDecimal(0);
-		String codice_fiscale = request.getParameter("campoCodiceFiscale");
-		String email = request.getParameter("campoEmail");
-		String password = request.getParameter("campoPassword");
-		Long id_citta=Long.parseLong(request.getParameter("campoCitta"));
-		LocalDate data_nascita = LocalDate.parse(request.getParameter("campoData"));
-		Utente u=new Utente(email, password,nome, cognome,data_nascita, codice_fiscale, id_citta);
+		    try {
+		        // 1. Recupero parametri
+		        String nome = request.getParameter("campoNome");
+		        String cognome = request.getParameter("campoCognome");
+		        String email = request.getParameter("campoEmail");
+		        String codice_fiscale = request.getParameter("campoCodiceFiscale");
+		        String password = request.getParameter("campoPassword");
+		        String confermapassword = request.getParameter("campoConfermaPassword");
+		        
+		        LocalDate data_nascita = null;
+		        if(request.getParameter("campoData") != null && !request.getParameter("campoData").isEmpty()) {
+		            data_nascita = LocalDate.parse(request.getParameter("campoData"));
+		        }
 
-		try {
-			utenteDao.inserisciUtente(u);
-			response.sendRedirect(request.getContextPath() + "/login");
-		}catch(Exception e) {
-			e.printStackTrace();
-			response.sendRedirect("/primo-progetto/errore.jsp");
+		        Long id_citta = null;
+		        if(request.getParameter("campoCitta") != null && !request.getParameter("campoCitta").isEmpty()) {
+		            id_citta = Long.parseLong(request.getParameter("campoCitta"));
+		        }
+
+		        // 2. Validazione sintattica immediata
+		        DatiErratiException emptyError = new DatiErratiException();
+		        if(email == null || email.trim().isEmpty()) emptyError.setErrEmail();
+		        if(nome == null || nome.trim().isEmpty()) emptyError.setErrNome();
+		        if(cognome == null || cognome.trim().isEmpty()) emptyError.setErrCognome();
+		        if(data_nascita == null) emptyError.setErrData();
+		        if(codice_fiscale == null || codice_fiscale.trim().isEmpty()) emptyError.setErrCF();
+		        if(password == null || password.trim().isEmpty()) emptyError.setErrPassword();
+
+		        if(emptyError.checkErrors()){
+		            emptyError.buildEmptyErrorMessage();
+		            outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Campi obbligatori mancanti", emptyError.getMessages())));
+		            return;
+		        }
+
+		        // 3. Validazione Business Logic (Utility)
+		        Utente u = Utility.checkInputUtenteBase(email, password, nome, cognome, data_nascita, codice_fiscale, id_citta, confermapassword);
+		                 
+		        // 4. Inserimento
+		        utenteDao.inserisciUtente(u);
+
+		        // 5. Risposta JSON (Il redirect lo farà il frontend)
+		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(true, "Registrazione completata con successo!", null)));
+
+		    } catch(DatiErratiException e) {
+		        e.buildErrorMessage();
+		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Dati non validi", e.getMessages())));
+		    } catch(SQLException e) {
+		        e.printStackTrace();
+		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Errore database (forse email o CF già esistenti)", null)));
+		    } catch (Exception e){
+		        e.printStackTrace();
+		        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, "Errore imprevisto", null)));
+		    } finally {
+		        outJson.flush();
+		    }
 		}
-
-
-
-	}
-
 }

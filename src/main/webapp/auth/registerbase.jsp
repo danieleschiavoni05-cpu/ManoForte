@@ -62,6 +62,14 @@
                                     <input type="password" class="form-control form-control-lg" placeholder="********" name="campoPassword" required>
                                 </div>
                             </div>
+                            
+                            <div class="col-md-6">
+                                <label class="form-label">Conferma Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-white"><i class="fa-solid fa-lock text-primary"></i></span>
+                                    <input type="password" class="form-control form-control-lg" placeholder="********" name="campoConfermaPassword" required>
+                                </div>
+                            </div>
 
                             <div class="col-md-6">
                                 <label class="form-label">Città di Residenza</label>

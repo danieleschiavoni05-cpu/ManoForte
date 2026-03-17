@@ -123,6 +123,10 @@ public class Utente {
 	public LocalDate getDataNascita() {
 		return dataNascita;
 	}
+	
+	public void setDataNascita(LocalDate dataNascita) {
+		this.dataNascita = dataNascita;
+	}
 
 	public String getCodiceFiscale() {
 		return codice_fiscale;

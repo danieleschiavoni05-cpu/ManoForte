@@ -5,15 +5,24 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import tools.jackson.databind.ObjectMapper;
+
+import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.DataSourceConfig;
+import org.elis.manoforte.utility.Utility;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Utente;
 
@@ -61,76 +70,87 @@ public class ModificaProfiloServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    // 1. Controllo Sessione IMMEDIATO (prima di toccare la response)
+	    Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
+	    if (utenteLoggato == null) {
+	        response.sendRedirect("login.jsp");
+	        return;
+	    }
+
+	    // 2. Inizializzazione DAO e JSON (ora che siamo sicuri di essere loggati)
 	    UtenteDAO dao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    
+	    PrintWriter outJson = response.getWriter();
+	    ObjectMapper mapper = new ObjectMapper();
 
 	    try {
-	        // Recupero l'utente corrente dalla sessione (contiene i dati "vecchi" inclusa la pass attuale)
-	        Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
-
-	        if (utenteLoggato == null) {
-	            response.sendRedirect("login.jsp");
-	            return;
-	        }
-
-	        // 1. Recupero parametri anagrafici
+	        // Recupero parametri
 	        String nuovoNome = request.getParameter("nome");
 	        String nuovoCognome = request.getParameter("cognome");
 	        String nuovoCF = request.getParameter("codiceFiscale");
-	        String idCittaStr = request.getParameter("campoCitta");
-	        String dataNascitaStr = request.getParameter("dataNascita");
-
-	        // 2. Recupero parametri Password
-	        String oldPassForm = request.getParameter("oldPassword"); // Quella inserita dall'utente
+	        String oldPassForm = request.getParameter("oldPassword");
 	        String nuovaPass = request.getParameter("newPassword");
 	        String confermaPass = request.getParameter("confirmPassword");
 
-	        // --- LOGICA DI CONTROLLO PASSWORD ---
-	        
-	        // Controllo A: La vecchia password deve essere corretta
-	        if (!utenteLoggato.getPassword().equals(oldPassForm)) {
-	            // Se la password non corrisponde, torniamo al form con un errore
-	            request.setAttribute("errore", "La password attuale inserita non è corretta.");
-	            doGet(request, response); // Ricarica la pagina tramite doGet per riavere la lista città
-	            return;
+	        LocalDate dataNascitaStr = null;
+	        if(request.getParameter("dataNascita") != null && !request.getParameter("dataNascita").isEmpty()) {
+	            dataNascitaStr = LocalDate.parse(request.getParameter("dataNascita"));
 	        }
 
-	        // Controllo B: Se l'utente vuole cambiare password (nuovaPass non vuota)
-	        if (nuovaPass != null && !nuovaPass.trim().isEmpty()) {
-	            if (nuovaPass.equals(confermaPass)) {
-	                // Se coincidono, la aggiorno nell'oggetto
-	                utenteLoggato.setPassword(nuovaPass);
-	            } else {
-	                // Se non coincidono
-	                request.setAttribute("errore", "Le nuove password non coincidono.");
-	                doGet(request, response);
-	                return;
+	        Long idCittaStr = null;
+	        if(request.getParameter("campoCitta") != null && !request.getParameter("campoCitta").isEmpty()) {
+	            idCittaStr = Long.parseLong(request.getParameter("campoCitta"));
+	        }
+	        
+	        
+	        // 3. Validazione campi obbligatori
+	        DatiErratiException emptyError = new DatiErratiException();
+	        if(nuovoNome == null || nuovoNome.trim().isEmpty()) emptyError.setErrNome();
+	        if(nuovoCognome == null || nuovoCognome.trim().isEmpty()) emptyError.setErrCognome();
+	        if(dataNascitaStr == null) emptyError.setErrData();
+	        if(nuovoCF == null || nuovoCF.trim().isEmpty()) emptyError.setErrCF();
+	        if(oldPassForm == null || oldPassForm.trim().isEmpty()) emptyError.setErrPassword();
+
+	        // Controllo coerenza password se l'utente sta provando a cambiarla
+	        if(nuovaPass != null && !nuovaPass.trim().isEmpty()) {
+	            if(confermaPass == null || !nuovaPass.equals(confermaPass)) {
+	                emptyError.setErrConfermaPassword();
 	            }
 	        }
-	        // Se nuovaPass è vuota, l'oggetto mantiene la vecchia password già presente in utenteLoggato
 
-	        // 3. Aggiornamento degli altri campi
-	        if (nuovoNome != null && idCittaStr != null) {
-	            utenteLoggato.setNome(nuovoNome);
-	            utenteLoggato.setCognome(nuovoCognome);
-	            utenteLoggato.setCodiceFiscale(nuovoCF);
-	            
-	            long idCitta = Long.parseLong(idCittaStr);
-	            utenteLoggato.setId_citta(idCitta); 
-	            // Aggiungi qui l'eventuale set della data di nascita se il tuo modello lo prevede
-
-	            // 4. Salvataggio su Database
-	            dao.update(utenteLoggato);
-
-	            // 5. Aggiorno la sessione
-	            request.getSession().setAttribute("utenteLoggato", utenteLoggato);
-	            
-	            // Redirect al successo
-	            response.sendRedirect(request.getContextPath() + "/homeBase");
+	        if(emptyError.checkEditErrors()){
+	            emptyError.buildEmptyErrorMessage();
+	            outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
+	                "Campi mancanti o non coerenti.", emptyError.getMessages())));
+	            return;
 	        }
+	       
+	        // 4. Logica di Business e Database
+	        Utente utenteBase = Utility.checkInputEditUtenteBase(utenteLoggato, nuovoNome, nuovoCognome, 
+	                            dataNascitaStr, nuovoCF, idCittaStr, nuovaPass, oldPassForm, confermaPass);
+	            
+	        dao.update(utenteBase);
 
-	    } catch (Exception e) {
-	        e.printStackTrace();
-	        response.sendRedirect("errore.jsp");
+	        // Aggiornamento Sessione
+	        request.getSession().setAttribute("utenteLoggato", utenteBase);
+	        
+	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(true, 
+	            "Modifica completata con successo.", null)));
+
+	    } catch(DatiErratiException e) {
+	        e.buildErrorMessage();
+	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
+	            "Errore dati: " + e.getMessage(), e.getMessages())));
+	    } catch(SQLException e) {
+	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
+	            "Errore database, riprovare più tardi.", null)));
+	    } catch (Exception e){
+	        outJson.print(mapper.writeValueAsString(new DTOResponseRegistrazione(false, 
+	            "Errore imprevisto.", null)));
+	    } finally {
+	        outJson.flush();
 	    }
 	}
 }

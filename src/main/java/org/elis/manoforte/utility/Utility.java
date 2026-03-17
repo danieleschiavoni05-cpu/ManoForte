@@ -175,4 +175,73 @@ public class Utility {
 
         return e;
     }
+    
+    public static Utente checkInputUtenteBase(String email, String password, String nome, 
+            String cognome, LocalDate dataNascita, String codice_fiscale, Long id_citta, String confermaPassword) throws Exception {
+
+        // DEBUG: Controlla cosa arriva
+        System.out.println("Validazione per: " + email + " - CF: " + codice_fiscale);
+
+        DatiErratiException e = checkInput(email, dataNascita, codice_fiscale, password, confermaPassword);
+
+        if(e.checkErrors()) {
+            // DEBUG: Mostra quali errori sono stati trovati
+            System.out.println("Errori trovati: " + e.getMessages());
+            throw e;
+        }
+
+        // Assicurati che tutti i campi siano passati correttamente al costruttore
+        Utente nuovo = new Utente();
+        nuovo.setEmail(email);
+        nuovo.setPassword(password);
+        nuovo.setNome(nome);
+        nuovo.setCognome(cognome);
+        nuovo.setDataNascita(dataNascita);
+        nuovo.setCodiceFiscale(codice_fiscale);
+        nuovo.setId_citta(id_citta);
+        
+        // Evita null sul database
+
+        return nuovo;
+    }
+    
+    
+    
+    public static Utente checkInputEditUtenteBase(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
+            String codiceFiscale, Long citta,
+            String nuovaPassword, String password, String confermaPassword) throws Exception {
+
+    DatiErratiException e;
+    
+    // 1. Validazione (rimane uguale)
+    if(codiceFiscale.equals(utenteLoggato.getCodiceFiscale()))
+        e = checkEditInput(dataNascita, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+    else 
+        e = checkEditInput(dataNascita, codiceFiscale, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+
+    if(e.checkErrors()) throw e;
+
+    // 2. LOGICA CORRETTA PER LA PASSWORD
+    // Se nuovaPassword non è nulla e non è vuota, usiamo quella. 
+    // Altrimenti manteniamo la password attuale dell'utente loggato.
+    String passwordDaSalvare = utenteLoggato.getPassword(); 
+    
+    if (nuovaPassword != null && !nuovaPassword.trim().isEmpty()) {
+        passwordDaSalvare = nuovaPassword; // Qui dovresti eventualmente hashare se non lo fa il DAO
+    }
+
+    // 3. Ritorno dell'oggetto con i dati corretti
+    return new Utente(
+        utenteLoggato.getEmail(), 
+        passwordDaSalvare, // <--- CAMBIATO QUI
+        nome, 
+        cognome, 
+        dataNascita, 
+        codiceFiscale, 
+        citta
+    );
+}
+    
+    
+    
 }
