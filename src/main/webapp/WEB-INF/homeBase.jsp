@@ -14,19 +14,131 @@ List<Richiesta> listaRichiesta = (List<Richiesta>) request.getAttribute("listaRi
 %>
 
 <!DOCTYPE html>
-<html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dashboard Utente | ManoForte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Utente | ManoForte</title>
 
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/style-homeBase.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
+    <style>
+        :root {
+            --ph-bg-main: #000000;
+            --ph-bg-card: #1b1b1b;
+            --ph-bg-input: #282828;
+            --ph-orange: #ff9900;
+            --ph-orange-hover: #ffad33;
+            --ph-text-main: #ffffff;
+            --ph-text-muted: #999999;
+            --ph-border: #333333;
+        }
 
+        body {
+            background-color: var(--ph-bg-main);
+            color: var(--ph-text-main);
+            font-family: Arial, sans-serif;
+        }
+
+        /* Navbar Style */
+        .navbar {
+            background-color: var(--ph-bg-main) !important;
+            border-bottom: 1px solid var(--ph-border);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            color: var(--ph-text-main) !important;
+        }
+        .navbar-brand i {
+            color: var(--ph-orange);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            padding: 60px 0;
+            background: linear-gradient(180deg, #1b1b1b 0%, #000000 100%);
+            border-bottom: 1px solid var(--ph-border);
+            margin-bottom: 30px;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--ph-bg-card);
+            border: 1px solid var(--ph-border);
+            color: var(--ph-text-main);
+        }
+        
+        .sidebar-link {
+            display: block;
+            color: var(--ph-text-main);
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .sidebar-link:hover {
+            background-color: var(--ph-bg-input);
+            color: var(--ph-orange);
+        }
+
+        /* Tabella */
+        .table-dark-gemini {
+            color: var(--ph-text-main);
+        }
+        .table-dark-gemini thead th {
+            background: var(--ph-bg-input);
+            color: var(--ph-orange);
+            border-bottom: 2px solid var(--ph-orange);
+            text-transform: uppercase;
+        }
+        .table-dark-gemini td {
+            border-color: var(--ph-border);
+        }
+
+        /* Badge */
+        .badge-gemini {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.7rem;
+        }
+        .badge-confirm { background: #443500; color: #ffcc00; }
+        .badge-process { background: #441a00; color: #ff6600; }
+        .badge-complete { background: #1a4400; color: #66ff00; }
+        .badge-muted { background: #333; color: #ccc; }
+
+        /* Pulsanti */
+        .btn-review, .btn-gemini-submit {
+            background-color: var(--ph-orange) !important;
+            border: none !important;
+            color: #000 !important;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .btn-review:hover, .btn-gemini-submit:hover {
+            background-color: var(--ph-orange-hover) !important;
+        }
+
+        /* Modale */
+        .gemini-modal {
+            background-color: var(--ph-bg-card);
+            border: 1px solid var(--ph-orange);
+        }
+        .dark-input {
+            background-color: var(--ph-bg-input);
+            border: 1px solid var(--ph-border);
+            color: white !important;
+        }
+        .dark-input:focus {
+            border-color: var(--ph-orange);
+            box-shadow: 0 0 5px rgba(255, 153, 0, 0.5);
+        }
+
+        /* Helpers */
+        .text-accent { color: var(--ph-orange) !important; }
+        .text-main { color: var(--ph-text-main) !important; }
+        .border-bottom-dark { border-bottom: 1px solid var(--ph-border); }
+    </style>
 </head>
 <body>
 	<% if (session.getAttribute("messaggioSuccesso") != null) { %>

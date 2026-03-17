@@ -1,69 +1,93 @@
-/* Custom Table Style */
+:root {
+  --ph-bg-main: #000000;         /* Nero assoluto */
+  --ph-bg-card: #1b1b1b;         /* Grigio scuro per card/modali */
+  --ph-bg-input: #282828;        /* Grigio più chiaro per input */
+  --ph-orange: #ff9900;          /* Arancione PH */
+  --ph-orange-hover: #ffad33;    /* Arancione PH hover */
+  --ph-text-main: #ffffff;       /* Bianco */
+  --ph-text-muted: #999999;     /* Grigio per testi secondari */
+  --ph-border: #333333;          /* Bordi sottili */
+}
+
+
+
+
+/* Custom Table Style - Pornhub Style */
 .table-dark-gemini {
     --bs-table-bg: transparent;
-    --bs-table-border-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
+    --bs-table-border-color: var(--ph-border);
+    color: var(--ph-text-muted);
 }
 
 .table-dark-gemini thead th {
-    background: rgba(255, 255, 255, 0.02);
-    color: var(--gemini-accent);
+    background: var(--ph-bg-card);
+    color: var(--ph-orange); /* Accent color sulle intestazioni */
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 1px;
-    border-top: none;
+    border-bottom: 2px solid var(--ph-orange); /* Riga arancione tipica */
 }
 
 /* Badges Personalizzati */
 .badge-gemini {
     padding: 6px 12px;
-    border-radius: 8px;
+    border-radius: 4px; /* PH usa angoli meno arrotondati, più netti */
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: bold;
 }
-.badge-confirm { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
-.badge-process { background: rgba(239, 68, 68, 0.15); color: #f87171; }
-.badge-complete { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
-.badge-muted { background: rgba(148, 163, 184, 0.15); color: #94a3b8; }
+.badge-confirm { background: #2d5a27; color: #69ff5b; } /* Verde scuro */
+.badge-process { background: #5a2727; color: #ff5b5b; } /* Rosso scuro */
+.badge-complete { background: #273e5a; color: #5baaff; } /* Blu scuro */
+.badge-muted { background: var(--ph-bg-input); color: var(--ph-text-muted); }
 
-/* Pulsante Recensione */
+/* Pulsante Recensione (Il classico pulsante arancione) */
 .btn-review {
-    background: var(--gemini-gradient);
-    color: white;
+    background: var(--ph-orange);
+    color: var(--ph-bg-main); /* Testo nero su fondo arancione */
     border: none;
-    border-radius: 8px;
-    padding: 6px 15px;
-    transition: 0.3s;
+    border-radius: 4px;
+    padding: 8px 18px;
+    font-weight: bold;
+    transition: 0.2s;
 }
 .btn-review:hover {
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4);
-    transform: scale(1.05);
+    background: var(--ph-orange-hover);
+    transform: none; /* PH non usa molto lo scaling, preferisce il cambio colore */
+    box-shadow: 0 0 10px rgba(255, 153, 0, 0.3);
 }
 
 /* Modale Dark */
 .gemini-modal {
-    background-color: var(--gemini-card);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: var(--ph-bg-card);
+    border: 1px solid var(--ph-border);
+    border-radius: 8px;
 }
-.dark-input {
-    background-color: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-}
-.dark-input:focus {
-    background-color: rgba(15, 23, 42, 0.8);
-    border-color: var(--gemini-accent);
-    box-shadow: none;
-    color: white;
-}
-.btn-gemini-submit {
-    background: var(--gemini-gradient);
-    border: none;
-    color: white;
-    padding: 10px 20px;
-}
-.border-bottom-dark { border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-.border-top-dark { border-top: 1px solid rgba(255, 255, 255, 0.05); }
-.text-accent { color: var(--gemini-accent); }
-.text-main { color: var(--text-main); }
 
+.dark-input {
+    background-color: var(--ph-bg-input);
+    border: 1px solid var(--ph-border);
+    color: var(--ph-text-main);
+    border-radius: 4px;
+}
+
+.dark-input:focus {
+    background-color: var(--ph-bg-input);
+    border-color: var(--ph-orange);
+    box-shadow: 0 0 0 0.25rem rgba(255, 153, 0, 0.25);
+    color: white;
+}
+
+.btn-gemini-submit {
+    background: var(--ph-orange);
+    border: none;
+    color: var(--ph-bg-main);
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* Helpers */
+.border-bottom-dark { border-bottom: 1px solid var(--ph-border); }
+.border-top-dark { border-top: 1px solid var(--ph-border); }
+.text-accent { color: var(--ph-orange); }
+.text-main { color: var(--ph-text-main); }
