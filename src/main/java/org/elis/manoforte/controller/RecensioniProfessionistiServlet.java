@@ -56,8 +56,7 @@ public class RecensioniProfessionistiServlet extends HttpServlet {
         // Recupero tutte le recensioni
         List<Recensione> recensioni = recensioneDao.findAll();
         
-        // Recupero tutti gli utenti per poter estrarre i nomi nella JSP
-        // (In alternativa dovresti creare un metodo nel DAO che fa una JOIN SQL)
+        
         List<Utente> tuttiUtenti;
 		
 			tuttiUtenti = utenteDao.findAllProfessionisti();
