@@ -1,4 +1,4 @@
-const fun = () => {
+const fun = function randomColor() {
     const baseHue1 = Math.floor(Math.random() * 360);
     const offset1 = Math.floor(Math.random() * 120) + 30;
     const baseHue2 = (baseHue1 + offset1) % 360;

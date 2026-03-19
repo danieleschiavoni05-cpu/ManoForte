@@ -45,6 +45,10 @@ h2 {
     letter-spacing: 1px;
 }
 
+input::placeholder {
+    color: var(--white-text);
+}
+
 .section-title {
     font-family: 'Poppins', sans-serif;
     color: var(--muted-silver);
