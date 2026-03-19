@@ -41,39 +41,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        HttpSession session = request.getSession();
-
-        Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
-
-        if(loggedUser == null){
-            response.sendRedirect(request.getContextPath()+"/login");
-            return;
-        }else if(loggedUser.getRuolo()!=Ruolo.PROFESSIONISTA){
-            response.sendRedirect(request.getContextPath()+"/"+Utility.getUserHomePage(loggedUser));
-            return;
-        }
-
-        System.out.println(loggedUser);
-
-        CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
-        VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
-        try {
-            request.setAttribute("utenteLoggato", loggedUser);
-            request.setAttribute("citta", cittaDAO.getAllCitta());
-            request.setAttribute("veicoli", veicoloDAO.getAllVeicolo());
-        }catch(SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect("/errorpage");
-            return;
-        }catch(NessunValoreTrovatoException e){
-            e.printStackTrace();
-            request.setAttribute("errore", e.getMessage());
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/professionista/modificaProfiloProfessionista.jsp");
-        dispatcher.forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/homeprofessionista#edit");
     }
 
     /**
@@ -174,7 +142,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
         }catch(DatiErratiException e) {
             e.printStackTrace();
-            e.buildErrorMessage();
+            e.buildErrorEditMessage();
 
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore inserimento dati dell'utente.", e.getMessages());

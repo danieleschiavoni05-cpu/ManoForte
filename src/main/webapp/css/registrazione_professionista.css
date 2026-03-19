@@ -1,16 +1,18 @@
 .container {
     max-width: 500px;
-    background: rgba(255, 255, 255, 0.73);
+    background: rgba(30, 34, 40, 0.85); /* deep-steel semitrasparente */
     padding: 2.5rem;
     border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    border: 1px solid var(--steel-variant);
+    color: var(--light-silver);
 }
 
 h2 {
     text-align: center;
     font-size: 1.4rem;
     font-weight: 700;
-    color: #212529;
+    color: var(--craft-gold);
     margin-bottom: 2rem;
     text-transform: uppercase;
 }
@@ -18,8 +20,8 @@ h2 {
 .login-register-button {
     width: 100%;
     padding: 12px;
-    background-color: #0d6efd;
-    color: white;
+    background-color: var(--craft-gold);
+    color: var(--obsidian-base);
     border: none;
     border-radius: 8px;
     font-weight: 600;
@@ -27,14 +29,14 @@ h2 {
 }
 
 .login-register-button:hover {
-    background-color: #0b5ed7;
+    background-color: var(--gold-variant);
     transform: translateY(-1px);
 }
 
 .section-title {
     font-size: 0.9rem;
     font-weight: 600;
-    color: #495057;
+    color: var(--light-silver);
     margin-bottom: 0.5rem;
     display: block;
 }
@@ -43,9 +45,9 @@ h2 {
     max-height: 180px;
     overflow-y: auto;
     padding: 10px;
-    border: 1px solid #c4c4c4;
+    border: 1px solid var(--steel-variant);
     border-radius: 8px;
-    background-color: #e2e2e2;
+    background-color: var(--obsidian-base);
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -60,7 +62,7 @@ input[type="number"]{
 }
 
 .error-div{
-    background-color: #f44336;
+    background-color: #E74C3C; /* Rosso attenuato */
     border-radius: 15px;
     padding: 15px;
     width: 100%;
@@ -76,43 +78,43 @@ p.error-message {
     justify-content: flex-start;
     gap: 12px;
     padding: 15px;
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: var(--obsidian-base);
     border-radius: 10px;
-    border: 1px solid #e5e7eb;
+    border: 1px solid var(--steel-variant);
 }
 
-.veicolo-label {
+.checkbox-label {
     position: relative;
     width: auto;
     text-transform: capitalize;
     height: 40px;
-    background: white;
+    background: var(--deep-steel);
     border-radius: 40px;
     display: flex;
     align-items: center;
     padding: 0 20px;
     font-size: 14px;
-    color: var(--notActiveCheck);
+    color: var(--muted-silver);
     font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.15) inset;
+    box-shadow: 0 0 0 1.5px rgba(255,255,255,0.05) inset;
     overflow: hidden;
     transition: all 0.35s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0s;
 }
 
-.veicolo-label input {
+.checkbox-label input {
     display: none;
 }
 
 
-.veicolo-label:has(input:checked) {
-    box-shadow: 0 0 0 2px var(--activeCheck) inset;
-    color: #000;
+.checkbox-label:has(input:checked) {
+    background-color: var(--craft-gold);
+    box-shadow: 0 0 0 2px var(--craft-gold) inset;
+    color: var(--obsidian-base);
 }
 
-.veicolo-label:has(input:checked)::after {
+.checkbox-label:has(input:checked)::after {
     width: 16px;
     height: 16px;
     margin-left: 10px;
 }
-

@@ -1,45 +1,49 @@
 .homeadmin-container {
-    background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+    background: var(--obsidian-base);
     min-height: 100vh;
     padding-bottom: 40px;
+    color: var(--light-silver);
 }
 
 .homeadmin-header {
     text-align: center;
     padding: 40px 20px;
-    background: linear-gradient(135deg, #2196F3, #64B5F6);
-    color: white;
+    background: var(--deep-steel);
+    color: var(--white-text);
     border-radius: 0 0 20px 20px;
+    border-bottom: 1px solid var(--steel-variant);
 }
 
 .homeadmin-header h1 {
     font-size: 2.2rem;
     font-weight: 700;
+    color: var(--craft-gold);
 }
 
 .homeadmin-header p {
     margin-top: 10px;
     font-size: 1.1rem;
-    opacity: 0.9;
+    color: var(--muted-silver);
 }
 
 .admin-card {
     max-width: 900px;
     margin: 40px auto;
     padding: 30px;
-    background: white;
+    background: var(--deep-steel);
     border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    border: 1px solid var(--steel-variant);
 }
 
 .admin-card h2 {
-    color: #1E88E5;
+    color: var(--craft-gold);
     margin-bottom: 10px;
 }
 
 .admin-card h3 {
     margin-top: 25px;
-    color: #424242;
+    color: var(--light-silver);
 }
 
 .admin-form {
@@ -51,19 +55,22 @@
 .admin-form input[type="text"] {
     padding: 12px;
     border-radius: 10px;
-    border: 1px solid #CCC;
+    border: 1px solid var(--steel-variant);
+    background: var(--obsidian-base);
+    color: var(--white-text);
     flex: 1;
     transition: 0.2s;
 }
 
 .admin-form input[type="text"]:focus {
-    border-color: #2196F3;
+    border-color: var(--craft-gold);
     outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
 }
 
 .admin-btn-primary {
-    background: #2196F3;
-    color: white;
+    background: var(--craft-gold);
+    color: var(--obsidian-base);
     padding: 12px 20px;
     border: none;
     border-radius: 10px;
@@ -73,7 +80,7 @@
 }
 
 .admin-btn-primary:hover {
-    background: #1976D2;
+    background: var(--gold-variant);
 }
 
 .admin-list {
@@ -85,22 +92,23 @@
 .admin-list-item {
     margin-bottom: 12px;
     padding: 10px 15px;
-    background: #F5F5F5;
+    background: var(--obsidian-base);
     border-radius: 10px;
     display: flex;
     align-items: center;
     gap: 15px;
+    border: 1px solid var(--steel-variant);
 }
 
 .admin-delete-link {
-    color: #D32F2F;
+    color: #E74C3C; /* Muted Red for delete actions in dark mode */
     font-weight: bold;
     text-decoration: none;
     transition: 0.2s;
 }
 
 .admin-delete-link:hover {
-    color: #B71C1C;
+    color: #C0392B; /* Darker Red on hover */
 }
 
 .admin-inline-form {
@@ -112,13 +120,20 @@
 .admin-inline-form input[type="text"] {
     padding: 6px;
     border-radius: 6px;
-    border: 1px solid #CCC;
+    border: 1px solid var(--steel-variant);
+    background: var(--deep-steel);
+    color: var(--white-text);
+}
+
+.admin-inline-form input[type="text"]:focus {
+    border-color: var(--craft-gold);
+    outline: none;
 }
 
 .admin-btn-small {
-    background: #64B5F6;
-    color: white;
-    border: none;
+    background: var(--steel-variant);
+    color: var(--light-silver);
+    border: 1px solid var(--muted-silver);
     padding: 6px 12px;
     border-radius: 6px;
     cursor: pointer;
@@ -126,11 +141,12 @@
 }
 
 .admin-btn-small:hover {
-    background: #42A5F5;
+    background: var(--muted-silver);
+    color: var(--obsidian-base);
 }
 
 .admin-hr {
     margin: 40px 0;
     border: none;
-    border-top: 1px solid #DDD;
+    border-top: 1px solid var(--steel-variant);
 }

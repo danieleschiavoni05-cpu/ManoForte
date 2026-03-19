@@ -25,7 +25,7 @@
 <% List<Citta> citta = (List<Citta>) request.getAttribute("citta"); %>
 <% List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");%>
 
-<div class="container">
+<div class="container mb-5 mt-5">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h2>
@@ -72,15 +72,13 @@
 
                     <div class="col-12">
                         <label class="section-title">Professioni praticate</label>
-                        <div class="checkbox-box shadow-sm">
+                        <div class="checkboxes-container shadow-sm">
                             <% if(professioni!=null) { %>
                                 <% for(Professione professione:professioni){ %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" value="<%=professione.getId()%>" name="professioni" id="professione_<%=professione.getNome()%>">
-                                        <label class="form-check-label" for="professione_<%=professione.getNome()%>">
-                                            <%=professione.getNome()%>
-                                        </label>
-                                    </div>
+                                    <label class="checkbox-label" for="professione_<%=professione.getNome()%>">
+                                        <%=professione.getNome()%>
+                                        <input type="checkbox" value="<%=professione.getId()%>" name="professioni" id="professione_<%=professione.getNome()%>">
+                                    </label>
                                 <%}%>
                             <%}%>
                         </div>
@@ -91,9 +89,9 @@
                         <div class="checkboxes-container shadow-sm">
                             <% if(veicoli!=null) { %>
                                 <% for(Veicolo veicolo:veicoli){ %>
-                                    <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
+                                    <label class="checkbox-label" for="veicolo_<%=veicolo.getNome()%>">
                                         <%=veicolo.getNome()%>
-                                        <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                                        <input type="checkbox" value="<%=veicolo.getId()%>" name="veicoli" id="veicolo_<%=veicolo.getNome()%>">
                                     </label>
                                 <%}%>
                             <%}%>
@@ -104,7 +102,7 @@
                         <label class="section-title" for="tariffa">Inserire una tariffa oraria</label>
                         <div class="input-group mb-0 w-50">
                             <input type="number" name="tariffa" id="tariffa" min="0" step="0.25" class="form-control">
-                            <span class="input-group-text">€/h</span>
+                            <span class="input-group-text">&euro;/h</span>
                         </div>
                     </div> <%-- Tariffa --%>
 
@@ -126,7 +124,7 @@
 
                     <div class="col-12 mt-4 d-none" id="containerSuccesso">
                         <div class="alert alert-successo text-center shadow-sm" role="alert">
-                            <ul id="listaErrori" class="list-unstyled mb-0 fw-bold"></ul>
+                            <ul id="listaSuccessi" class="list-unstyled mb-0 fw-bold"></ul>
                         </div>
                     </div> <%-- Lista successo --%>
 

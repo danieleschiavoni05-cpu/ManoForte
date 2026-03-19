@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const formRegistrazioneUtenteBase=document.getElementById("formRegistrazioneUtenteBase");
 	const formModificaProfiloUtenteBase = document.getElementById("formModificaProfiloUtenteBase");
 
+
     let localDateNow = new Date();
 
     //Codice per impostare la data massima a un età maggiorenne

@@ -19,7 +19,7 @@
 
 <body>
 
-<jsp:include page="/Navbar.jsp"/>
+<jsp:include page="/includes/Navbar.jsp"/>
 
 <div class="homeadmin-container">
 
@@ -88,7 +88,7 @@
 
 </div>
 
-<jsp:include page="/Footer.jsp"/>
+<jsp:include page="/includes/Footer.jsp"/>
 
 </body>
 </html>

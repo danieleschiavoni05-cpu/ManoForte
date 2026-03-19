@@ -1,26 +1,26 @@
 :root {
-    --primary: #0aad6a;
-    --dark: #1a252f;
-    --light: #f8f9fa;
-    --accent: #3498db;
+    --primary: var(--craft-gold);
+    --dark: var(--obsidian-base);
+    --light: var(--deep-steel);
+    --accent: var(--muted-silver);
 }
 
 body {
     margin: 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     background: var(--light);
-    color: var(--dark);
+    color: var(--white-text);
     line-height: 1.6;
 }
 
 /* Header */
 header {
-    background: white;
+    background: var(--obsidian-base);
     padding: 15px 8%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -37,7 +37,7 @@ header {
 nav a {
     margin-left: 25px;
     text-decoration: none;
-    color: var(--dark);
+    color: var(--light-silver);
     font-weight: 600;
     transition: 0.3s;
     font-size: 15px;
@@ -52,7 +52,7 @@ nav a:hover {
     position: relative;
     height: 500px;
     overflow: hidden;
-    background: #000;
+    background: var(--obsidian-base);
 }
 
 .slide {
@@ -65,7 +65,7 @@ nav a:hover {
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: white;
+    color: var(--white-text);
     background-size: cover;
     background-position: center;
 }
@@ -81,7 +81,7 @@ nav a:hover {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(15, 17, 21, 0.6); /* obsidian-base semi-trasparente */
 }
 
 .slide-content {
@@ -94,7 +94,8 @@ nav a:hover {
     font-size: 56px;
     margin-bottom: 15px;
     font-weight: 800;
-    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.8);
+    color: var(--craft-gold);
 }
 
 /* Barra di ricerca */
@@ -108,10 +109,11 @@ nav a:hover {
 
 .search-box {
     display: inline-flex;
-    background: white;
+    background: var(--obsidian-base);
     border-radius: 60px;
     padding: 8px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--steel-variant);
 }
 
 .search-box input {
@@ -121,6 +123,12 @@ nav a:hover {
     border: none;
     outline: none;
     font-size: 16px;
+    background: transparent;
+    color: var(--white-text);
+}
+
+.search-box input::placeholder {
+    color: var(--muted-silver);
 }
 
 .search-box button {
@@ -128,14 +136,14 @@ nav a:hover {
     border: none;
     border-radius: 60px;
     background: var(--primary);
-    color: white;
+    color: var(--obsidian-base);
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
 }
 
 .search-box button:hover {
-    background: #088f58;
+    background: var(--gold-variant);
 }
 
 .container {
@@ -149,6 +157,7 @@ h2 {
     font-size: 32px;
     margin-bottom: 40px;
     font-weight: 800;
+    color: var(--craft-gold);
 }
 
 h2::after {
@@ -172,20 +181,22 @@ h2::after {
 
 .cat-item {
     text-decoration: none;
-    color: var(--dark);
+    color: var(--light-silver);
     width: 140px;
     text-align: center;
     transition: 0.3s;
     padding: 20px;
-    background: white;
+    background: var(--obsidian-base);
     border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--steel-variant);
 }
 
 .cat-item:hover {
     transform: translateY(-5px);
     color: var(--primary);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary);
 }
 
 .cat-icon {
@@ -202,15 +213,16 @@ h2::after {
 }
 
 .rec-card {
-    background: white;
+    background: var(--obsidian-base);
     padding: 30px;
     border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
     border-top: 4px solid var(--primary);
+    color: var(--light-silver);
 }
 
 .stars {
-    color: #f1c40f;
+    color: var(--primary);
     margin-bottom: 10px;
     font-size: 1.2em;
 }
@@ -218,16 +230,17 @@ h2::after {
 .rec-meta {
     margin-top: 15px;
     font-size: 0.85em;
-    color: #777;
-    border-top: 1px solid #eee;
+    color: var(--muted-silver);
+    border-top: 1px solid var(--steel-variant);
     padding-top: 10px;
 }
 
 footer {
     background: var(--dark);
-    color: #bdc3c7;
+    color: var(--muted-silver);
     padding: 60px 8% 30px;
     margin-top: 80px;
+    border-top: 1px solid var(--steel-variant);
 }
 
 .footer-grid {

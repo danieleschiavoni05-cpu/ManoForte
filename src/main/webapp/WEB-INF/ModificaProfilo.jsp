@@ -10,20 +10,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Modifica Profilo | ManoForte</title>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
-    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/style-modificaProfilo.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
 
 </head>
-<body>
+<body style="margin: 0; padding: 0;">
+
+    <jsp:include page="/includes/Navbar.jsp"/>
 
 <% Utente utente = (Utente) request.getAttribute("utenteLoggato");%>
 <% List<String> messaggi = (List<String>) request.getAttribute("messages"); %>
 <% String errore = (String) request.getAttribute("errore");%>
 <% List<Citta> citta = (List<Citta>) request.getAttribute("listaCitta"); %>
 
-	<div class="container d-flex justify-content-center">
+	<div class="container d-flex justify-content-center" style="margin-top: 2rem;">
 		<div class="profile-card shadow">
 
 			<div class="profile-header">
@@ -111,10 +116,11 @@
 				class="btn-back d-block text-center mt-4"> <i
 				class="fa-solid fa-house-user me-2"></i>Annulla e torna alla Home
 			</a>
-		
 
 
-	<script src="<%=request.getContextPath()%>/js/script-registrazione_edit.js"></script>
-<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+    <jsp:include page="/includes/Footer.jsp"/>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

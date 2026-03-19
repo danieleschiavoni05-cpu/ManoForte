@@ -1,10 +1,10 @@
 :root {
-	--gemini-bg: #0f172a;
-	--gemini-card: #1e293b;
-	--gemini-accent: #6366f1;
-	--text-main: #f8fafc;
-	--text-muted: #94a3b8;
-	--star-color: #fbbf24;
+	--gemini-bg: var(--obsidian-base);
+	--gemini-card: var(--deep-steel);
+	--gemini-accent: var(--craft-gold);
+	--text-main: var(--light-silver);
+	--text-muted: var(--muted-silver);
+	--star-color: var(--craft-gold);
 }
 
 body {
@@ -16,21 +16,19 @@ body {
 
 .header-section {
 	padding: 3rem 0;
-	background: radial-gradient(circle at top, #1e2a4a 0%, #0f172a 100%);
-	border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+	background: radial-gradient(circle at top, var(--steel-variant) 0%, var(--obsidian-base) 100%);
+	border-bottom: 1px solid var(--steel-variant);
 	margin-bottom: 2rem;
 }
 
 .header-section h1 {
 	font-weight: 800;
-	background: linear-gradient(90deg, #818cf8, #c084fc);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: var(--craft-gold);
 }
 
 .review-card {
 	background: var(--gemini-card);
-	border: 1px solid rgba(255, 255, 255, 0.1);
+	border: 1px solid var(--steel-variant);
 	border-radius: 16px;
 	padding: 1.5rem;
 	margin-bottom: 1rem;
@@ -40,11 +38,12 @@ body {
 .review-card:hover {
 	border-color: var(--gemini-accent);
 	transform: translateX(5px);
+	box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
 }
 
 .prof-id-tag {
 	font-size: 0.8rem;
-	background: rgba(99, 102, 241, 0.1);
+	background: rgba(212, 175, 55, 0.1); /* craft-gold semitrasparente */
 	color: var(--gemini-accent);
 	padding: 4px 12px;
 	border-radius: 20px;
@@ -57,7 +56,7 @@ body {
 }
 
 .review-body {
-	color: var(--text-muted);
+	color: var(--text-main);
 	margin-top: 1rem;
 	line-height: 1.6;
 	font-style: italic;
@@ -73,12 +72,12 @@ body {
 }
 
 .btn-back:hover {
-	color: white;
+	color: var(--craft-gold);
 }
 
 .empty-box {
 	background: rgba(255, 255, 255, 0.02);
-	border: 2px dashed rgba(255, 255, 255, 0.1);
+	border: 2px dashed var(--steel-variant);
 	border-radius: 20px;
 	padding: 4rem;
 }
