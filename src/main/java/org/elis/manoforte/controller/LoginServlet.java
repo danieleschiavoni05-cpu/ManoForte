@@ -33,11 +33,6 @@ public class LoginServlet extends HttpServlet {
 
         Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
 
-        if(loggedUser != null){
-            response.sendRedirect(request.getContextPath()+"/"+Utility.getUserHomePage(loggedUser));
-            return;
-        }
-
         RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/login.jsp");
         dispatcher.forward(request, response);
     }
@@ -77,7 +72,26 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("utenteLoggato", utente);
 
-            response.sendRedirect(request.getContextPath()+"/"+Utility.getUserHomePage(utente));
+            String destination = request.getContextPath() + "/" + Utility.getUserHomePage(utente);
+            
+            Cookie[] cookies = request.getCookies();
+            if (cookies != null) {
+                for (Cookie c : cookies) {
+                    if ("last_visited_url".equals(c.getName())) {
+                        // Se esiste il cookie, la destinazione diventa l'URL salvato
+                        destination = java.net.URLDecoder.decode(c.getValue(), "UTF-8");
+                        
+                        // Eliminiamo il cookie
+                        c.setMaxAge(0);
+                        c.setPath("/");
+                        response.addCookie(c);
+                        break;
+                    }
+                }
+            }
+
+            // 3. Reindirizzamento finale
+            response.sendRedirect(destination);
 
         }catch(DatiErratiException e) {
             e.printStackTrace();

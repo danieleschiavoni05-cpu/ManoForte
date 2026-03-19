@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface RecensioneDAO {
     List<Recensione> findAll();
+    
+    List<Recensione> findAllwithConditions();
 
     void inserisciRecensione(Recensione recensione) throws Exception;
 

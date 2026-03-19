@@ -37,7 +37,7 @@ public class LogoutServlet extends HttpServlet {
             }
             
             // Ritorna alla pagina di login o alla home pubblica
-            response.sendRedirect(request.getContextPath() + "/Homepage.jsp");
+            response.sendRedirect(request.getContextPath() + "/Homepage");
         }
     
 
