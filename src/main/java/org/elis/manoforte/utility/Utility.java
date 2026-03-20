@@ -74,7 +74,7 @@ public class Utility {
     public static String getUserHomePage(Utente loggedUser) {
         Ruolo userType = loggedUser.getRuolo();
         if(userType.equals(Ruolo.ADMIN)){
-            return "homeadmin";
+            return "HomeAdmin";
         }else if(userType.equals(Ruolo.UTENTE_BASE)){
             return "homeBase";
         }else return "homeprofessionista";

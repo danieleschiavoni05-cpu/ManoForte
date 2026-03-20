@@ -67,9 +67,11 @@
 
 <jsp:include page="/includes/Navbar.jsp"/>
 
-<div class="filter-section">
-    <div class="container" style="margin-top: 0; margin-bottom: 0;">
-        <form class="search-box" action="ListaProfessionisti" method="get" style="margin: 0 auto; display: table;">
+<div class="filter-section" 
+     style="background: #279AF1; padding:30px 0;">
+    <div class="container">
+        <form class="search-box" action="ListaProfessionisti" method="get" 
+              style="display:flex; gap:10px; justify-content:center;">
             <%
                 String cerca = request.getParameter("cercaNome");
                 if (cerca == null) cerca = "";
@@ -107,7 +109,7 @@
     </div>
 </div>
 
-<jsp:include page="/includes/Footer.jsp"/>
+
 
 </body>
 </html>

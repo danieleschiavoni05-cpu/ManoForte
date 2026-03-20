@@ -5,7 +5,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.elis.manoforte.dao.definition.AdminDAO;
+
+import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,8 +18,8 @@ public class HomeAdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        List<Object[]> citta = AdminDAO.getCitta();
-        List<Object[]> professioni = AdminDAO.getProfessioni();
+        List<Object[]> citta = JdbcAdminDAO.getCitta();
+        List<Object[]> professioni = JdbcAdminDAO.getProfessioni();
 
         request.setAttribute("citta", citta);
         request.setAttribute("professioni", professioni);

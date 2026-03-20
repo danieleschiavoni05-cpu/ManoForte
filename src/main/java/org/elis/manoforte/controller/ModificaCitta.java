@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import org.elis.manoforte.dao.definition.AdminDAO;
+import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 
 @WebServlet("/ModificaCitta")
 public class ModificaCitta extends HttpServlet {
@@ -17,9 +17,9 @@ public class ModificaCitta extends HttpServlet {
         String nome = request.getParameter("nome");
 
         if (nome != null && !nome.trim().isEmpty()) {
-            AdminDAO.modificaCitta(id, nome.trim());
+            JdbcAdminDAO.modificaCitta(id, nome.trim());
         }
 
-        response.sendRedirect("HomeAdmin.jsp");
+        response.sendRedirect("HomeAdmin");
     }
 }

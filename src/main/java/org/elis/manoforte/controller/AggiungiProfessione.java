@@ -4,7 +4,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import org.elis.manoforte.dao.definition.AdminDAO;
+import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 
 @WebServlet("/AggiungiProfessione")
 public class AggiungiProfessione extends HttpServlet {
@@ -16,9 +16,9 @@ public class AggiungiProfessione extends HttpServlet {
         String nome = request.getParameter("nomeProfessione");
 
         if (nome != null && !nome.trim().isEmpty()) {
-            AdminDAO.aggiungiProfessione(nome.trim());
+            JdbcAdminDAO.aggiungiProfessione(nome.trim());
         }
 
-        response.sendRedirect("HomeAdmin.jsp");
+        response.sendRedirect("HomeAdmin");
     }
 }

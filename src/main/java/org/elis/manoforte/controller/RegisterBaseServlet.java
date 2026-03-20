@@ -57,8 +57,8 @@ public class RegisterBaseServlet extends HttpServlet {
 	            response.sendRedirect(request.getContextPath()+Utility.getUserHomePage(loggedUser));
 	            return;
 	        }
-		
-		
+	
+	        
 		CittaDAO cittaDao = new JdbcCittaDAO(DataSourceConfig.getDataSource());
 		try {
 	        List<Citta> citta = cittaDao.getAllCitta(); 

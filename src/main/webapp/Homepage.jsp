@@ -20,17 +20,13 @@
 
     <jsp:include page="/includes/Navbar.jsp"/>
 
-    <% 
-	List<Utente> listaUtenti = (List<Utente>) request.getAttribute("listaUtenti");
-	
-    %>
 
-    <div class="carousel">
-        <div class="slide active">
-            <div class="slide-content">
-                <h1>Esperti Idraulici pronti per te</h1>
-                <p>Risolvi ogni problema domestico con professionisti verificati.</p>
-            </div>
+<div class="carousel"
+     style="background: linear-gradient(180deg, #279AF1 0%, #4FB4FF 100%);">
+    <div class="slide active" style="background-color:#279AF1">
+        <div class="slide-content">
+            <h1>Esperti Idraulici pronti per te</h1>
+            <p>Risolvi ogni problema domestico con professionisti verificati.</p>
         </div>
         <div class="slide">
             <div class="slide-content">
@@ -68,7 +64,7 @@
             </a>
         </div>
     </div>
-
+</div>
 <div class="container"
      style="background: linear-gradient(135deg, #279AF1 0%, #6EC6FF 50%, #A8E1FF 100%);
             padding: 40px; border-radius: 15px; margin-top: 40px;">
@@ -151,17 +147,19 @@
     }
     %>
     </div>
+    </div>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 5000);
-    </script>
-    <jsp:include page="/includes/Footer.jsp"/>
+<script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    setInterval(() => {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }, 5000);
+</script>
+
+
 
 </body>
 </html>

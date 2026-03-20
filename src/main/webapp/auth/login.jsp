@@ -46,7 +46,7 @@
                 <div class="row g-3 <%=(errore!=null)?' ':"mb-4"%>" id="mainRow">
                     <div class="col-12">
                         <label class="section-title" for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Inserire un indirizzo email">
+                        <input type="text" class="form-control" id="email" name="email" placeholder="Inserire un indirizzo email">
                     </div> <%-- Email --%>
                     <div class="col-12">
                         <label class="section-title" for="password">Password</label>

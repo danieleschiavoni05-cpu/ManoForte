@@ -20,9 +20,9 @@ import org.elis.manoforte.utility.DataSourceConfig;
 
 @WebServlet("/Homepage")
 public class HomeServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
 
     @Override
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
     	String task = request.getParameter("task");
@@ -64,6 +64,7 @@ public class HomeServlet extends HttpServlet {
         	
             request.setAttribute("recensioni", recensioni);
             request.setAttribute("mappaProfessionisti", mappaProfessionisti);
+       
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -73,7 +74,8 @@ public class HomeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         doGet(request, response);
     }
 }

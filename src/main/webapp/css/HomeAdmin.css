@@ -1,3 +1,15 @@
+:root {
+    --obsidian-base: #1a1a1d;
+    --deep-steel: #2b2f36;
+    --steel-variant: #3c4149;
+    --light-silver: #d1d1d1;
+    --muted-silver: #a0a0a0;
+    --white-text: #ffffff;
+    --craft-gold: #d4af37;
+    --gold-variant: #b8962e;
+}
+
+
 .homeadmin-container {
     background: var(--obsidian-base);
     min-height: 100vh;

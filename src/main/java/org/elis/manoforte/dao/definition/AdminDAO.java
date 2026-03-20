@@ -1,26 +1,16 @@
 package org.elis.manoforte.dao.definition;
 
+import org.elis.manoforte.utility.DataSourceConfig;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminDAO {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/progetto_java_web";
-    private static final String USER = "root";
-    private static final String PASS = "root";
-
-    private static Connection getConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(URL, USER, PASS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    private static Connection getConnection() throws Exception {
+        return DataSourceConfig.getDataSource().getConnection();
     }
-
-    // ------------------ AGGIUNGI ------------------
 
     public static void aggiungiCitta(String nome) {
         try (Connection conn = getConnection()) {
@@ -37,8 +27,6 @@ public class AdminDAO {
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
-
-    // ------------------ LISTA ------------------
 
     public static List<Object[]> getCitta() {
         List<Object[]> lista = new ArrayList<>();
@@ -64,8 +52,6 @@ public class AdminDAO {
         return lista;
     }
 
-    // ------------------ ELIMINA ------------------
-
     public static void eliminaCitta(int id) {
         try (Connection conn = getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM citta WHERE id=?");
@@ -81,8 +67,6 @@ public class AdminDAO {
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
-
-    // ------------------ MODIFICA ------------------
 
     public static void modificaCitta(int id, String nome) {
         try (Connection conn = getConnection()) {
@@ -101,7 +85,4 @@ public class AdminDAO {
             ps.executeUpdate();
         } catch (Exception e) { e.printStackTrace(); }
     }
-    
-    }
-
-
+}

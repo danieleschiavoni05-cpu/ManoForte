@@ -5,7 +5,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import org.elis.manoforte.dao.definition.AdminDAO;
+import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 
 @WebServlet("/EliminaCitta")
 public class EliminaCitta extends HttpServlet {
@@ -15,8 +15,15 @@ public class EliminaCitta extends HttpServlet {
             throws IOException {
 
         int id = Integer.parseInt(request.getParameter("id"));
-        AdminDAO.eliminaCitta(id);
+        JdbcAdminDAO.eliminaCitta(id);
 
-        response.sendRedirect("HomeAdmin.jsp");
+        response.sendRedirect("HomeAdmin");
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        doGet(request, response);
+
     }
 }
