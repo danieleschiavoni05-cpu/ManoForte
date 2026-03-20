@@ -161,7 +161,7 @@
             slides[currentSlide].classList.add('active');
         }, 5000);
     </script>
-    <jsp:include page="/includes/Footer.jsp"/>
+    
 
 </body>
 </html>

@@ -71,6 +71,7 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("utenteLoggato", utente);
+            session.setAttribute("ruolo", utente.getRuolo());
 
             String destination = request.getContextPath() + "/" + Utility.getUserHomePage(utente);
             
