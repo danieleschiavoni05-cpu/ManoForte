@@ -2,7 +2,8 @@ package org.elis.manoforte.controller;
 
 import jakarta.servlet.ServletException;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -29,8 +30,18 @@ public class LoginServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, IOException {
-        HttpSession session = request.getSession();
+        String path = "C:/immagini";
+        File file = new File(path);
+        if (!file.exists()) {
+            Files.createDirectory(file.toPath());
+        }
+        try(DataOutputStream fos = new DataOutputStream(new FileOutputStream(file.toPath()+"/test.txt"))){
+            fos.writeChars("hello world");
+            fos.flush();
+        }
 
+
+        HttpSession session = request.getSession();
         Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/login.jsp");

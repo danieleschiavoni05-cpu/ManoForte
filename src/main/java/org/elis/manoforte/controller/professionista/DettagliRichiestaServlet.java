@@ -1,4 +1,4 @@
-package org.elis.manoforte.controller;
+package org.elis.manoforte.controller.professionista;
 
 import jakarta.servlet.ServletException;
 
@@ -6,7 +6,6 @@ import java.io.*;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import jakarta.servlet.RequestDispatcher;
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;

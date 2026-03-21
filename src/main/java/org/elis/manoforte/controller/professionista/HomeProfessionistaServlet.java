@@ -1,22 +1,20 @@
-package org.elis.manoforte.controller;
+package org.elis.manoforte.controller.professionista;
 
 import jakarta.servlet.ServletException;
 
 import java.io.*;
 import java.sql.SQLException;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
-import org.elis.manoforte.dao.definition.CittaDAO;
-import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.dao.definition.RichiestaDAO;
-import org.elis.manoforte.dao.definition.VeicoloDAO;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
-import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
-import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
+import org.elis.manoforte.dao.definition.*;
+import org.elis.manoforte.dao.jdbc.*;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.DataSourceConfig;
@@ -52,6 +50,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
         DataSource ds = DataSourceConfig.getDataSource();
         RichiestaDAO richiestaDAO = new RichiestaDAOJDBC(ds);
         RecensioneDAO recensioneDAO = new RecensioneDAOJDBC(ds);
+        DisponibilitaDAO disponibilitaDAO = new JdbcDisponibilitaDAO(ds);
         CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
         VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
 
@@ -62,6 +61,20 @@ public class HomeProfessionistaServlet extends HttpServlet {
 
             List<CardRecensione> recensioni = recensioneDAO.getRecensioneByEmailProfessionistaLimit(loggedUser.getEmail(), 4);
 
+
+
+            List<Disponibilita> disponibilita = disponibilitaDAO.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.SINGOLO);
+            Map<LocalDate, List<Disponibilita>> disponibilitaSingole = disponibilita.stream()
+                    .collect(Collectors.groupingBy(d -> d.getData()));
+
+            disponibilita = disponibilitaDAO.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.RICORSIVO);
+            Map<DayOfWeek, List<Disponibilita>> disponibilitaRicorsive = disponibilita.stream()
+                    .collect(Collectors.groupingBy(d -> d.getGiorno_settimana()));
+
+            disponibilita = disponibilitaDAO.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.ECCEZIONE);
+            Map<LocalDate, List<Disponibilita>> disponibilitaEccezioni = disponibilita.stream()
+                    .collect(Collectors.groupingBy(d -> d.getData()));
+
             // Attibuti per le mie richieste
             request.setAttribute("richiesteInAttesa", richiesteInAttesa);
             request.setAttribute("richiesteInCorso", richiesteInCorso);
@@ -71,6 +84,10 @@ public class HomeProfessionistaServlet extends HttpServlet {
             // Attributi per la modifica del profilo
             request.setAttribute("citta", cittaDAO.getAllCitta());
             request.setAttribute("veicoli", veicoloDAO.getAllVeicolo());
+            // Attributi disponibilità
+            request.setAttribute("disponibilitaSingole", disponibilitaSingole);
+            request.setAttribute("disponibilitaRicorrenti", disponibilitaRicorsive);
+            request.setAttribute("disponibilitaEccezioni", disponibilitaEccezioni);
 
         }catch(SQLException e) {
             e.printStackTrace();

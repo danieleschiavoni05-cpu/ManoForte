@@ -1,4 +1,4 @@
-package org.elis.manoforte.controller;
+package org.elis.manoforte.controller.professionista;
 
 import jakarta.servlet.ServletException;
 
@@ -11,18 +11,11 @@ import java.util.List;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import jakarta.servlet.RequestDispatcher;
-import org.elis.manoforte.dao.definition.CittaDAO;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.definition.VeicoloDAO;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
-import org.elis.manoforte.exception.NessunValoreTrovatoException;
-import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.DataSourceConfig;

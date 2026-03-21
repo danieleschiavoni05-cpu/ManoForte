@@ -34,22 +34,22 @@
             <input type="date" class="form-control" id="data" value="<%=utente.getDataNascita()%>" name="data_nascita">
         </div> <%-- Data di nascita --%>
 
-        <div class="col-md-10">
+        <div class="col-md-4">
             <label class="section-title" for="codice_fiscale">Codice fiscale/Partita IVA</label>
             <input type="text" class="form-control" id="codice_fiscale" name="codice_fiscale" value="<%=utente.getCodiceFiscale()%>" maxlength="16" placeholder="Inserire un codice fiscale/partita IVA">
         </div> <%-- Codice fiscale --%>
 
-        <div class="col-12">
+        <div class="col-md-8">
             <label class="section-title" for="citta">Città di residenza</label>
             <select class="form-select" name="citta" id="citta">
                 <%if(citta!=null && !citta.isEmpty()){%>
-                <%for(Citta c: citta){%>
-                <%if(c.getId()==utente.getIdCitta()){%>
-                <option selected value="<%=c.getId()%>"><%=c.getNome()%></option>
-                <%}else{%>
-                <option value="<%=c.getId()%>"><%=c.getNome()%></option>
-                <%}%>
-                <%}%>
+                    <%for(Citta c: citta){%>
+                        <%if(c.getId()==utente.getIdCitta()){%>
+                            <option selected value="<%=c.getId()%>"><%=c.getNome()%></option>
+                        <%}else{%>
+                            <option value="<%=c.getId()%>"><%=c.getNome()%></option>
+                        <%}%>
+                    <%}%>
                 <%}%>
             </select>
         </div> <%-- Citta --%>

@@ -1,4 +1,4 @@
-package org.elis.manoforte.controller;
+package org.elis.manoforte.controller.professionista;
 
 import jakarta.servlet.ServletException;
 

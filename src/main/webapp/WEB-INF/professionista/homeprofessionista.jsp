@@ -48,7 +48,7 @@
     </div>
 
     <div class="row d-flex flex-row">
-        <div class="col-md-9 gap-2 task-column">
+        <div class="col-md-10 gap-0 task-column">
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="requests" role="tabpanel" aria-labelledby="pills-requests" tabindex="0">
                     <%@include file="/WEB-INF/professionista/richiesteProfessionista.jsp"%>
@@ -66,7 +66,7 @@
             </div>--%>
 
         </div>
-        <div class="col-md-3 ">
+        <div class="col-md-2 ">
             <div class="card border-none shadow-sm p-3 border-radius-15 action-column">
                 <ul class="nav nav-pills mb-3 flex-column" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
@@ -103,6 +103,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
 <script src="<%=request.getContextPath()%>/js/dettagliRichieste.js"></script>
+<script src="<%=request.getContextPath()%>/js/aggiungiDisponibilita.js"></script>
 
 <script>
     let param = window.location.hash;
