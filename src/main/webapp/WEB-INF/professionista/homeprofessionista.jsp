@@ -59,11 +59,11 @@
                     <%@include file="/WEB-INF/professionista/modificaProfiloProfessionista.jsp"%>
                 </div>
             </div>
-            <%--<div class="tab-content" id="pills-tabContent">
+            <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade" id="availability" role="tabpanel" aria-labelledby="pills-availability" tabindex="0">
                     <%@include file="/WEB-INF/professionista/disponibilitaProfessionista.jsp"%>
                 </div>
-            </div>--%>
+            </div>
 
         </div>
         <div class="col-md-2 ">

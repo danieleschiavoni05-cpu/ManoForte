@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -177,6 +178,28 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 								rs.getString("email"),
 								rs.getLong("id_citta")));
 				richieste.add(card);
+			}
+		}
+		return richieste;
+	}
+
+	@Override
+	public List<Richiesta> getRichiesteByEmailProfessionistaAndTipo(String email, StatoRichiesta statoRichiesta) throws SQLException {
+		List<Richiesta> richieste = new ArrayList<>();
+		try (Connection conn = dataSource.getConnection()){
+			PreparedStatement statement = conn.prepareStatement(SqlQuery.elencoRichiesteByIdProfessionistaAndStato);
+			statement.setString(1, email);
+			statement.setInt(2, statoRichiesta.ordinal());
+			statement.executeQuery();
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				Richiesta richiesta = new Richiesta();
+				richiesta.setId(rs.getLong("id_richiesta"));
+				richiesta.setData(rs.getDate("data_richiesta").toLocalDate());
+				richiesta.setStatoRichiesta(StatoRichiesta.values()[rs.getInt("stato")]);
+				richiesta.setOra_inizio(LocalTime.parse(rs.getString("ora_inizio")));
+				richiesta.setOra_fine(LocalTime.parse(rs.getString("ora_fine")));
+				richieste.add(richiesta);
 			}
 		}
 		return richieste;

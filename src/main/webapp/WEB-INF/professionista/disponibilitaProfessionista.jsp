@@ -10,7 +10,6 @@
 <%@ page import="java.util.Map" %>
 
 <%
-    // --- 1. GESTIONE DATA CORRENTE (Navigazione) ---
     String dateParam = request.getParameter("date");
     LocalDate referenceDate = (dateParam != null && !dateParam.isEmpty()) ? LocalDate.parse(dateParam) : LocalDate.now();
 
@@ -25,6 +24,7 @@
     Map<LocalDate, List<Disponibilita>> disponibilitaSingole = (Map<LocalDate, List<Disponibilita>>) request.getAttribute("disponibilitaSingole");
     Map<DayOfWeek, List<Disponibilita>> disponibilitaRicorrenti = (Map<DayOfWeek, List<Disponibilita>>) request.getAttribute("disponibilitaRicorrenti");
     Map<LocalDate, List<Disponibilita>> disponibilitaEccezioni = (Map<LocalDate, List<Disponibilita>>) request.getAttribute("disponibilitaEccezioni");
+    Map<LocalDate, List<Richiesta>> richiesteRicevute = (Map<LocalDate, List<Richiesta>>) request.getAttribute("richiesteRicevute");
 
 %>
 
@@ -70,24 +70,34 @@
                             <%for (int i = 0; i < 7; i++) {%>
                                 <%LocalDate giornoSettimana = startOfWeek.plusDays(i);%>
                                 <%Disponibilita disp = null;%>
+                                <%Richiesta rich = null;%>
                                 <%String tipo = "Vuoto";%>
 
-                                <%if(disponibilitaEccezioni.get(giornoSettimana)!=null){%>
-                                    <%disp = checkOrario(disponibilitaEccezioni.get(giornoSettimana), cellaOra);%>
-                                    <%if(disp!=null) tipo = "Eccezione";%>
+                                <%if(richiesteRicevute.get(giornoSettimana)!=null){%>
+                                    <%rich = checkOrarioRichiesta(richiesteRicevute.get(giornoSettimana), cellaOra);%>
+                                    <%if(rich!=null) tipo="Richiesta";%>
                                 <%}%>
 
-                                <%if(disp==null&&disponibilitaSingole.get(giornoSettimana)!=null){%>
-                                    <%disp = checkOrario(disponibilitaSingole.get(giornoSettimana), cellaOra);%>
-                                    <%if(disp!=null) tipo = "Disponibile";%>
+                                <%if(!tipo.equals("Richiesta")){%>
+                                    <%if(disponibilitaEccezioni.get(giornoSettimana)!=null){%>
+                                        <%disp = checkOrario(disponibilitaEccezioni.get(giornoSettimana), cellaOra);%>
+                                        <%if(disp!=null) tipo = "Eccezione";%>
+                                    <%}%>
+
+                                    <%if(disp==null&&disponibilitaSingole.get(giornoSettimana)!=null){%>
+                                        <%disp = checkOrario(disponibilitaSingole.get(giornoSettimana), cellaOra);%>
+                                        <%if(disp!=null) tipo = "Disponibile";%>
+                                    <%}%>
+
+                                    <%if(disp==null&&disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana))!=null){%>
+                                        <%disp = checkOrario(disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana)), cellaOra);%>
+                                        <%if(disp!=null) tipo = "Disponibile";%>
+                                    <%}%>
                                 <%}%>
 
-                                <%if(disp==null&&disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana))!=null){%>
-                                    <%disp = checkOrario(disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana)), cellaOra);%>
-                                    <%if(disp!=null) tipo = "Disponibile";%>
-                                <%}%>
-
-                                <%if(tipo.equals("Eccezione")){%>
+                                <%if(tipo.equals("Richiesta")){%>
+                                    <%=stampaRichiesta()%>
+                                <%}else if(tipo.equals("Eccezione")){%>
                                     <%=stampaEccezione(disp, cellaOra, giornoSettimana)%>
                                 <%}else if(tipo.equals("Disponibile")){%>
                                     <%=stampaDisponibile(disp, cellaOra, giornoSettimana)%>
@@ -187,6 +197,19 @@
             }
         }
         return null;
+    }
+
+    private Richiesta checkOrarioRichiesta(List<Richiesta> richieste, LocalTime slotTime) {
+        for (Richiesta r : richieste) {
+            if (!slotTime.isBefore(r.getOra_inizio()) && slotTime.isBefore(r.getOra_fine())) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+    private String stampaRichiesta(){
+        return  "<td class='slot-requested' title='Richiesta'></td>";
     }
 
     private String stampaVuoto(LocalTime ora, LocalDate giornoSettimana){

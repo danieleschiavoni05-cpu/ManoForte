@@ -75,6 +75,10 @@ public class HomeProfessionistaServlet extends HttpServlet {
             Map<LocalDate, List<Disponibilita>> disponibilitaEccezioni = disponibilita.stream()
                     .collect(Collectors.groupingBy(d -> d.getData()));
 
+            List<Richiesta> richieste = richiestaDAO.getRichiesteByEmailProfessionistaAndTipo(loggedUser.getEmail(), StatoRichiesta.IN_CORSO);
+            Map<LocalDate, List<Richiesta>> richiesteRicevute = richieste.stream()
+                    .collect(Collectors.groupingBy(r -> r.getData()));
+
             // Attibuti per le mie richieste
             request.setAttribute("richiesteInAttesa", richiesteInAttesa);
             request.setAttribute("richiesteInCorso", richiesteInCorso);
@@ -88,6 +92,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
             request.setAttribute("disponibilitaSingole", disponibilitaSingole);
             request.setAttribute("disponibilitaRicorrenti", disponibilitaRicorsive);
             request.setAttribute("disponibilitaEccezioni", disponibilitaEccezioni);
+            request.setAttribute("richiesteRicevute", richiesteRicevute);
 
         }catch(SQLException e) {
             e.printStackTrace();
@@ -108,8 +113,6 @@ public class HomeProfessionistaServlet extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
         doGet(request, response);
     }
 }

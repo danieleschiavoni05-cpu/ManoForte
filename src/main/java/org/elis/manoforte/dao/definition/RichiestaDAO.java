@@ -21,4 +21,6 @@ public interface RichiestaDAO {
     Richiesta getRichiestaById(long id) throws Exception;
 
     List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws Exception;
+
+    List<Richiesta> getRichiesteByEmailProfessionistaAndTipo(String email, StatoRichiesta statoRichiesta) throws Exception;
 }
