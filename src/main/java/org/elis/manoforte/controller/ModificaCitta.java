@@ -9,17 +9,24 @@ import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 @WebServlet("/ModificaCitta")
 public class ModificaCitta extends HttpServlet {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws IOException {
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        String nome = request.getParameter("nome");
+	    HttpSession session = request.getSession(false);
+	    if (session == null || session.getAttribute("utenteLoggato") == null) {
+	        response.sendRedirect("Login");
+	        return;
+	    }
 
-        if (nome != null && !nome.trim().isEmpty()) {
-            JdbcAdminDAO.modificaCitta(id, nome.trim());
-        }
+	    int id = Integer.parseInt(request.getParameter("id"));
+	    String nome = request.getParameter("nome");
 
-        response.sendRedirect("HomeAdmin");
-    }
+	    if (nome != null && !nome.trim().isEmpty()) {
+	        JdbcAdminDAO.modificaCitta(id, nome.trim());
+	    }
+
+	    response.sendRedirect("HomeAdmin");
+	}
+
 }

@@ -1,26 +1,16 @@
 package org.elis.manoforte.dao.jdbc;
 
+import org.elis.manoforte.utility.DataSourceConfig;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcAdminDAO {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/progetto_java_web";
-    private static final String USER = "root";
-    private static final String PASS = "root";
-
-    private static Connection getConnection() {
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return DriverManager.getConnection(URL, USER, PASS);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    private static Connection getConnection() throws Exception {
+        return DataSourceConfig.getDataSource().getConnection();
     }
-
-    // ------------------ CITTÀ ------------------
 
     public static List<Object[]> getCitta() {
         List<Object[]> lista = new ArrayList<>();
@@ -59,7 +49,37 @@ public class JdbcAdminDAO {
         } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // ------------------ PROFESSIONI ------------------
+    public static boolean cittaUsata(int idCitta) {
+        String sql = "SELECT COUNT(*) FROM utenti WHERE id_citta = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, idCitta);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean professioneUsata(String nomeProfessione) {
+        String sql = "SELECT COUNT(*) FROM utenti WHERE professione = ?";
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, nomeProfessione);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) return rs.getInt(1) > 0;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 
     public static List<Object[]> getProfessioni() {
         List<Object[]> lista = new ArrayList<>();

@@ -9,29 +9,29 @@ import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 @WebServlet("/EliminaProfessione")
 public class EliminaProfessione extends HttpServlet {
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+	@Override
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+	        throws IOException {
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        JdbcAdminDAO.eliminaProfessione(id);
+	    HttpSession session = request.getSession(false);
+	    if (session == null || session.getAttribute("utenteLoggato") == null) {
+	        response.sendRedirect("Login");
+	        return;
+	    }
 
-        response.sendRedirect("HomeAdmin");
-    }
+	    String nome = request.getParameter("nome");
+	    int id = Integer.parseInt(request.getParameter("id"));
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+	    if (JdbcAdminDAO.professioneUsata(nome)) {
+	        session.setAttribute("erroreProfessione", "Impossibile eliminare: la professione è collegata a utenti.");
+	    } else {
+	        JdbcAdminDAO.eliminaProfessione(id);
+	    }
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        JdbcAdminDAO.eliminaProfessione(id);
+	    response.sendRedirect("HomeAdmin");
+	}
 
-        response.sendRedirect("HomeAdmin");
-    }
+  
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-        doGet(request, response);
-    }
+    
 }

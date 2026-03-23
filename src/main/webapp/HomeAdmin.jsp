@@ -1,12 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.Utente" %>
-<%@ page import="org.elis.manoforte.model.Ruolo" %>
 
 <%
     List<Object[]> citta = (List<Object[]>) request.getAttribute("citta");
     List<Object[]> professioni = (List<Object[]>) request.getAttribute("professioni");
     Utente userSession = (Utente) session.getAttribute("utenteLoggato");
+
+    if (userSession == null) {
+        response.sendRedirect("Login");
+        return;
+    }
+
+    String erroreCitta = (String) session.getAttribute("erroreCitta");
+    String erroreProfessione = (String) session.getAttribute("erroreProfessione");
 %>
 
 <!DOCTYPE html>
@@ -14,10 +21,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Admin - ManoForte</title>
-   <link rel="stylesheet" href="<%= request.getContextPath() %>/css/header.css">
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/header.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/HomeAdmin.css">
-        <link rel="stylesheet" href="<%= request.getContextPath() %>/css/footer.css">
-    
+    <link rel="stylesheet" href="<%= request.getContextPath() %>/css/footer.css">
 </head>
 
 <body>
@@ -33,7 +39,16 @@
 
     <div class="admin-card">
 
-        <!-- Aggiungi Città -->
+        <% if (erroreCitta != null) { %>
+            <div style="color:#E74C3C;font-weight:bold;margin-bottom:15px;"><%= erroreCitta %></div>
+            <% session.removeAttribute("erroreCitta"); %>
+        <% } %>
+
+        <% if (erroreProfessione != null) { %>
+            <div style="color:#E74C3C;font-weight:bold;margin-bottom:15px;"><%= erroreProfessione %></div>
+            <% session.removeAttribute("erroreProfessione"); %>
+        <% } %>
+
         <h2>Aggiungi una Città</h2>
         <form action="AggiungiCitta" method="post" class="admin-form">
             <input type="text" name="nomeCitta" placeholder="Nome città" required>
@@ -63,7 +78,6 @@
 
         <hr class="admin-hr">
 
-        <!-- Aggiungi Professione -->
         <h2>Aggiungi una Professione</h2>
         <form action="AggiungiProfessione" method="post" class="admin-form">
             <input type="text" name="nomeProfessione" placeholder="Nome professione" required>
@@ -79,6 +93,7 @@
 
                     <form action="EliminaProfessione" method="post" class="admin-inline-form">
                         <input type="hidden" name="id" value="<%= p[0] %>">
+                        <input type="hidden" name="nome" value="<%= p[1] %>">
                         <button type="submit" class="admin-delete-link">Elimina</button>
                     </form>
 
