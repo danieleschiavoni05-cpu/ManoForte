@@ -14,3 +14,4 @@ public class SqlQuery {
 						SELECT p.id FROM utente p WHERE p.email=?)
 			""";
 }
+

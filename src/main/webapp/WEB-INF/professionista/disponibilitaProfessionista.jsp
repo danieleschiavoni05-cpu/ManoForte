@@ -71,7 +71,7 @@
                 <%LocalDate giorno = startOfWeek.plusDays(i);%>
                 <%String actionAdd = "gestisciClick('"+giorno+"', '08:00', false, '')";%>
                 <div class="day-column" onclick="<%=actionAdd%>">
-                    <%if(disponibilitaRicorrenti.get(giorno.getDayOfWeek())!=null){%>
+                    <%if(disponibilitaRicorrenti!=null && disponibilitaRicorrenti.get(giorno.getDayOfWeek())!=null){%>
                         <%for(Disponibilita d: disponibilitaRicorrenti.get(giorno.getDayOfWeek())){%>
                             <%String actionClick = "event.stopPropagation(); gestisciClick('"+giorno+"', '"+d.getOra_inizio()+"', true, '"+d.getId()+"' );";%>
                             <div class="disponibile-block disponibile-ricorrenza"
@@ -81,7 +81,7 @@
                         <%}%>
                     <%}%>
 
-                    <%if(disponibilitaSingole.get(giorno)!=null){%>
+                    <%if(disponibilitaSingole!=null && disponibilitaSingole.get(giorno)!=null){%>
                         <%for(Disponibilita d: disponibilitaSingole.get(giorno)){%>
                             <%String actionClick = "event.stopPropagation(); gestisciClick('"+giorno+"', '"+d.getOra_inizio()+"', true, '"+d.getId()+"' );";%>
                             <div class="disponibile-block disponibile-singolo"
@@ -91,7 +91,7 @@
                         <%}%>
                     <%}%>
 
-                    <%if(disponibilitaEccezioni.get(giorno)!=null){%>
+                    <%if(disponibilitaEccezioni!=null && disponibilitaEccezioni.get(giorno)!=null){%>
                         <%for(Disponibilita d: disponibilitaEccezioni.get(giorno)){%>
                             <%String actionClick = "event.stopPropagation(); gestisciClick('"+giorno+"', '"+d.getOra_inizio()+"', true, '"+d.getId()+"' );";%>
                             <div class="disponibile-block disponibile-exception"
@@ -101,7 +101,7 @@
                         <%}%>
                     <%}%>
 
-                    <%if(richiesteRicevute.get(giorno)!=null){%>
+                    <%if(richiesteRicevute!=null && richiesteRicevute.get(giorno)!=null){%>
                         <%for(Richiesta r:richiesteRicevute.get(giorno)){%>
                             <div class="disponibile-block disponibile-richiesta"
                                  style="<%=calcolaPosizione(r.getOra_inizio(), r.getOra_fine())%> z-index: 40;"

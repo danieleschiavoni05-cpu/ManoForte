@@ -48,7 +48,11 @@
         </div>
     </div>
 
-    <div class="container">
+    
+    
+    
+</div>
+<div class="container">
         <h2>Scegli per Categoria</h2>
         <div class="categories-grid">
             <a href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=idraulico" class="cat-item">
@@ -69,34 +73,6 @@
             </a>
         </div>
     </div>
-</div>
-<div class="container"
-     style="background: linear-gradient(135deg, #279AF1 0%, #6EC6FF 50%, #A8E1FF 100%);
-            padding: 40px; border-radius: 15px; margin-top: 40px;">
-    <h2 style="color:white;">Scegli per Categoria</h2>
-    <div class="categories-grid">
-        <a href="ListaProfessionisti?cercaNome=Idraulico" class="cat-item" 
-           style="background: linear-gradient(135deg, #1B82D1, #4FB4FF); color:white;">
-            <span class="cat-icon">🔧</span>
-            <span>Idraulici</span>
-        </a>
-        <a href="ListaProfessionisti?cercaNome=Elettricista" class="cat-item"
-           style="background: linear-gradient(135deg, #1B82D1, #4FB4FF); color:white;">
-            <span class="cat-icon">⚡</span>
-            <span>Elettricisti</span>
-        </a>
-        <a href="ListaProfessionisti?cercaNome=Pulizia" class="cat-item"
-           style="background: linear-gradient(135deg, #1B82D1, #4FB4FF); color:white;">
-            <span class="cat-icon">🧹</span>
-            <span>Pulizie</span>
-        </a>
-        <a href="ListaProfessionisti?cercaNome=Pittore" class="cat-item"
-           style="background: linear-gradient(135deg, #1B82D1, #4FB4FF); color:white;">
-            <span class="cat-icon">🎨</span>
-            <span>Pittori</span>
-        </a>
-    </div>
-</div>
 
 
 

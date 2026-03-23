@@ -29,7 +29,7 @@
 <% List<CardRichiesta> richiesteCompletate = (List<CardRichiesta>) request.getAttribute("richiesteComplete");%>
 <% List<CardRecensione> recensioni = (List<CardRecensione>) request.getAttribute("recensioni");%>
 
-<%@include file="/includes/Navbar.jsp"%>
+<%@include file="/WEB-INF/includes/Navbar.jsp"%>
 
 <div class="container container-home">
     <div class="row welcome-row">
@@ -95,7 +95,7 @@
 
 </div>
 
-<%@include file="/includes/Footer.jsp"%>
+<%@include file="/WEB-INF/includes/Footer.jsp"%>
 
 
 

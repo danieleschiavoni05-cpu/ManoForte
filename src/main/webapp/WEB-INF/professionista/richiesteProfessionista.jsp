@@ -1,3 +1,4 @@
+<%@page import="org.elis.manoforte.model.CardRichiesta"%>
 <nav class="mb-4">
   <div class="nav nav-pills" id="nav-request" role="tablist">
     <a class="nav-item nav-link active" id="nav-pending-tab" data-bs-toggle="tab" href="#nav-pending" role="tab" aria-controls="nav-pending" aria-selected="true">

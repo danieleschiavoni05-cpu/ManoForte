@@ -35,15 +35,21 @@ public class LoginServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, IOException {
-        /*String path = "C:/immagini";
-        File file = new File(path);
-        if (!file.exists()) {
-            Files.createDirectory(file.toPath());
-        }
-        try(DataOutputStream fos = new DataOutputStream(new FileOutputStream(file.toPath()+"/test.txt"))){
-            fos.writeChars("hello world");
-            fos.flush();
-        }*/
+
+//        String path = "C:/immagini";
+//        File file = new File(path);
+//        if (!file.exists()) {
+//            Files.createDirectory(file.toPath());
+//        }
+//        try(DataOutputStream fos = new DataOutputStream(new FileOutputStream(file.toPath()+"/test.txt"))){
+//            fos.writeChars("hello world");
+//            fos.flush();
+//        }
+
+
+        HttpSession session = request.getSession();
+        Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
+
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/login.jsp");
         dispatcher.forward(request, response);

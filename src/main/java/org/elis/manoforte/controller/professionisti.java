@@ -9,12 +9,15 @@ import jakarta.servlet.http.HttpServletResponse;
 
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
+
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
 
@@ -46,18 +49,26 @@ public class professionisti extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String nomeProfessione = request.getParameter("nome");
+
 		
 		System.out.println("Cerco professionisti per: [" + nomeProfessione + "]");
 		
 		
         try {
             // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
+
             List<Utente> risultato = utenteDao.findAllProfessionistibyProfessione(nomeProfessione);
             List<Professione> professioni= professioneDao.getAllProfessioni();
+             List<Disponibilita> disponibilitaPro=disponibilita.findDisponibilitaByData(LocalDate.now());
+            List<Citta> citta = cittaDao.getAllCitta();
+            
+            request.setAttribute("listaCitta", citta);
+
 
             request.setAttribute("nomeProfessione", nomeProfessione);
             request.setAttribute("listaProfessioni", professioni);
             request.setAttribute("listaProfessionisti", risultato);
+            request.setAttribute("disponibilita", disponibilitaPro);
 
         } catch (Exception e) {
             e.printStackTrace();
