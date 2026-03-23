@@ -44,6 +44,9 @@ public class JdbcUtenteDAO implements UtenteDAO {
             insertIntoUtenteProfessione(generatedKeys.getLong(1), utente.getProfessioni());
             if(!utente.getVeicoli().isEmpty())
                 insertIntoUtenteVeicolo(generatedKeys.getLong(1),utente.getVeicoli());
+        }catch(SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Errore di connessione con il database.");
         }
     }
 
@@ -62,6 +65,9 @@ public class JdbcUtenteDAO implements UtenteDAO {
             statement.setLong(7, professionista.getIdCitta());
             statement.setString(8, professionista.getEmail());
             statement.executeUpdate();
+        }catch(SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Errore di connessione col database;");
         }
     }
 
@@ -95,7 +101,6 @@ public class JdbcUtenteDAO implements UtenteDAO {
             throw new Exception("Error inserting user: " + e.getMessage(), e);
         }
     }
-    
 
     @Override
     public Utente findByEmailPassword(String email, String password) throws Exception {
@@ -107,6 +112,9 @@ public class JdbcUtenteDAO implements UtenteDAO {
             if(result.next()){
                 return Utility.createUserObj(result);
             }
+        }catch(SQLException e) {
+            e.printStackTrace();
+            throw new Exception("Errore nella connessione col server.");
         }
         throw new UtenteNonTrovatoException("Le credenziali inserite non corrispondono a nessun account!");
     }

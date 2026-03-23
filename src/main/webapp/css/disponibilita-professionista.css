@@ -1,116 +1,3 @@
-.agenda-container {
-    background-color: var(--deep-steel);
-    border-radius: 15px;
-    padding: 20px;
-    overflow-x: auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.agenda-table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 2px;
-    min-width: 800px;
-}
-
-.agenda-table th {
-    text-align: center;
-    padding: 15px;
-    color: var(--craft-gold);
-    font-weight: bold;
-    border-bottom: 2px solid var(--steel-variant);
-    width: 12.5%; /* 1 col orari + 7 giorni */
-}
-
-.agenda-table td {
-    height: 50px;
-    border: 1px solid var(--steel-variant);
-    vertical-align: middle;
-    position: relative;
-    transition: all 0.2s ease;
-}
-
-.agenda-time-col {
-    color: var(--muted-silver);
-    font-size: 0.9rem;
-    font-weight: bold;
-    text-align: right;
-    padding-right: 15px;
-    width: 60px;
-    background-color: rgba(0,0,0,0.2);
-}
-
-/* Celle cliccabili */
-.agenda-slot {
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.02);
-}
-
-.agenda-slot:hover {
-    background-color: rgba(212, 175, 55, 0.2); /* Gold trasparente */
-}
-
-.slot-available {
-    background-color: var(--craft-gold) !important;
-    color: var(--obsidian-base);
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px var(--gold-variant);
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.slot-available:hover {
-    background-color: var(--gold-variant) !important;
-    transform: scale(1.02);
-}
-
-.slot-available::after {
-    content: "Disponibile";
-    display: block;
-}
-
-.slot-exception {
-    background-color: var(--muted-silver) !important;
-    color: var(--obsidian-base);
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px var(--light-silver);
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.slot-exception:hover {
-    background-color: var(--deep-steel) !important;
-    transform: scale(1.02);
-}
-
-.slot-exception::after {
-    content: "Eccezione";
-    display: block;
-}
-
-.slot-requested {
-    background-color: var(--steel-variant) !important; /* Un colore diverso per le richieste */
-    color: var(--light-silver);
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px var(--muted-silver);
-    text-align: center;
-    font-size: 0.8rem;
-    font-weight: bold;
-}
-
-.slot-requested:hover {
-    background-color: rgba(43, 50, 61, 0.8) !important; /* Steel più scuro al passaggio del mouse */
-    transform: scale(1.02);
-}
-
-.slot-requested::after {
-    content: "Richiesta"; /* Testo da mostrare nello slot */
-    display: block;
-}
-
-/* Modale personalizzata */
 .custom-modal-content {
     background-color: var(--deep-steel);
     color: var(--light-silver);
@@ -140,4 +27,139 @@
 
 .label-orario{
     color: var(--muted-silver);
+}
+
+.agenda-container {
+    background-color: var(--deep-steel);
+    border-radius: 15px;
+    padding: 20px;
+    overflow-x: auto;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.timeline-wrapper {
+    display: flex;
+    position: relative;
+    margin-top: 10px;
+    min-width: 800px;
+}
+
+.time-labels-col {
+    width: 60px;
+    flex-shrink: 0;
+    position: relative;
+    height: 720px;
+}
+
+.time-label {
+    position: absolute;
+    width: 100%;
+    text-align: right;
+    padding-right: 15px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: var(--muted-silver);
+    transform: translateY(calc(-50% - 1.5px));
+}
+
+.day-column {
+    flex: 1;
+    position: relative;
+    border-left: 1px solid var(--steel-variant);
+    height: 720px;
+    background-image: repeating-linear-gradient(transparent, transparent 59px, var(--steel-variant) 59px, var(--steel-variant) 60px);
+    cursor: crosshair;
+}
+
+.day-column:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.day-header {
+    text-align: center;
+    font-weight: bold;
+    color: var(--light-silver);
+    padding-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.disponibile-block {
+    position: absolute;
+    width: 90%;
+    left: 5%;
+    border-radius: 6px;
+    padding: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, z-index 0.2s;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.2);
+}
+
+.disponibile-block:hover {
+    transform: scale(1.03);
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+}
+
+.disponibile-ricorrenza {
+    background-color: var(--slot-routine-bg);
+    color: var(--slot-routine-text);
+}
+
+.disponibile-singolo {
+    background-color: var(--slot-extra-bg);
+    color: var(--slot-extra-text);
+}
+
+.disponibile-richiesta {
+    background-color: var(--slot-booked-bg);
+    color: var(--slot-booked-text);
+}
+
+.disponibile-exception {
+    background-color: var(--slot-exception-bg);
+    color: var(--slot-exception-text);
+    text-decoration: line-through;
+    border: 1px dashed var(--muted-silver);
+}
+
+
+.selettore-orario-custom {
+    background-color: var(--obsidian-base);
+    color: var(--light-silver);
+    border: 1px solid var(--steel-variant);
+    border-radius: 8px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    background-image: url("../res/assets/arrow_down.svg");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+.selettore-orario-custom:focus {
+    border-color: var(--craft-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    outline: none;
+}
+
+.selettore-orario-custom option {
+    background-color: var(--deep-steel);
+    color: var(--light-silver);
+    padding: 10px;
 }

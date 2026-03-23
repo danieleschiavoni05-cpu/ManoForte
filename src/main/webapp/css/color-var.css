@@ -8,4 +8,16 @@
     --muted-silver: #A0AEC0;    /* Muted text for subtitles */
     --light-silver: #E2E8F0;    /* Main readable text on dark backgrounds */
     --white-text: #FFFFFF;      /* Titles and highlights */
+
+    --slot-routine-bg: var(--craft-gold);        /* Usa il tuo oro */
+    --slot-routine-text: var(--obsidian-base);   /* Testo scuro per l'oro */
+
+    --slot-extra-bg: #2EA043;                    /* Verde per le aggiunte */
+    --slot-extra-text: var(--white-text);
+
+    --slot-booked-bg: #D25E24;                   /* Arancione bruciato per richieste */
+    --slot-booked-text: var(--white-text);
+
+    --slot-exception-bg: var(--steel-variant);   /* Usa il tuo grigio scuro */
+    --slot-exception-text: var(--muted-silver);
 }

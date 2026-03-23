@@ -1,6 +1,7 @@
 package org.elis.manoforte.dao.definition;
 
 import org.elis.manoforte.model.CardRichiesta;
+import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 
@@ -23,4 +24,6 @@ public interface RichiestaDAO {
     List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws Exception;
 
     List<Richiesta> getRichiesteByEmailProfessionistaAndTipo(String email, StatoRichiesta statoRichiesta) throws Exception;
+
+    boolean checkRequestByOra(Disponibilita disp) throws Exception;
 }

@@ -3,7 +3,6 @@ package org.elis.manoforte.dao.definition;
 import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.TipoDisponibilita;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -28,4 +27,10 @@ public interface DisponibilitaDAO {
     boolean checkRicorrenzaById(Long idDisponibilita) throws Exception;
 
     List<Disponibilita> findDisponibilitaByEmailProfessionistaAndTipo(String email, TipoDisponibilita tipoDisponibilita) throws Exception;
+
+    Disponibilita checkSovrapposizione(Disponibilita disponibilita, String email) throws Exception;
+
+    void updateDisponibilitaById(Disponibilita union, Long id) throws Exception;
+
+    Disponibilita findDisponibilitaById(Long idDisponibilita) throws Exception;
 }

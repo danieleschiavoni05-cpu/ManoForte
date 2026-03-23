@@ -301,6 +301,12 @@
     margin-bottom: 0;
 }
 
+.tab-pane:focus,
+.tab-pane:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 /* 4. Creiamo i keyframes per far ruotare l'angolo da 0 a 360 gradi */
 @keyframes rotate-gradient1 {
     0% {

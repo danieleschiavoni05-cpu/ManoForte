@@ -14,10 +14,7 @@ import java.util.List;
 import javax.sql.DataSource;
 
 import org.elis.manoforte.dao.definition.RichiestaDAO;
-import org.elis.manoforte.model.CardRichiesta;
-import org.elis.manoforte.model.Richiesta;
-import org.elis.manoforte.model.StatoRichiesta;
-import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.SqlQuery;
 
 public class RichiestaDAOJDBC implements RichiestaDAO{
@@ -203,6 +200,24 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 			}
 		}
 		return richieste;
+	}
+
+	@Override
+	public boolean checkRequestByOra(Disponibilita disp) throws Exception {
+		try(Connection conn = dataSource.getConnection()){
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM richiesta WHERE ora_inizio<=? AND ora_fine>=? AND data=?");
+			statement.setTime(1, Time.valueOf(disp.getOra_fine()));
+			statement.setTime(2, Time.valueOf(disp.getOra_inizio()));
+			statement.setDate(3, Date.valueOf(disp.getData()));
+			ResultSet rs = statement.executeQuery();
+            return rs.next();
+		}catch(SQLException e){
+			e.printStackTrace();
+			throw new SQLException("Errore di connessione al db.");
+		}catch(Exception e){
+			e.printStackTrace();
+			throw new Exception("Errore imprevisto.");
+		}
 	}
 
 

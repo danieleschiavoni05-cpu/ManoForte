@@ -196,9 +196,98 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 	}
 
 	@Override
+	public Disponibilita checkSovrapposizione(Disponibilita disponibilita, String email) throws SQLException {
+		try(Connection connection = dataSource.getConnection()){
+			PreparedStatement statement = connection.prepareStatement("" +
+					"SELECT * FROM disponibilita WHERE id_utente = " +
+					"(SELECT id FROM utente WHERE email = ?) AND ora_inizio<=? AND ora_fine>=? AND (data=? OR giorno_settimana=?)");
+			statement.setString(1, email);
+			statement.setTime(2, Time.valueOf(disponibilita.getOra_fine()));
+			statement.setTime(3, Time.valueOf(disponibilita.getOra_inizio()));
+			statement.setDate(4, Date.valueOf(disponibilita.getData()));
+			System.out.println(disponibilita.getData().getDayOfWeek().ordinal());
+			statement.setInt(5, disponibilita.getData().getDayOfWeek().ordinal());
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				Disponibilita disp = new Disponibilita();
+				disp.setId(rs.getLong("id"));
+				if(rs.getDate("data")!=null) {
+					disp.setData(rs.getDate("data").toLocalDate());
+				}else disp.setData(null);
+				disp.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
+				disp.setOra_fine(rs.getTime("ora_fine").toLocalTime());
+				disp.setId_utente(rs.getLong("id_utente"));
+				disp.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
+				return disp;
+			}
+			return null;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Errore di connessione al database.");
+		}
+	}
+
+	@Override
+	public void updateDisponibilitaById(Disponibilita disponibilita, Long id) throws SQLException{
+		Connection connection = null;
+		try{
+			connection = dataSource.getConnection();
+			connection.setAutoCommit(false);
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM disponibilita WHERE id = ?");
+				statement.setLong(1, id);
+				statement.executeUpdate();
+
+				statement = connection.prepareStatement("INSERT INTO disponibilita (data, ora_inizio, ora_fine, id_utente, tipo) VALUES (?, ?, ?, ?, ?)");
+				statement.setDate(1, Date.valueOf(disponibilita.getData()));
+				statement.setTime(2, Time.valueOf(disponibilita.getOra_inizio()));
+				statement.setTime(3, Time.valueOf(disponibilita.getOra_fine()));
+				statement.setLong(4, disponibilita.getId_utente());
+				statement.setInt(5, disponibilita.getTipo().ordinal());
+				statement.executeUpdate();
+			connection.commit();
+		}catch(SQLException e) {
+			if(connection!=null){
+				connection.rollback();
+			}
+			e.printStackTrace();
+			throw new SQLException("Errore di connessione al database.");
+		}finally {
+			if(connection!=null){
+				connection.setAutoCommit(true);
+				connection.close();
+			}
+		}
+	}
+
+	@Override
+	public Disponibilita findDisponibilitaById(Long idDisponibilita) throws Exception {
+		try(Connection connection = dataSource.getConnection()){
+			PreparedStatement statement = connection.prepareStatement("" +
+					"SELECT * FROM disponibilita WHERE id=?");
+			statement.setLong(1, idDisponibilita);
+			ResultSet rs = statement.executeQuery();
+			if(rs.next()) {
+				Disponibilita disp = new Disponibilita();
+				disp.setId(rs.getLong("id"));
+				if(rs.getDate("data")!=null) {
+					disp.setData(rs.getDate("data").toLocalDate());
+				}else disp.setData(null);
+				disp.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
+				disp.setOra_fine(rs.getTime("ora_fine").toLocalTime());
+				disp.setId_utente(rs.getLong("id_utente"));
+				disp.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
+				return disp;
+			}
+			return null;
+		}catch(SQLException e) {
+			e.printStackTrace();
+			throw new SQLException("Errore di connessione al database.");
+		}
+	}
+
+	@Override
 	public void deleteDisponiblitaById(Long idDisponibilita) throws Exception {
 		try (Connection connection = dataSource.getConnection()) {
-
 			PreparedStatement statement = connection.prepareStatement("DELETE FROM disponibilita WHERE id = ?");
 			statement.setLong(1, idDisponibilita);
 			statement.executeUpdate();
