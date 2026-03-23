@@ -12,6 +12,7 @@ public interface ProfessioneDAO {
 
     List<Professione> getAllProfessioni() throws Exception;
 
+
     List<Professione> getProfessioniListById(List<Long> professioni) throws Exception;
 
     void addProfessione(String professione) throws Exception;
@@ -19,4 +20,7 @@ public interface ProfessioneDAO {
     void removeProfessione(Long id) throws Exception;
 
     void modificaProfessione(Long id, String nome) throws Exception;
+
+    List<Professione> findProfessioniByName(String nome) throws Exception;
+
 }

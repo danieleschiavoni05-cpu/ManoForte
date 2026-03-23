@@ -1,83 +1,192 @@
 :root {
-	--gemini-bg: var(--obsidian-base);
-	--gemini-card: var(--deep-steel);
+	/* Palette ManoForte */
+	--gemini-bg: #0d1117; /* Sfondo scuro profondo */
+	--gemini-card: #161b22; /* Card leggermente più chiara */
 	--gemini-accent: var(--craft-gold);
-	--text-main: var(--light-silver);
-	--text-muted: var(--muted-silver);
+	--text-main: #ffffff; /* Bianco puro per i testi principali */
+	--text-muted: rgba(255, 255, 255, 0.7); /* Bianco sporco per i dettagli */
 	--star-color: var(--craft-gold);
 }
 
 body {
 	background-color: var(--gemini-bg);
 	color: var(--text-main);
-	font-family: 'Inter', system-ui, sans-serif;
+	font-family: 'Inter', system-ui, -apple-system, sans-serif;
 	min-height: 100vh;
+	margin: 0;
+	padding: 0;
 }
 
-.header-section {
-	padding: 3rem 0;
-	background: radial-gradient(circle at top, var(--steel-variant) 0%, var(--obsidian-base) 100%);
-	border-bottom: 1px solid var(--steel-variant);
-	margin-bottom: 2rem;
+/* --- HEADER SEZIONE --- */
+.page-header {
+	padding: 4rem 0;
+	background: radial-gradient(circle at top, var(--deep-steel) 0%, var(--obsidian-base) 100%);
+	border-bottom: 2px solid var(--craft-gold);
+	margin-bottom: 3rem;
+	text-align: center;
 }
 
-.header-section h1 {
+.page-header h1 {
 	font-weight: 800;
-	color: var(--craft-gold);
+	color: #ffffff; /* Titolo in bianco */
+	font-size: 2.5rem;
 }
 
+.page-header h1 span {
+	color: var(--craft-gold); /* Solo "Recensioni" in Oro */
+}
+
+/* --- CARD RECENSIONE --- */
 .review-card {
 	background: var(--gemini-card);
-	border: 1px solid var(--steel-variant);
-	border-radius: 16px;
-	padding: 1.5rem;
-	margin-bottom: 1rem;
-	transition: all 0.3s ease;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 20px;
+	padding: 2rem;
+	margin-bottom: 1.5rem;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 .review-card:hover {
 	border-color: var(--gemini-accent);
-	transform: translateX(5px);
-	box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
+	transform: translateY(-5px) scale(1.01);
+	box-shadow: 0 15px 40px rgba(212, 175, 55, 0.1);
+}
+
+/* --- INFO PROFESSIONISTA --- */
+.prof-info h3 {
+	color: var(--craft-gold);
+	font-weight: 700;
+	margin-bottom: 0.3rem;
+	font-size: 1.3rem;
+}
+
+.prof-info p {
+	color: var(--text-muted);
+	font-size: 0.9rem;
+	margin-bottom: 1rem;
 }
 
 .prof-id-tag {
-	font-size: 0.8rem;
-	background: rgba(212, 175, 55, 0.1); /* craft-gold semitrasparente */
+	font-size: 0.75rem;
+	background: rgba(212, 175, 55, 0.15);
 	color: var(--gemini-accent);
-	padding: 4px 12px;
-	border-radius: 20px;
-	font-weight: 600;
+	padding: 5px 15px;
+	border-radius: 30px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
 }
 
+/* --- STELLE E TESTO --- */
 .star-rating {
 	color: var(--star-color);
-	margin-top: 0.5rem;
+	font-size: 1.1rem;
+	margin: 0.8rem 0;
 }
 
 .review-body {
-	color: var(--text-main);
-	margin-top: 1rem;
-	line-height: 1.6;
+	color: #ffffff; /* Testo del feedback bianco */
+	margin-top: 1.5rem;
+	line-height: 1.8;
 	font-style: italic;
+	padding-top: 1.5rem;
+	border-top: 1px solid rgba(255, 255, 255, 0.05);
+	position: relative;
 }
 
+/* --- BOTTONI E AZIONI --- */
 .btn-back {
-	color: var(--text-muted);
+	color: #ffffff;
 	text-decoration: none;
 	display: inline-flex;
 	align-items: center;
-	margin-top: 2rem;
+	margin-top: 3rem;
+	font-weight: 600;
 	transition: 0.3s;
+	padding: 10px 20px;
+	border-radius: 12px;
 }
 
 .btn-back:hover {
 	color: var(--craft-gold);
+	background: rgba(255, 255, 255, 0.05);
 }
 
-.empty-box {
-	background: rgba(255, 255, 255, 0.02);
-	border: 2px dashed var(--steel-variant);
-	border-radius: 20px;
-	padding: 4rem;
+.btn-delete {
+	color: #ff4d4d; /* Rosso per eliminazione */
+	background: transparent;
+	border: 1px solid rgba(255, 77, 77, 0.3);
+	padding: 6px 12px;
+	border-radius: 8px;
+	transition: all 0.3s;
+}
+
+.btn-delete:hover {
+	background: rgba(255, 77, 77, 0.1);
+	border-color: #ff4d4d;
+}
+
+/* --- STATO VUOTO --- */
+.no-data {
+	background: rgba(255, 255, 255, 0.03);
+	border: 2px dashed rgba(255, 255, 255, 0.1);
+	border-radius: 24px;
+	padding: 5rem;
+	text-align: center;
+	color: #ffffff;
+}
+/* --- EFFETTO RISALTO BOTTONI (Esplora & Invia Richiesta) --- */
+
+.login-register-button {
+    position: relative;
+    overflow: hidden; /* Necessario per l'effetto riflesso */
+    z-index: 1;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    /* Animazione ombra pulsante automatica */
+    animation: gold-pulse 2s infinite;
+}
+
+/* Riflesso di luce che attraversa il bottone */
+.login-register-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.4), 
+        transparent
+    );
+    transform: skewX(-25deg);
+    transition: none;
+}
+
+/* Attiva il riflesso al passaggio del mouse o a intervalli se vuoi */
+.login-register-button:hover::after {
+    left: 150%;
+    transition: 0.6s;
+}
+
+/* Animazione per far brillare il bottone */
+@keyframes gold-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 12px rgba(212, 175, 55, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+}
+
+/* Tocco finale: se il bottone è "Invia Richiesta" dentro una card, lo rendiamo più imponente */
+.review-card .login-register-button {
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    padding: 15px 20px;
 }

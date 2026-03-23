@@ -42,10 +42,13 @@ public class PaginaListaProfessioniServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String nomeProfessione = request.getParameter("nome");
 		
 		
+		
         try {
+        	
             // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
             List<Utente> risultato = utenteDao.findAllProfessionistibyProfessione(nomeProfessione);
             List<Professione> professioni= professioneDao.getAllProfessioni();

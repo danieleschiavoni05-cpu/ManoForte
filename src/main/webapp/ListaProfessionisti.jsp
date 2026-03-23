@@ -1,3 +1,4 @@
+<%@page import="org.elis.manoforte.model.Utente"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.Professione" %>
@@ -65,7 +66,7 @@
 
 <body>
 
-<jsp:include page="/includes/Navbar.jsp"/>
+<jsp:include page="WEB-INF/includes/Navbar.jsp"/>
 
 <div class="filter-section" 
      style="background: #279AF1; padding:30px 0;">
@@ -88,6 +89,7 @@
     <div class="prof-grid">
         <%
             List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessionisti");
+        List<Utente> utentiPro = (List<Utente>) request.getAttribute("listaUtenteProfessionisti");
         %>
 
         <% if (professioni != null && !professioni.isEmpty()) { %>
@@ -96,7 +98,7 @@
                     <h3><%= p.getNome() %></h3>
                     <p>Nessuna descrizione disponibile.</p>
                     <div class="prof-footer" style="margin-top:15px;">
-                        <a href="DettaglioProfessionista?id=<%= p.getId() %>">Vedi Profilo</a>
+                        <a href="<%=request.getContextPath()%>/DettagliProfessionista?nome=<%=p.getNome()%>">Vedi Profilo</a>
                     </div>
                 </div>
             <% } %>
@@ -109,7 +111,7 @@
     </div>
 </div>
 
-
+<jsp:include page="WEB-INF/includes/Footer.jsp"/>
 
 </body>
 </html>

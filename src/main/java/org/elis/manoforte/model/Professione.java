@@ -6,8 +6,10 @@ import java.util.List;
 
 @Entity
 public class Professione {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private long id;
     @Column(unique = true)
     private String nome;
@@ -22,7 +24,8 @@ public class Professione {
         this.nome = nome;
     }
 
-    public String getNome() {
+    
+	public String getNome() {
         return nome;
     }
 
@@ -58,4 +61,8 @@ public class Professione {
             return id==prof.id;
         else return false;
     }
+ public void setId(long id) {
+		this.id = id;
+	}
+	
 }

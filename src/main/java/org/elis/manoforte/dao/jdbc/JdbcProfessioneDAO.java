@@ -1,3 +1,4 @@
+
 //package org.elis.manoforte.dao.jdbc;
 //
 //import org.elis.manoforte.dao.definition.ProfessioneDAO;
@@ -75,3 +76,32 @@
 //        return professioni;
 //    }
 //}
+     @Override
+    public List<Professione> findProfessioniByName(String nomeCercato) throws Exception {
+        List<Professione> professioni = new ArrayList<>();
+        String sql = "SELECT id, nome FROM professione WHERE LOWER(nome) LIKE LOWER(?)";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, "%" + nomeCercato + "%");
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    // Recuperiamo i dati dal database
+                    long idDb = rs.getLong("id");
+                    String nomeDb = rs.getString("nome");
+
+                    
+                    Professione p = new Professione(idDb, nomeDb);
+
+                    professioni.add(p);
+                }
+            }
+        } catch (SQLException e) {
+            throw new Exception("Errore SQL nella ricerca professione", e);
+        }
+        return professioni;
+    }
+
+

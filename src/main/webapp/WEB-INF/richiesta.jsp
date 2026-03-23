@@ -1,186 +1,152 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ page
-	import="org.elis.manoforte.model.Utente, org.elis.manoforte.model.Professione, java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="org.elis.manoforte.model.Utente, org.elis.manoforte.model.Professione, java.util.List"%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invia Richiesta | ManoForte</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Invia Richiesta | ManoForte</title>
+
+    <link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
 	rel="stylesheet">
+
 <link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+	href="<%=request.getContextPath()%>/css/color-var.css">
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/style-homeBase.css">
+	href="<%=request.getContextPath()%>/css/header.css">
+
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/style-recensioniPro.css?v=<%=System.currentTimeMillis()%>">
 </head>
-<body class="bg-light">
 
-	<nav
-		class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
-		<div class="container">
-			<a class="navbar-brand" href="#"><i
-				class="fa-solid fa-handshake-angle me-2"></i>MANOFORTE</a>
-		</div>
-	</nav>
+<body>
 
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-md-8 col-lg-6">
+    <jsp:include page="/WEB-INF/includes/Navbar.jsp" />
 
-				<%
-				// Recupero il professionista (passato come singolo oggetto dalla Servlet)
-				Utente pro = (Utente) request.getAttribute("listaProfessionisti");
-				Utente utente = (Utente) request.getAttribute("utenteLoggato");
+    <main class="main-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
 
-				if (pro != null) {
-				%>
+                    <%
+                    // Recupero il professionista e l'utente loggato
+                    Utente pro = (Utente) request.getAttribute("listaProfessionisti");
+                    Utente utente = (Utente) request.getAttribute("utenteLoggato");
 
-				<div class="card shadow border-0" style="border-radius: 15px;">
-					<div class="card-header bg-white py-3 text-center border-0">
-						<h4 class="fw-bold text-primary mb-0">Nuova Richiesta
-							d'Intervento</h4>
-					</div>
+                    if (pro != null && utente != null) {
+                    %>
 
-					<div class="card-body p-4">
-						<div class="alert alert-secondary d-flex align-items-center mb-4">
-							<i class="fa-solid fa-user-gear fa-2x me-3"></i>
-							<div>
-								<small class="text-muted d-block">Destinatario:</small> <strong><%=pro.getNome()%>
-									<%=pro.getCognome()%></strong>
-							</div>
-						</div>
+                    <div class="profile-card shadow">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </div>
+                            <h2 class="fw-bold">Nuova Richiesta</h2>
+                            <p class="text-white opacity-75">Compila i dettagli per l'intervento</p>
+                        </div>
 
-						<div>
-							<small class="text-muted d-block">Richiedente:</small> <strong><%=utente.getNome()%>
-								<%=utente.getCognome()%></strong>
+                        <div class="row g-3 mb-4">
+                            <div class="col-12">
+                                <div style="background: rgba(212, 175, 55, 0.05); padding: 15px; border-radius: 12px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="fa-solid fa-user-gear me-2" style="color: var(--craft-gold);"></i>
+                                        <span class="section-title m-0">Destinatario</span>
+                                    </div>
+                                    
+                                    <strong class="text-white"><%=pro.getNome()%> <%=pro.getCognome()%></strong>
+                                </div>
+                            </div>
+                        </div>
+						
 
-						</div>
-					</div>
+						<form action="<%=request.getContextPath()%>/richiesta" method="post">
+                            <input type="hidden" name="emailProfessionista" value="<%=pro.getEmail()%>"> 
+                            <input type="hidden" name="emailBase" value="<%=utente.getEmail()%>">
 
+                            <div class="mb-3">
+                                <label class="section-title">Indirizzo dell'intervento</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-location-dot"></i></span> 
+                                    <input type="text" name="indirizzo" class="form-control" placeholder="Via Roma 10, Milano" required>
+                                </div>
+                            </div>
 
-					<form action="<%=request.getContextPath()%>/richiesta"
-						method="post">
-						<input type="hidden" name="emailProfessionista"
-							value="<%=pro.getEmail()%>"> <input type="hidden"
-							name="emailBase" value="<%=utente.getEmail()%>">
+                            <div class="mb-4">
+                                <label class="section-title">Dettagli della richiesta</label>
+                                <textarea name="descrizione" class="form-control" rows="4" placeholder="Descrivi il guasto o l'intervento..." required></textarea>
+                            </div>
 
-						<div class="mb-3">
-							<label class="form-label fw-bold">Indirizzo
-								dell'intervento</label>
-							<div class="input-group">
-								<span class="input-group-text"><i
-									class="fa-solid fa-location-dot"></i></span> <input type="text"
-									name="indirizzo" class="form-control"
-									placeholder="Via Roma 10, Milano" required>
-							</div>
-						</div>
+                            <% String oggi = java.time.LocalDate.now().toString(); %>
 
-						<div class="mb-4">
-							<label class="form-label fw-bold">Dettagli della
-								richiesta</label>
-							<textarea name="descrizione" class="form-control" rows="4"
-								placeholder="Descrivi brevemente il guasto o l'intervento di cui hai bisogno..."
-								required></textarea>
-						</div>
+                            <div class="mb-3">
+                                <label class="section-title">Giorno dell'intervento</label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-dark border-secondary text-white"><i class="fa-solid fa-calendar-days"></i></span> 
+                                    <input type="date" name="giorni" class="form-control" min="<%=oggi%>" value="<%=oggi%>" required>
+                                </div>
+                            </div>
 
-						<%
-						// Otteniamo la data di oggi nel formato ISO (yyyy-MM-dd) per il limite "min"
-						String oggi = java.time.LocalDate.now().toString();
-						%>
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="section-title">Ora Inizio</label>
+                                    <select name="ora_inizio" class="form-select" required>
+                                        <option value="" disabled selected>Scegli ora...</option>
+                                        <% for (int h = 0; h < 24; h++) {
+                                            for (int m = 0; m < 60; m += 30) {
+                                                String orario = String.format("%02d:%02d", h, m);
+                                        %>
+                                        <option value="<%=orario%>"><%=orario%></option>
+                                        <% } } %>
+                                    </select>
+                                </div>
 
-						<div class="mb-3">
-							<label class="form-label fw-bold">Giorno dell'intervento</label>
-							<div class="input-group">
-								<span class="input-group-text"><i
-									class="fa-solid fa-calendar-days"></i></span> <input type="date"
-									name="giorni" class="form-control" min="<%=oggi%>"
-									value="<%=oggi%>" required>
-							</div>
-							<div class="form-text">Seleziona una data disponibile (da
-								oggi in poi).</div>
-						</div>
+                                <div class="col-md-6">
+                                    <label class="section-title">Ora Fine</label>
+                                    <select name="ora_fine" class="form-select" required>
+                                        <option value="" disabled selected>Scegli ora...</option>
+                                        <% for (int h = 0; h < 24; h++) {
+                                            for (int m = 0; m < 60; m += 30) {
+                                                String orario = String.format("%02d:%02d", h, m);
+                                        %>
+                                        <option value="<%=orario%>"><%=orario%></option>
+                                        <% } } %>
+                                    </select>
+                                </div>
+                            </div>
 
-						<div class="row mb-3">
-							<div class="col-md-6">
-								<label class="form-label fw-bold">Ora Inizio</label>
-								<div class="input-group">
-									<span class="input-group-text"><i
-										class="fa-solid fa-clock"></i></span> <select name="ora_inizio"
-										class="form-select" required>
-										<option value="" disabled selected>Scegli ora...</option>
-										<%
-										for (int h = 0; h < 24; h++) {
-											for (int m = 0; m < 60; m += 30) {
-												String orario = String.format("%02d:%02d", h, m);
-										%>
-										<option value="<%=orario%>"><%=orario%></option>
-										<%
-										}
-										}
-										%>
-									</select>
-								</div>
-							</div>
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="login-register-button">
+                                    Invia richiesta a <%=pro.getNome()%>
+                                </button>
+                                <a href="<%=request.getContextPath()%>/homeBase" class="btn-back text-center"> 
+                                    <i class="fa-solid fa-xmark me-2"></i>Annulla 
+                                </a>
+                            </div>
+                        </form>
+                    </div>
 
-							<div class="col-md-6">
-								<label class="form-label fw-bold">Ora Fine</label>
-								<div class="input-group">
-									<span class="input-group-text"><i
-										class="fa-regular fa-clock"></i></span> <select name="ora_fine"
-										class="form-select" required>
-										<option value="" disabled selected>Scegli ora...</option>
-										<%
-										for (int h = 0; h < 24; h++) {
-											for (int m = 0; m < 60; m += 30) {
-												String orario = String.format("%02d:%02d", h, m);
-										%>
-										<option value="<%=orario%>"><%=orario%></option>
-										<%
-										}
-										}
-										%>
-									</select>
-								</div>
-							</div>
-						</div>
+                    <% } else { %>
 
-						<div class="d-grid gap-2">
-							<button type="submit" class="btn btn-primary btn-lg rounded-pill">
-								Invia richiesta a
-								<%=pro.getNome()%>
-							</button>
-							<a href="<%=request.getContextPath()%>/homeBase"
-								class="btn btn-link text-muted"> Annulla e torna alla home </a>
-						</div>
-					</form>
-				</div>
-			</div>
+                    <div class="no-data text-center p-5">
+                        <i class="fa-solid fa-triangle-exclamation fa-3x mb-3" style="color: var(--craft-gold);"></i> 
+                        <h3 class="text-white">Errore: Professionista non trovato</h3>
+                        <a href="<%=request.getContextPath()%>/homeBase" class="btn-back mt-3">Torna alla Home</a>
+                    </div>
 
-			<%
-			} else {
-			%>
+                    <% } %>
 
-			<div class="alert alert-danger text-center">
-				<i class="fa-solid fa-triangle-exclamation me-2"></i> Errore:
-				Professionista non trovato. <br> <a
-					href="<%=request.getContextPath()%>/homeBase" class="alert-link">Torna
-					alla Home</a>
-			</div>
+                </div>
+            </div>
+        </div>
+    </main>
 
-			<%
-			}
-			%>
+    <jsp:include page="/WEB-INF/includes/Footer.jsp" />
 
-		</div>
-	</div>
-
-
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

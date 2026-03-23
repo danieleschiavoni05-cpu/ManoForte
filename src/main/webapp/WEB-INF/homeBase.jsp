@@ -158,7 +158,7 @@ List<Richiesta> listaRichiesta = (List<Richiesta>) request.getAttribute("listaRi
 	<% session.removeAttribute("messaggioSuccesso"); %>
 	<% } %>
 
-    <jsp:include page="/includes/Navbar.jsp"/>
+    <jsp:include page="includes/Navbar.jsp"/>
 
 	<header class="hero-section text-center" style="margin-top: 2rem;">
 		<div class="container">
@@ -333,7 +333,7 @@ function preparaModale(idRichiesta, idProfessionista) {
 }
 </script>
 
-    <jsp:include page="/includes/Footer.jsp"/>
+    <jsp:include page="includes/Footer.jsp"/>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

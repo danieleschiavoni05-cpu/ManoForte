@@ -14,8 +14,12 @@
             <ul class="nav-links">
                 <li><a href="Homepage">Home</a></li>
                 <% if (ruolo == Ruolo.UTENTE_BASE) { %>
-                    <li><a href="ListaProfessionisti">Trova Professionisti</a></li>
-                    <li><a href="MyRequests">Le mie richieste</a></li>
+           
+                    <li><a href="<%=request.getContextPath()%>/RecensioniProfessionisti">Visualizza recensioni </a></li>
+                    <li><a href="<%=request.getContextPath()%>/lista_professioni">Effettua una richiesta</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ModificaProfilo">Modifica Profilo</a></li>
+                    <li><a href="<%=request.getContextPath()%>/homeBase">Ritorna alla tua home</a></li>
+                    
                 <% } %>
                 <% if (ruolo == Ruolo.PROFESSIONISTA) { %>
                     <li><a href="ListaClienti">I miei Clienti</a></li>
@@ -31,7 +35,7 @@
             <% if (user == null) { %>
                 <a href="login" class="btn-login">Accedi</a>
             <% } else { %>
-                <span style="margin-right: 15px;">Ciao, <strong><%= user.getNome() %></strong></span>
+                <span style="margin-right: 15px; color: var(--light-silver);">Ciao, <strong><%= user.getNome() %></strong> <strong><%= user.getCognome() %></strong></span>
                 <a href="logout" class="btn-login">Logout</a>
             <% } %>
         </div>

@@ -10,15 +10,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ManoForte - Trova la tua mano di fiducia</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
+    
 </head>
 
 <body>
 
-    <jsp:include page="/includes/Navbar.jsp"/>
+    <jsp:include page="WEB-INF/includes/Navbar.jsp"/>
 
 
 <div class="carousel"
@@ -36,7 +41,7 @@
         </div>
 
         <div class="search-container">
-            <form class="search-box" action="ListaProfessionisti" method="get">
+            <form class="search-box" action="<%=request.getContextPath()%>/ricercaProfessioni" method="get">
                 <input type="text" name="cercaNome" placeholder="Cosa stai cercando? (es. Idraulico)" required>
                 <button type="submit">Trova Esperto</button>
             </form>
@@ -46,19 +51,19 @@
     <div class="container">
         <h2>Scegli per Categoria</h2>
         <div class="categories-grid">
-            <a href="ListaProfessionisti?cercaNome=Idraulico" class="cat-item">
+            <a href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=idraulico" class="cat-item">
                 <span class="cat-icon">🔧</span>
                 <span>Idraulici</span>
             </a>
-            <a href="ListaProfessionisti?cercaNome=Elettricista" class="cat-item">
+            <a href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Elettricista" class="cat-item">
                 <span class="cat-icon">⚡</span>
                 <span>Elettricisti</span>
             </a>
-            <a href="ListaProfessionisti?cercaNome=Pulizia" class="cat-item">
+            <a href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Pulizia" class="cat-item">
                 <span class="cat-icon">🧹</span>
                 <span>Pulizie</span>
             </a>
-            <a href="ListaProfessionisti?cercaNome=Pittore" class="cat-item">
+            <a href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Pittore" class="cat-item">
                 <span class="cat-icon">🎨</span>
                 <span>Pittori</span>
             </a>
@@ -92,6 +97,8 @@
         </a>
     </div>
 </div>
+
+
 
 <div class="container" style="margin-top: 40px; margin-bottom: 60px;">
     <h2 style="color:white; margin-bottom: 25px;">
@@ -149,17 +156,16 @@
     </div>
     </div>
 
-<script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-    setInterval(() => {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-    }, 5000);
-</script>
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 5000);
+    </script>
 
-
-
-</body>
+    <jsp:include page="WEB-INF/includes/Footer.jsp" />
+    </body>
 </html>
