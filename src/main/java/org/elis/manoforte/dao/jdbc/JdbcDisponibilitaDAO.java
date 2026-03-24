@@ -15,6 +15,7 @@ import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.TipoDisponibilita;
+import org.elis.manoforte.model.Utente;
 
 public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 	private DataSource dataSource;
@@ -31,7 +32,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 			statement.setLong(1, id);
 			ResultSet resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				disponibilita.add(new Disponibilita(
+				/*disponibilita.add(new Disponibilita(
 						resultSet.getLong("id"),
 						resultSet.getDate("data").toLocalDate(),
 						resultSet.getTime("ora_inizio").toLocalTime(),
@@ -39,7 +40,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 						resultSet.getLong("id_utente"),
 						TipoDisponibilita.values()[resultSet.getInt("tipo")],
 						DayOfWeek.values()[resultSet.getInt("giorno_settimana")]
-				));
+				));*/
 			}
 			return disponibilita;
 		}catch (SQLException e){
@@ -61,7 +62,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 						resultSet.getDate("data").toLocalDate(),
 						resultSet.getTime("ora_inizio").toLocalTime(),
 						resultSet.getTime("ora_fine").toLocalTime(),
-						resultSet.getLong("id_utente"),
+						new Utente(), //resultSet.getLong("id_utente"),
 						TipoDisponibilita.values()[resultSet.getInt("tipo")],
 						DayOfWeek.values()[resultSet.getInt("giorno_settimana")]
 				));
@@ -88,7 +89,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 						resultSet.getDate("data").toLocalDate(),
 						resultSet.getTime("ora_inizio").toLocalTime(),
 						resultSet.getTime("ora_fine").toLocalTime(),
-						resultSet.getLong("id_utente"),
+						new Utente(), //resultSet.getLong("id_utente"),
 						TipoDisponibilita.values()[resultSet.getInt("tipo")],
 						DayOfWeek.values()[resultSet.getInt("giorno_settimana")]
 				));
@@ -117,7 +118,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 
 			statement.setTime(2, Time.valueOf(disponibilita.getOra_inizio()));
 			statement.setTime(3, Time.valueOf(disponibilita.getOra_fine()));
-			statement.setLong(4, disponibilita.getId_utente());
+			statement.setLong(4, 10);
 			statement.setInt(5, disponibilita.getTipo().ordinal());
 			statement.executeUpdate();
 		}catch (SQLException e){
@@ -145,7 +146,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 					}else d.setData(null);
 	                d.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
 	                d.setOra_fine(rs.getTime("ora_fine").toLocalTime());
-	              	d.setId_utente(rs.getLong("id_utente"));
+	              	d.setId_utente(new Utente());
 					d.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
 					d.setGiorno_settimana(DayOfWeek.values()[rs.getInt("giorno_settimana")]);
 	                
@@ -180,7 +181,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 					}else d.setData(null);
 					d.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
 					d.setOra_fine(rs.getTime("ora_fine").toLocalTime());
-					d.setId_utente(rs.getLong("id_utente"));
+					d.setId_utente(new Utente());
 					d.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
 					d.setGiorno_settimana(DayOfWeek.values()[rs.getInt("giorno_settimana")]);
 
@@ -216,7 +217,8 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 				}else disp.setData(null);
 				disp.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
 				disp.setOra_fine(rs.getTime("ora_fine").toLocalTime());
-				disp.setId_utente(rs.getLong("id_utente"));
+				disp.setId_utente(new Utente());
+				 //disp.setId_utente(rs.getLong("id_utente"));
 				disp.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
 				return disp;
 			}
@@ -241,7 +243,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 				statement.setDate(1, Date.valueOf(disponibilita.getData()));
 				statement.setTime(2, Time.valueOf(disponibilita.getOra_inizio()));
 				statement.setTime(3, Time.valueOf(disponibilita.getOra_fine()));
-				statement.setLong(4, disponibilita.getId_utente());
+				statement.setLong(4, 10);
 				statement.setInt(5, disponibilita.getTipo().ordinal());
 				statement.executeUpdate();
 			connection.commit();
@@ -274,7 +276,7 @@ public class JdbcDisponibilitaDAO implements DisponibilitaDAO{
 				}else disp.setData(null);
 				disp.setOra_inizio(rs.getTime("ora_inizio").toLocalTime());
 				disp.setOra_fine(rs.getTime("ora_fine").toLocalTime());
-				disp.setId_utente(rs.getLong("id_utente"));
+				disp.setId_utente(new Utente());
 				disp.setTipo(TipoDisponibilita.values()[rs.getInt("tipo")]);
 				return disp;
 			}

@@ -13,10 +13,7 @@ import java.util.List;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
-import org.elis.manoforte.dao.definition.CittaDAO;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
-import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.definition.VeicoloDAO;
+import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
 import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
@@ -33,8 +30,21 @@ import tools.jackson.databind.ObjectMapper;
 public class RegistrazioneProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    ProfessioneDAO professioneDAO;
+    CittaDAO cittaDAO;
+    VeicoloDAO veicoloDAO;
+    UtenteDAO utenteDAO;
+
     public RegistrazioneProfessionistaServlet() {
         super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        professioneDAO = DaoFactory.getInstance().getProfessioneDAO();
+        cittaDAO = DaoFactory.getInstance().getCittaDAO();
+        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
+        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
     }
 
     /**
@@ -50,9 +60,6 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             return;
         }
 
-        ProfessioneDAO professioneDAO = new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
-        CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
-        VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
         try {
             request.setAttribute("citta", cittaDAO.getAllCitta());
             request.setAttribute("professioni", professioneDAO.getAllProfessioni());
@@ -147,8 +154,6 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             outJson.flush();
             return;
         }
-
-        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
 
         try {
             Utente professionista = Utility.checkInputProfessionista(nome, cognome, email, data_nascita, codice_fiscale,

@@ -113,7 +113,7 @@
     <%
     } else {
         for (Recensione r : recensioni) {
-            Utente prof = (mappaProf != null) ? mappaProf.get(r.getId_professionista()) : null;
+            Utente prof = (mappaProf != null) ? mappaProf.get(r.getProfessionista()) : null;
     %>
         <div class="review-card shadow-sm bg-white p-4 mb-3" style="border-radius: 15px; border-left: 6px solid #279AF1;">
             <div class="d-flex justify-content-between align-items-start">

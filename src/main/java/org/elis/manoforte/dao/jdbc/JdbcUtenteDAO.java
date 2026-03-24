@@ -22,7 +22,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
 
     @Override
     public void inserisciProfessionista(Utente utente) throws Exception {
-        try(Connection connection = dataSource.getConnection()){
+        /*try(Connection connection = dataSource.getConnection()){
             PreparedStatement statement = connection.prepareStatement(
                     "INSERT INTO utente(email, nome, cognome, password, data_nascita, codice_fiscale, ruolo, id_citta) VALUES(?,?,?,?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
@@ -41,13 +41,13 @@ public class JdbcUtenteDAO implements UtenteDAO {
             ResultSet generatedKeys = statement.getGeneratedKeys();
             generatedKeys.next();
 
-            insertIntoUtenteProfessione(generatedKeys.getLong(1), utente.getProfessioni());
-            if(!utente.getVeicoli().isEmpty())
-                insertIntoUtenteVeicolo(generatedKeys.getLong(1),utente.getVeicoli());
+            insertIntoUtenteProfessione(generatedKeys.getLong(1), utente.getProfessione());
+            if(!utente.getVeicolo().isEmpty())
+                insertIntoUtenteVeicolo(generatedKeys.getLong(1),utente.getVeicolo());
         }catch(SQLException e) {
             e.printStackTrace();
             throw new Exception("Errore di connessione con il database.");
-        }
+        }*/
     }
 
     @Override
@@ -62,7 +62,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
             statement.setDate(4, Date.valueOf(professionista.getDataNascita()));
             statement.setBigDecimal(5, professionista.getTariffa());
             statement.setString(6, professionista.getCodiceFiscale());
-            statement.setLong(7, professionista.getIdCitta());
+            //statement.setLong(7, professionista.getIdCitta());
             statement.setString(8, professionista.getEmail());
             statement.executeUpdate();
         }catch(SQLException e) {
@@ -84,13 +84,13 @@ public class JdbcUtenteDAO implements UtenteDAO {
             ps.setString(4, utente.getCognome());
             ps.setDate(5, Date.valueOf(utente.getDataNascita()));
             ps.setString(6, utente.getCodiceFiscale());
-            
+
             // Handling the nullable foreign key for id_citta
-            if (utente.getIdCitta() != 0) {
+            /*if (utente.getIdCitta() != 0) {
                 ps.setLong(7, utente.getIdCitta());
             } else {
                 ps.setNull(7, java.sql.Types.BIGINT);
-            }
+            }*/
             
             ps.setInt(8, utente.getRuolo().UTENTE_BASE.ordinal());
 
@@ -104,7 +104,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
 
     @Override
     public Utente findByEmailPassword(String email, String password) throws Exception {
-        try(Connection connection = dataSource.getConnection()){
+        /*try(Connection connection = dataSource.getConnection()){
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM utente WHERE email = ? AND password = ?");
             statement.setString(1, email);
             statement.setString(2, password);
@@ -116,7 +116,8 @@ public class JdbcUtenteDAO implements UtenteDAO {
             e.printStackTrace();
             throw new Exception("Errore nella connessione col server.");
         }
-        throw new UtenteNonTrovatoException("Le credenziali inserite non corrispondono a nessun account!");
+        throw new UtenteNonTrovatoException("Le credenziali inserite non corrispondono a nessun account!");*/
+        return null;
     }
 
     @Override
@@ -127,7 +128,8 @@ public class JdbcUtenteDAO implements UtenteDAO {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             if(resultSet.next()){
-                return Utility.createUserObj(resultSet);
+                return null;
+                //return Utility.createUserObj(resultSet);
             }
         }
         throw new UtenteNonTrovatoException("Utente non trovato!");
@@ -141,7 +143,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
             preparedStatement.setInt(1, Ruolo.PROFESSIONISTA.ordinal());
             ResultSet resultSet = preparedStatement.executeQuery();
             while(resultSet.next()){
-                utenti.add(Utility.createUserObj(resultSet)) ;
+                //utenti.add(Utility.createUserObj(resultSet)) ;
             }
             return utenti;
         }
@@ -153,9 +155,9 @@ public class JdbcUtenteDAO implements UtenteDAO {
     }
 
     @Override
-    public Utente update(Utente utente) throws Exception {
+    public void update(Utente utente) throws Exception {
         // Suggerimento: usa l'ID se lo hai, è più performante e sicuro
-        String sql = "UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, password = ?, " +
+       /* String sql = "UPDATE utente SET nome = ?, cognome = ?, data_nascita = ?, password = ?, " +
                      "tariffa = ?, codice_fiscale = ?, id_citta = ? WHERE email = ?";
         
         try (Connection conn = dataSource.getConnection();
@@ -195,7 +197,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
         } catch (SQLException e) {
             // Logga l'errore qui o rilancialo con un messaggio chiaro
             throw new Exception("Errore SQL durante l'update: " + e.getErrorCode(), e);
-        }
+        }*/
     }
 
     @Override
@@ -254,21 +256,6 @@ public class JdbcUtenteDAO implements UtenteDAO {
         return true;
     }
 
-    @Override
-    public Map<Long, String> findAllUsersMap() throws SQLException {
-        Map<Long, String>  listaUtenti = new HashMap<Long, String>();
-        try(Connection connection = dataSource.getConnection()){
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM utente WHERE Ruolo = ? AND RUOLO = ?");
-            statement.setInt(1, Ruolo.PROFESSIONISTA.ordinal());
-            statement.setInt(2, Ruolo.UTENTE_BASE.ordinal());
-            ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()){
-                listaUtenti.put(resultSet.getLong(1), resultSet.getString(2));
-            }
-        }
-        return listaUtenti;
-    }
-
 	@Override
 	public List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception {
 		List<Utente> professionisti = new ArrayList<>();
@@ -284,7 +271,7 @@ public class JdbcUtenteDAO implements UtenteDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     // Usiamo la tua utility per mantenere coerenza nel progetto
-                    professionisti.add(Utility.createUserObj(rs));
+                    //professionisti.add(Utility.createUserObj(rs));
                 }
             }
         } catch (SQLException e) {
@@ -306,7 +293,8 @@ public class JdbcUtenteDAO implements UtenteDAO {
 	        
 	        ResultSet rs=ps.executeQuery();
 	            if (rs.next()) {
-	                 return Utility.createUserObj(rs);
+	                return null;
+                    //return Utility.createUserObj(rs);
 	            }
 	            throw new Exception("Utente non trovato");
 	        

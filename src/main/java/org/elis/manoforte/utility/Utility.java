@@ -2,17 +2,13 @@ package org.elis.manoforte.utility;
 
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.definition.VeicoloDAO;
 import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
-import org.elis.manoforte.model.Ruolo;
-import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.model.*;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -58,7 +54,7 @@ public class Utility {
     }
 
     public static Utente checkInputProfessionista(String nome, String cognome, String email, LocalDate data_nascita, String codice_fiscale,
-                                                  Long citta, List<Long> professioni, List<Long> veicoli,
+                                                  Citta citta, List<Professione> professioni, List<Veicolo> veicoli,
                                                   BigDecimal tariffa, String password, String confermaPassword) throws Exception {
 
         DatiErratiException e = checkInput(email, data_nascita, codice_fiscale, password, confermaPassword);
@@ -80,7 +76,7 @@ public class Utility {
         }else return "homeprofessionista";
     }
 
-
+    /*
     public static Utente createUserObj(ResultSet resultSet) throws Exception {
         if(resultSet.getInt("ruolo") == Ruolo.ADMIN.ordinal()){
             return new Utente(
@@ -113,9 +109,9 @@ public class Utility {
             );
         }
     }
-
+*/
     public static Utente checkInputEditProfessionista(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
-                                                        String codiceFiscale, Long citta, List<Long> veicoli, BigDecimal tariffa,
+                                                        String codiceFiscale, Citta citta, List<Veicolo> veicoli, BigDecimal tariffa,
                                                         String nuovaPassword, String password, String confermaPassword) throws Exception{
 
         DatiErratiException e;
@@ -127,7 +123,17 @@ public class Utility {
 
         if(e.checkErrors()) throw e;
 
-        return new Utente(utenteLoggato.getEmail(), password, nome, cognome, dataNascita, codiceFiscale, citta, utenteLoggato.getProfessioni(), tariffa, veicoli);
+        return new Utente(
+                utenteLoggato.getEmail(),
+                password,
+                nome,
+                cognome,
+                dataNascita,
+                codiceFiscale,
+                citta,
+                utenteLoggato.getProfessione(),
+                tariffa,
+                veicoli);
     }
 
     public static DatiErratiException checkEditInput(LocalDate data_nascita, String codice_fiscale,
@@ -177,7 +183,7 @@ public class Utility {
     }
     
     public static Utente checkInputUtenteBase(String email, String password, String nome, 
-            String cognome, LocalDate dataNascita, String codice_fiscale, Long id_citta, String confermaPassword) throws Exception {
+            String cognome, LocalDate dataNascita, String codice_fiscale, Citta citta, String confermaPassword) throws Exception {
 
         // DEBUG: Controlla cosa arriva
         System.out.println("Validazione per: " + email + " - CF: " + codice_fiscale);
@@ -198,7 +204,7 @@ public class Utility {
         nuovo.setCognome(cognome);
         nuovo.setDataNascita(dataNascita);
         nuovo.setCodiceFiscale(codice_fiscale);
-        nuovo.setId_citta(id_citta);
+        nuovo.setId_citta(citta);
         
         // Evita null sul database
 
@@ -208,7 +214,7 @@ public class Utility {
     
     
     public static Utente checkInputEditUtenteBase(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
-            String codiceFiscale, Long citta,
+            String codiceFiscale, Citta citta,
             String nuovaPassword, String password, String confermaPassword) throws Exception {
 
     DatiErratiException e;

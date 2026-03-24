@@ -10,6 +10,13 @@ public class CardRichiesta {
 
     public CardRichiesta(){}
 
+    public CardRichiesta(Richiesta richiesta){
+        this.id=richiesta.getId();
+        this.cliente=richiesta.getCliente();
+        this.data=richiesta.getData();
+        this.statoRichiesta=richiesta.getStatoRichiesta();
+    }
+
     public void setId(Long id){
         this.id = id;
     }

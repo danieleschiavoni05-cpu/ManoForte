@@ -11,14 +11,15 @@ import java.util.List;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
+import org.elis.manoforte.dao.definition.CittaDAO;
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.definition.VeicoloDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
+import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.model.Veicolo;
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
-import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
 
@@ -26,8 +27,19 @@ import tools.jackson.databind.ObjectMapper;
 public class ModificaProfiloProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    UtenteDAO utenteDAO;
+    VeicoloDAO veicoloDAO;
+    CittaDAO cittaDAO;
+
     public ModificaProfiloProfessionistaServlet() {
         super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
+        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
+        cittaDAO = DaoFactory.getInstance().getCittaDAO();
     }
 
     /**
@@ -49,9 +61,9 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         ObjectMapper mapper = new ObjectMapper();
 
         LocalDate data_nascita = null;
-        Long citta = null;
+        Long id_citta = null;
         BigDecimal tariffa = null;
-        List<Long> veicoli = new ArrayList<>();
+        List<Long> veicoliIds = new ArrayList<>();
 
 
         String nome = request.getParameter("nome");
@@ -63,7 +75,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         String codice_fiscale = request.getParameter("codice_fiscale");
 
         if(request.getParameter("citta")!=null && !request.getParameter("citta").equals(""))
-            citta =  Long.parseLong(request.getParameter("citta"));
+            id_citta =  Long.parseLong(request.getParameter("citta"));
 
         String nuovaPassword = request.getParameter("nuovaPassword");
         String confermaPassword = request.getParameter("conferma_password");
@@ -71,7 +83,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
         if(request.getParameterValues("veicolo")!=null)
             for(String str : request.getParameterValues("veicolo"))
-                veicoli.add(Long.parseLong(str));
+                veicoliIds.add(Long.parseLong(str));
 
         if(request.getParameterValues("tariffa")!=null && !request.getParameter("tariffa").equals(""))
             tariffa = new BigDecimal(request.getParameter("tariffa"));
@@ -83,6 +95,9 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
         if(cognome==null || cognome.trim().isEmpty())
             emptyError.setErrCognome();
+
+        if(id_citta==null || id_citta.toString().trim().isEmpty())
+            emptyError.setErrCitta();
 
         if(data_nascita==null)
             emptyError.setErrData();
@@ -115,17 +130,18 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
             return;
         }
 
-        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-        VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
-
         try {
             Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
 
-            Utente professionista = Utility.checkInputEditProfessionista(utenteLoggato, nome, cognome, data_nascita, codice_fiscale,
-                    citta, veicoli, tariffa, nuovaPassword, password, confermaPassword);
+            Citta citta = cittaDAO.getCittaById(id_citta);
+            List<Veicolo> veicolo = veicoloDAO.getVeicoliByIds(veicoliIds);
+
+            Utente professionista = Utility.checkInputEditProfessionista(
+                    utenteLoggato, nome, cognome, data_nascita, codice_fiscale,
+                    citta, veicolo, tariffa, nuovaPassword, password, confermaPassword);
 
             utenteDAO.modificaProfessionista(professionista);
-            veicoloDAO.updateVeicoli(utenteLoggato.getEmail(), veicoli);
+            veicoloDAO.updateVeicoliProfessionista(utenteLoggato.getEmail(), veicolo);
 
             request.getSession().setAttribute("utenteLoggato", professionista);
 

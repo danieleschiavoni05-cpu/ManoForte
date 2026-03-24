@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.sql.Date;
@@ -68,8 +67,8 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 			ps.setTime(3, Time.valueOf(richiesta.getOra_fine()));
 			ps.setString(4, richiesta.getIndirizzo());
 			ps.setInt(5, 0);
-			ps.setLong(6, richiesta.getId_cliente());
-			ps.setLong(7, richiesta.getId_professionista());
+			ps.setLong(6, richiesta.getCliente());
+			ps.setLong(7, richiesta.getProfessionista());
 			ps.setString(8, richiesta.getDescrizione());
 
 			ps.executeUpdate();
@@ -89,8 +88,8 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 			ps.setTime(3, java.sql.Time.valueOf(richiesta.getOra_fine()));
 			ps.setString(4, richiesta.getIndirizzo());
 			ps.setString(5, StatoRichiesta.IN_ATTESA_DI_CONFERMA.name()); 
-			ps.setLong(6, richiesta.getId_cliente());
-			ps.setLong(7, richiesta.getId_professionista());
+			ps.setLong(6, richiesta.getCliente());
+			ps.setLong(7, richiesta.getProfessionista());
 			ps.setLong(8, richiesta.getId());
 
 			ps.executeUpdate();
@@ -130,13 +129,13 @@ public class RichiestaDAOJDBC implements RichiestaDAO{
 	    int statoInt = rs.getInt("stato");
 	    r.setStatoRichiesta(StatoRichiesta.values()[statoInt]);
 	    
-	    r.setId_cliente(rs.getLong("id_cliente"));
+	    r.setCliente(rs.getLong("id_cliente"));
 
 	    long idProf = rs.getLong("id_professionista");
 	    if (!rs.wasNull()) {
-	        r.setId_professionista(idProf);
+	        r.setProfessionista(idProf);
 	    } else {
-	        r.setId_professionista(null); 
+	        r.setProfessionista(null);
 	    }
 	    
 	    return r;

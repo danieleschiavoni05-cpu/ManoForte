@@ -1,21 +1,30 @@
 package org.elis.manoforte.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
+@Entity
 public class Richiesta {
-    private Long id;
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	private LocalDate data;
     private LocalTime ora_inizio;
     private LocalTime ora_fine;
     private String indirizzo;
+	@Column(columnDefinition = "check(statoRichiesta in (0,1,2))")
     private StatoRichiesta statoRichiesta;
-    private Long id_cliente;
-    private Long id_professionista;
+	@ManyToOne
+    private Utente cliente;
+	@ManyToOne
+    private Utente professionista;
 	private String descrizione;
 
     public Richiesta(Long id, LocalDate data, LocalTime ora_inizio, LocalTime ora_fine,
-                     String indirizzo, StatoRichiesta statoRichiesta, String descrizione, Long id_cliente, Long id_professionista) {
+					 String indirizzo, StatoRichiesta statoRichiesta, String descrizione, Utente cliente, Utente professionista) {
         this.id = id;
         this.data = data;
         this.ora_inizio = ora_inizio;
@@ -23,8 +32,8 @@ public class Richiesta {
         this.indirizzo = indirizzo;
 		this.descrizione = descrizione;
         this.statoRichiesta = statoRichiesta;
-        this.id_cliente = id_cliente;
-        this.id_professionista = id_professionista;
+        this.cliente = cliente;
+        this.professionista = professionista;
     }
 
     public Richiesta() {
@@ -86,19 +95,19 @@ public class Richiesta {
 		this.statoRichiesta = statoRichiesta;
 	}
 
-	public Long getId_cliente() {
-		return id_cliente;
+	public Utente getCliente() {
+		return cliente;
 	}
 
-	public void setId_cliente(Long id_cliente) {
-		this.id_cliente = id_cliente;
+	public void setCliente(Utente cliente) {
+		this.cliente = cliente;
 	}
 
-	public Long getId_professionista() {
-		return id_professionista;
+	public Utente getProfessionista() {
+		return professionista;
 	}
 
-	public void setId_professionista(Long id_professionista) {
-		this.id_professionista = id_professionista;
+	public void setProfessionista(Utente professionista) {
+		this.professionista = professionista;
 	}
 }

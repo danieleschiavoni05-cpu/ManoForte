@@ -20,13 +20,13 @@ public class JdbcProfessioneDAO implements ProfessioneDAO {
     }
 
     @Override
-    public List<Long> findProfessioniByIdProfessionista(Long id) throws Exception {
+    public List<Professione> findProfessioniByIdProfessionista(Long id) throws Exception {
         return List.of();
     }
 
     @Override
-    public List<Professione> findProfessioniById(Long id) throws Exception {
-        return List.of();
+    public Professione findProfessioneById(Long id) throws Exception {
+        return null;
     }
 
     @Override

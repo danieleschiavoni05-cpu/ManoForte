@@ -20,7 +20,7 @@ public interface UtenteDAO {
 
     List<Utente> findAllProfessionistiWithConditions() throws Exception;
 
-    Utente update(Utente utente) throws Exception;
+    void update(Utente utente) throws Exception;
 
     Utente delete(Utente utente) throws Exception;
 
@@ -28,10 +28,7 @@ public interface UtenteDAO {
 
     Boolean checkCFAvailability(String codice_fiscale) throws Exception;
 
-    Map<Long, String> findAllUsersMap() throws SQLException;
-
     List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception;
-
 
     void modificaProfessionista(Utente professionista) throws Exception;
 

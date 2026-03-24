@@ -1,0 +1,127 @@
+package org.elis.manoforte.dao.jpa;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import org.elis.manoforte.dao.definition.DisponibilitaDAO;
+import org.elis.manoforte.model.Disponibilita;
+import org.elis.manoforte.model.TipoDisponibilita;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+
+public class JPADisponibilitaDao implements DisponibilitaDAO {
+    private EntityManagerFactory emf;
+    public JPADisponibilitaDao(EntityManagerFactory emf) {
+        this.emf = emf;
+    }
+
+    @Override
+    public List<Disponibilita> findDisponibilitaByIdProfessionista(long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Utente u join u.disponibilita where u.id=:id");
+            query.setParameter("id", id);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Disponibilita> findDisponibilitaByData(LocalDate data) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Disponibilita d where d.data=:data");
+            query.setParameter("data", data);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Disponibilita> findDisponibilitaByDataOra(LocalDateTime dataora) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Disponibilita d where d.data=:data and d.ora_inizio=:ora_inizio");
+            query.setParameter("data", dataora.toLocalDate());
+            query.setParameter("ora_inizio", dataora.toLocalTime());
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public void inserisciDisponibilita(Disponibilita disponibilita) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(disponibilita);
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public List<Disponibilita> findDisponibilitaByEmailProfessionista(String email) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email");
+            query.setParameter("email", email);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public void deleteDisponiblitaById(Long idDisponibilita) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                em.remove(em.find(Disponibilita.class, idDisponibilita));
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void removeDisponibilitaByDataOraEmail(LocalDate data, LocalTime ora, String email) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email and d.data=:data and d.ora_inizio=:ora_inizio");
+            transaction.begin();
+                query.setParameter("email", email);
+                query.setParameter("data", data);
+                query.setParameter("ora_inizio", ora);
+                em.remove(query.getSingleResult());
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public boolean checkRicorrenzaById(Long idDisponibilita) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where d.id=:id and d.tipo=:tipo");
+            query.setParameter("id", idDisponibilita);
+            query.setParameter("tipo", TipoDisponibilita.RICORSIVO);
+            return query.getSingleResult()!=null;
+        }
+    }
+
+    @Override
+    public List<Disponibilita> findDisponibilitaByEmailProfessionistaAndTipo(String email, TipoDisponibilita tipoDisponibilita) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email and d.tipo=:tipo");
+            query.setParameter("email", email);
+            query.setParameter("tipo", tipoDisponibilita);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public Disponibilita checkSovrapposizione(Disponibilita disponibilita, String email) throws Exception {
+        return null;
+    }
+
+    @Override
+    public void updateDisponibilitaById(Disponibilita union, Long id) throws Exception {
+
+    }
+
+    @Override
+    public Disponibilita findDisponibilitaById(Long idDisponibilita) throws Exception {
+        return null;
+    }
+}

@@ -83,7 +83,7 @@ public class InviaRecensioneServlet extends HttpServlet {
 		        // Controllo di business e di proprietà (il cliente che recensisce deve essere quello della richiesta)
 		        if (richiesta != null && 
 		            StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta()) && 
-		            richiesta.getId_cliente() == idBase) {
+		            richiesta.getCliente() == idBase) {
 
 		            Recensione rec = new Recensione(idRichiesta, descrizione, voto, data, idBase, idProfessionista);
 		            recensioneDao.inserisciRecensione(rec);

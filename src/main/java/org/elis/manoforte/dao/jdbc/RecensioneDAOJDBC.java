@@ -77,8 +77,8 @@ public class RecensioneDAOJDBC implements RecensioneDAO {
             ps.setString(1, r.getDescrizione());
             ps.setInt(2, r.getVoto());
             ps.setDate(3, r.getData() != null ? Date.valueOf(r.getData()) : new Date(System.currentTimeMillis()));
-            ps.setLong(4, r.getId_cliente());
-            ps.setLong(5, r.getId_professionista());
+            ps.setLong(4, r.getCliente());
+            ps.setLong(5, r.getProfessionista());
             
             ps.executeUpdate();
         } catch (SQLException e) {

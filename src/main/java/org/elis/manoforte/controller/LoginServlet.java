@@ -77,7 +77,7 @@ public class LoginServlet extends HttpServlet {
 
             if(utente.getRuolo().equals(Ruolo.PROFESSIONISTA)){
                 VeicoloDAO  veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
-                utente.setVeicoli(veicoloDAO.getVeicoliByEmailProfessionista(utente.getEmail()));
+                utente.setVeicolo(veicoloDAO.getVeicoliByEmailProfessionista(utente.getEmail()));
             }
 
             HttpSession session = request.getSession();

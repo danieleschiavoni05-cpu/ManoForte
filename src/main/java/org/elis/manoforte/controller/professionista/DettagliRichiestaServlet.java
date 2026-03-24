@@ -7,10 +7,9 @@ import java.io.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import org.elis.manoforte.dao.definition.CittaDAO;
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.*;
@@ -20,8 +19,20 @@ import tools.jackson.databind.ObjectMapper;
 public class DettagliRichiestaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    RichiestaDAO richiestaDAO;
+    CittaDAO cittaDAO;
+    UtenteDAO utenteDAO;
+
+
     public DettagliRichiestaServlet() {
         super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        richiestaDAO = DaoFactory.getInstance().getRichiestaDAO();
+        cittaDAO = DaoFactory.getInstance().getCittaDAO();
+        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
     }
 
     /**
@@ -45,15 +56,12 @@ public class DettagliRichiestaServlet extends HttpServlet {
 
         Long id_richiesta = Long.valueOf(request.getParameter("id_richiesta"));
 
-        RichiestaDAO richiestaDAO = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
-        CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
-        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
         try{
             Richiesta richiesta = richiestaDAO.getRichiestaById(id_richiesta);
 
             if(richiesta!=null){
-                Utente cliente = utenteDAO.findById(richiesta.getId_cliente());
-                Citta citta = cittaDAO.getCittaById(cliente.getIdCitta());
+                Utente cliente = richiesta.getCliente();
+                Citta citta = cliente.getCitta();
                 String nome = cliente.getNome()+" "+cliente.getCognome().charAt(0)+".";
                 DTOResponseDettagliRichiesta risposta = new DTOResponseDettagliRichiesta(
                         richiesta, nome, citta.getNome());

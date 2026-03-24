@@ -23,7 +23,6 @@ import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
 import org.elis.manoforte.model.Disponibilita;
-import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 import org.elis.manoforte.model.Utente;
@@ -183,8 +182,8 @@ public class RichiestaServlet extends HttpServlet {
 			System.out.println("Ora Inizio: " + nuovaRichiesta.getOra_inizio());
 			System.out.println("Ora Fine: " + nuovaRichiesta.getOra_fine());
 			System.out.println("Indirizzo: " + nuovaRichiesta.getIndirizzo());
-			System.out.println("ID Cliente: " + nuovaRichiesta.getId_cliente());
-			System.out.println("ID Professionista: " + nuovaRichiesta.getId_professionista());
+			System.out.println("ID Cliente: " + nuovaRichiesta.getCliente());
+			System.out.println("ID Professionista: " + nuovaRichiesta.getProfessionista());
 			System.out.println("Descrizione: " + nuovaRichiesta.getDescrizione());
 			System.out.println("--------------------------------");
 			

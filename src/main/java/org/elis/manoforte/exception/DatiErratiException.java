@@ -77,6 +77,11 @@ public class DatiErratiException extends RuntimeException {
         count++;
     }
 
+    public void setErrCitta() {
+        errCitta = true;
+        count++;
+    }
+
     public void setErrTariffa() {
         this.errTariffa= true;
         count++;
@@ -132,6 +137,7 @@ public class DatiErratiException extends RuntimeException {
         if(errCF) messages.add("Inserire un codice fiscale.");
         if(errTariffa) messages.add("La tariffa deve essere maggiore di 0.");
         if(errProfessioni) messages.add("Selezionare almeno una professione.");
+        if(errCitta)  messages.add("Inserire almeno una citta.");
 
     }
 
@@ -164,8 +170,6 @@ public class DatiErratiException extends RuntimeException {
         if(errData!=null&&errData) messages.add("La data inserita non è valida.");
         if(errCFGiaPresente) messages.add("Codice fiscale già registrato.");
         if(errCF) messages.add("Codice fiscale non valido.");
-        
+        if(errCitta)  messages.add("Inserire almeno una citta.");
     }
-
-
 }

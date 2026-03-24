@@ -58,8 +58,8 @@
 
                         <div class="mb-3">
                             <% 
-                            if (u.getProfessioni() != null && listaProfessioni != null) {
-                                for (Long id : u.getProfessioni()) {
+                            if (u.getProfessione() != null && listaProfessioni != null) {
+                                for (Long id : u.getProfessione()) {
                                     for (Professione p : listaProfessioni) {
                                         if (p.getId() == id.longValue()) { %>
                                             <span class="badge bg-info text-dark me-1"><%= p.getNome() %></span>

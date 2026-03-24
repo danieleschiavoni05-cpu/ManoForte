@@ -35,7 +35,7 @@ public class JdbcVeicoloDAO implements VeicoloDAO {
     }
 
     @Override
-    public void inserisciVeicolo(String nome) throws Exception {
+    public void inserisciVeicolo(Veicolo veicolo) throws Exception {
 
     }
 
@@ -57,7 +57,7 @@ public class JdbcVeicoloDAO implements VeicoloDAO {
     }
 
     @Override
-    public void updateVeicoli(String email, List<Long> veicoli) throws Exception {
+    public void updateVeicoliProfessionista(String email, List<Long> veicoli) throws Exception {
         Connection connection = null;
 
         try{

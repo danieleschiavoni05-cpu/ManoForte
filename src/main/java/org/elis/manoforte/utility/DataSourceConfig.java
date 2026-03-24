@@ -4,10 +4,13 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class DataSourceConfig {
-    private static final DataSource dataSource;
+    private static final DataSource jdbcDataSource;
+
 
     static{
         Properties properties = new Properties();
@@ -24,11 +27,11 @@ public class DataSourceConfig {
         properties.setProperty("connectionTimeout","20000");
 
         HikariConfig config = new HikariConfig(properties);
-        dataSource = new HikariDataSource(config);
-
+        jdbcDataSource = new HikariDataSource(config);
     }
 
     public static DataSource getDataSource(){
-        return dataSource;
+        return jdbcDataSource;
     }
+
 }

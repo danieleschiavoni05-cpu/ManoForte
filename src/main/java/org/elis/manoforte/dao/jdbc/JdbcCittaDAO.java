@@ -50,6 +50,6 @@ public class JdbcCittaDAO implements CittaDAO {
     }
 
     @Override
-    public void inserisciCitta(String nome) throws Exception {
+    public void inserisciCitta(Citta citta) throws Exception {
     }
 }

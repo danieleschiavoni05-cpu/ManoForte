@@ -261,8 +261,8 @@ List<Richiesta> listaRichiesta = (List<Richiesta>) request.getAttribute("listaRi
 									<td class="text-center" style="background-color: transparent; border-bottom: 1px solid var(--steel-variant);">
 										<% if (StatoRichiesta.COMPLETA.equals(r.getStatoRichiesta())) { %>
 										<button type="button" class="btn btn-review btn-sm"
-											data-bs-toggle="modal" data-bs-target="#modalRecensione"
-											onclick="preparaModale('<%= r.getId() %>', '<%= r.getId_professionista() %>')" style="background-color: var(--craft-gold); color: var(--obsidian-base); font-weight: bold;">
+                                                data-bs-toggle="modal" data-bs-target="#modalRecensione"
+                                                onclick="preparaModale('<%= r.getId() %>', '<%= r.getProfessionista() %>')" style="background-color: var(--craft-gold); color: var(--obsidian-base); font-weight: bold;">
 											<i class="fa-solid fa-star me-1"></i>Recensisci
 										</button> <% } else { %> <span class="text-muted small italic" style="color: var(--muted-silver) !important;">In
 											attesa...</span> <% } %>

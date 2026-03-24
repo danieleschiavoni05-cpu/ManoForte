@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ProfessioneDAO {
 
-    List<Long> findProfessioniByIdProfessionista(Long id) throws Exception;
+    List<Professione> findProfessioniByIdProfessionista(Long id) throws Exception;
 
-    List<Professione> findProfessioniById(Long id) throws Exception;
+    Professione findProfessioneById(Long id) throws Exception;
 
     void inserisciProfessione(String nome) throws Exception;
 

@@ -25,9 +25,23 @@ import javax.sql.DataSource;
 @WebServlet("/homeprofessionista")
 public class HomeProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    RichiestaDAO richiestaDAO;
+    RecensioneDAO recensioneDAO;
+    DisponibilitaDAO disponibilitaDAO;
+    CittaDAO cittaDAO;
+    VeicoloDAO veicoloDAO;
 
     public HomeProfessionistaServlet() {
         super();
+    }
+
+    @Override
+    public void init() throws ServletException {
+        richiestaDAO = DaoFactory.getInstance().getRichiestaDAO();
+        recensioneDAO = DaoFactory.getInstance().getRecensioneDAO();
+        cittaDAO = DaoFactory.getInstance().getCittaDAO();
+        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
+        disponibilitaDAO = DaoFactory.getInstance().getDisponibilitaDAO();
     }
 
     /**
@@ -45,14 +59,6 @@ public class HomeProfessionistaServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath()+"/"+Utility.getUserHomePage(loggedUser));
             return;
         }
-
-
-        DataSource ds = DataSourceConfig.getDataSource();
-        RichiestaDAO richiestaDAO = new RichiestaDAOJDBC(ds);
-        RecensioneDAO recensioneDAO = new RecensioneDAOJDBC(ds);
-        DisponibilitaDAO disponibilitaDAO = new JdbcDisponibilitaDAO(ds);
-        CittaDAO cittaDAO = new JdbcCittaDAO(DataSourceConfig.getDataSource());
-        VeicoloDAO veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
 
         try{
             List<CardRichiesta> richiesteInAttesa = richiestaDAO.getRichiesteByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
@@ -75,7 +81,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
             Map<LocalDate, List<Disponibilita>> disponibilitaEccezioni = disponibilita.stream()
                     .collect(Collectors.groupingBy(d -> d.getData()));
 
-            List<Richiesta> richieste = richiestaDAO.getRichiesteByEmailProfessionistaAndTipo(loggedUser.getEmail(), StatoRichiesta.IN_CORSO);
+            List<Richiesta> richieste = richiestaDAO.getRichiesteListByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.IN_CORSO);
             Map<LocalDate, List<Richiesta>> richiesteRicevute = richieste.stream()
                     .collect(Collectors.groupingBy(r -> r.getData()));
 

@@ -1,8 +1,16 @@
 package org.elis.manoforte.model;
 
+import jakarta.persistence.*;
+
+@Entity
 public class Professione {
-    private final String nome;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @Column(unique = true)
+    private String nome;
+
+    public Professione(){}
 
     public Professione(long id, String nome){
         this.id = id;
@@ -15,6 +23,14 @@ public class Professione {
 
     public long getId() {
         return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     @Override

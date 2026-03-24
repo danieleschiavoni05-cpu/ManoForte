@@ -61,7 +61,7 @@
                 <% for(Veicolo veicolo:veicoli){ %>
                 <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
                     <%=veicolo.getNome()%>
-                    <%if(utente.getVeicoli()!=null&&utente.getVeicoli().contains(veicolo.getId())){%>
+                    <%if(utente.getVeicolo()!=null&&utente.getVeicolo().contains(veicolo.getId())){%>
                     <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
                     <%}else{%>
                     <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">

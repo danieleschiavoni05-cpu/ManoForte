@@ -10,6 +10,6 @@ public interface CittaDAO {
 
     Citta getCittaById(long id) throws Exception;
 
-    void inserisciCitta(String nome) throws Exception;
+    void inserisciCitta(Citta citta) throws Exception;
 
 }

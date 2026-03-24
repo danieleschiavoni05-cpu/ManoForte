@@ -92,7 +92,7 @@
 					if (listaUtenti != null) {
 						for (Utente u : listaUtenti) {
 					// CORREZIONE: confronta l'ID dell'utente con l'ID professionista della recensione
-					if (idProfessionista == r.getId_professionista()) {
+					if (idProfessionista == r.getProfessionista()) {
 						prof = u;
 						break;
 					}

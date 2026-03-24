@@ -1,25 +1,39 @@
 package org.elis.manoforte.model;
 
+import jakarta.persistence.*;
+import org.hibernate.annotations.Check;
+
 import java.time.LocalDate;
 
+@Entity
+@Check(constraints = "cliente!=professionista")
 public class Recensione {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descrizione;
+    @Column(columnDefinition = "byte unsigned check(voto>0 AND voto<6")
     private Integer voto;
+    @Column(nullable = false)
     private LocalDate data;
-    private Long id_cliente;
-    private Long id_professionista;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Utente cliente;
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Utente professionista;
 
-    public Recensione(Long id, String descrizione, Integer voto, LocalDate data, Long id_cliente, Long id_professionista) {
+    public Recensione(Long id, String descrizione, Integer voto, LocalDate data, Utente cliente, Utente professionista) {
         this.id = id;
         this.descrizione = descrizione;
         this.voto = voto;
         this.data = data;
-        this.id_cliente = id_cliente;
-        this.id_professionista = id_professionista;
+        this.cliente = cliente;
+        this.professionista = professionista;
     }
 
-    public Recensione(long id, String descrizione, int voto) {
+    public Recensione() {
+
     }
 
     public Long getId() {
@@ -38,12 +52,12 @@ public class Recensione {
         return data;
     }
 
-    public Long getId_cliente() {
-        return id_cliente;
+    public Utente getCliente() {
+        return cliente;
     }
 
-    public Long getId_professionista() {
-        return id_professionista;
+    public Utente getProfessionista() {
+        return professionista;
     }
 
 }
