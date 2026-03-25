@@ -42,3 +42,4 @@ pom.xml
 src/main/java/org/elis/manoforte/controller/ErrorServlet.java
 src/main/webapp/WEB-INF/web.xml
 src/main/webapp/error.jsp
+desktop.ini
