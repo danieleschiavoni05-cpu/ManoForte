@@ -14,26 +14,24 @@ import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
 import org.elis.manoforte.dao.definition.*;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
+import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
-import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 @WebServlet("/registrazioneprofessionista")
 public class RegistrazioneProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    ProfessioneDAO professioneDAO;
-    CittaDAO cittaDAO;
-    VeicoloDAO veicoloDAO;
-    UtenteDAO utenteDAO;
+    private ProfessioneDAO professioneDao;
+    private CittaDAO cittaDao;
+    private VeicoloDAO veicoloDao;
+    private UtenteDAO utenteDao;
 
     public RegistrazioneProfessionistaServlet() {
         super();
@@ -41,10 +39,10 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        professioneDAO = DaoFactory.getInstance().getProfessioneDAO();
-        cittaDAO = DaoFactory.getInstance().getCittaDAO();
-        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
-        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
+        professioneDao = DaoFactory.getInstance().getProfessioneDAO();
+        cittaDao = DaoFactory.getInstance().getCittaDAO();
+        veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
     }
 
     /**
@@ -61,9 +59,9 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         }
 
         try {
-            request.setAttribute("citta", cittaDAO.getAllCitta());
-            request.setAttribute("professioni", professioneDAO.getAllProfessioni());
-            request.setAttribute("veicoli", veicoloDAO.getAllVeicolo());
+            request.setAttribute("citta", cittaDao.getAllCitta());
+            request.setAttribute("professioni", professioneDao.getAllProfessioni());
+            request.setAttribute("veicoli", veicoloDao.getAllVeicolo());
         }catch(SQLException e) {
             e.printStackTrace();
             response.sendRedirect("/errorpage");
@@ -88,7 +86,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter outJson = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
         LocalDate data_nascita = null;
         Long citta = null;
@@ -156,9 +154,10 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         }
 
         try {
-            Utente professionista = Utility.checkInputProfessionista(nome, cognome, email, data_nascita, codice_fiscale,
-                    citta, professioni, veicoli, tariffa, password, confermaPassword);
-            utenteDAO.inserisciProfessionista(professionista);
+            List<Professione> professioniDb = professioneDao.getProfessioniListById(professioni);
+            Utente professionista = Utility.checkInputProfessionista(nome, cognome, email, data_nascita, codice_fiscale, professioniDb, tariffa, password, confermaPassword);
+            professionista.setProfessione(professioniDb);
+            utenteDao.inserisciProfessionista(professionista);
 
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(true,
                     "Registrazione completata con successo.", null);

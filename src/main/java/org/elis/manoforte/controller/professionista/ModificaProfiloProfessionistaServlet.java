@@ -22,14 +22,16 @@ import org.elis.manoforte.model.Veicolo;
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 @WebServlet("/modificaProfiloProfessionista")
 public class ModificaProfiloProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    UtenteDAO utenteDAO;
-    VeicoloDAO veicoloDAO;
-    CittaDAO cittaDAO;
+    private UtenteDAO utenteDao;
+    private VeicoloDAO veicoloDao;
+    private CittaDAO cittaDao;
 
     public ModificaProfiloProfessionistaServlet() {
         super();
@@ -37,9 +39,9 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
-        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
-        cittaDAO = DaoFactory.getInstance().getCittaDAO();
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
+        cittaDao = DaoFactory.getInstance().getCittaDAO();
     }
 
     /**
@@ -58,7 +60,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter outJson = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
         LocalDate data_nascita = null;
         Long id_citta = null;
@@ -133,15 +135,18 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         try {
             Utente utenteLoggato = (Utente) request.getSession().getAttribute("utenteLoggato");
 
-            Citta citta = cittaDAO.getCittaById(id_citta);
-            List<Veicolo> veicolo = veicoloDAO.getVeicoliByIds(veicoliIds);
+            Citta citta = cittaDao.getCittaById(id_citta);
+            List<Veicolo> veicolo = veicoloDao.getVeicoliByIds(veicoliIds);
 
             Utente professionista = Utility.checkInputEditProfessionista(
                     utenteLoggato, nome, cognome, data_nascita, codice_fiscale,
-                    citta, veicolo, tariffa, nuovaPassword, password, confermaPassword);
+                    tariffa, nuovaPassword, password, confermaPassword);
 
-            utenteDAO.modificaProfessionista(professionista);
-            veicoloDAO.updateVeicoliProfessionista(utenteLoggato.getEmail(), veicolo);
+            professionista.setCitta(citta);
+            professionista.setVeicolo(veicolo);
+
+            utenteDao.modificaProfessionista(professionista);
+            veicoloDao.updateVeicoliProfessionista(utenteLoggato.getEmail(), veicolo);
 
             request.getSession().setAttribute("utenteLoggato", professionista);
 

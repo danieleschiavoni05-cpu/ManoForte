@@ -8,7 +8,6 @@ import org.elis.manoforte.dao.definition.RecensioneDAO;
 import org.elis.manoforte.model.CardRecensione;
 import org.elis.manoforte.model.Recensione;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class JPARecensioneDao implements RecensioneDAO {
@@ -43,14 +42,14 @@ public class JPARecensioneDao implements RecensioneDAO {
     @Override
     public List<Recensione> findByIdProfessionista(long id) {
         try(EntityManager em = emf.createEntityManager()) {
-           Query query = em.createQuery("select u.recensione from Utente u where u.id=:id");
+           Query query = em.createQuery("select u.recensioneRicevute from Utente u where u.id=:id");
            query.setParameter("id", id);
            return query.getResultList();
         }
     }
 
     @Override
-    public void delete(long id) {
+    public void deleteRecensioneById(long id) {
         try(EntityManager em = emf.createEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
@@ -60,9 +59,9 @@ public class JPARecensioneDao implements RecensioneDAO {
     }
 
     @Override
-    public List<CardRecensione> getRecensioneByEmailProfessionistaLimit(String email, int i) throws SQLException {
+    public List<CardRecensione> getRecensioneByEmailProfessionistaLimit(String email, int i) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select r from Utente u join u.recensione r where u.email=:email");
+            Query query = em.createQuery("select r from Utente u join u.recensioneRicevute r where u.email=:email");
             query.setParameter("email", email);
             query.setMaxResults(i);
             return query.getResultList();

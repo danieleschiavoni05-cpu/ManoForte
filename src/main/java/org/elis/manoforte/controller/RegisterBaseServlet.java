@@ -1,34 +1,30 @@
 package org.elis.manoforte.controller;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import tools.jackson.databind.ObjectMapper;
+import org.elis.manoforte.dao.definition.DaoFactory;
 
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
-import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.List;
 
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.exception.DatiErratiException;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Utente;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 /**
  * Servlet implementation class LoginServlet
@@ -36,13 +32,20 @@ import org.elis.manoforte.model.Utente;
 @WebServlet("/registerBase")
 public class RegisterBaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	CittaDAO cittaDao;
+	UtenteDAO utenteDao;
+
+	public void init() throws ServletException{
+		cittaDao = DaoFactory.getInstance().getCittaDAO();
+		utenteDao = DaoFactory.getInstance().getUtenteDAO();
+	}
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public RegisterBaseServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
@@ -57,9 +60,7 @@ public class RegisterBaseServlet extends HttpServlet {
 	            response.sendRedirect(request.getContextPath()+Utility.getUserHomePage(loggedUser));
 	            return;
 	        }
-	
-	        
-		CittaDAO cittaDao = new JdbcCittaDAO(DataSourceConfig.getDataSource());
+
 		try {
 	        List<Citta> citta = cittaDao.getAllCitta(); 
 	        request.setAttribute("listaCitta", citta);
@@ -79,8 +80,7 @@ public class RegisterBaseServlet extends HttpServlet {
 		    response.setCharacterEncoding("UTF-8");
 		    
 		    PrintWriter outJson = response.getWriter();
-		    ObjectMapper mapper = new ObjectMapper();
-		    UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+			ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
 		    try {
 		        // 1. Recupero parametri
@@ -107,6 +107,7 @@ public class RegisterBaseServlet extends HttpServlet {
 		        if(nome == null || nome.trim().isEmpty()) emptyError.setErrNome();
 		        if(cognome == null || cognome.trim().isEmpty()) emptyError.setErrCognome();
 		        if(data_nascita == null) emptyError.setErrData();
+				if(id_citta == null) emptyError.setErrCitta();
 		        if(codice_fiscale == null || codice_fiscale.trim().isEmpty()) emptyError.setErrCF();
 		        if(password == null || password.trim().isEmpty()) emptyError.setErrPassword();
 
@@ -118,6 +119,10 @@ public class RegisterBaseServlet extends HttpServlet {
 
 		        // 3. Validazione Business Logic (Utility)
 		        Utente u = Utility.checkInputUtenteBase(email, password, nome, cognome, data_nascita, codice_fiscale, id_citta, confermapassword);
+
+				Citta c = cittaDao.getCittaById(id_citta);
+
+				u.setCitta(c);
 		                 
 		        // 4. Inserimento
 		        utenteDao.inserisciUtente(u);
@@ -142,7 +147,5 @@ public class RegisterBaseServlet extends HttpServlet {
 		        outJson.flush();
 		        
 		    }
-		     
-
 		}
 }

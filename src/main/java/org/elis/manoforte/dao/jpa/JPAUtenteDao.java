@@ -146,16 +146,7 @@ public class JPAUtenteDao implements UtenteDAO {
     }
 
     @Override
-    public long trovaIdProfessionistaPerEmail(String email) throws Exception {
-        try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("Select u.id from Utente u where u.email = :email");
-            query.setParameter("email", email);
-            return (Long) query.getSingleResult();
-        }
-    }
-
-    @Override
-    public long trovaIdBasePerEmail(String email) throws Exception {
+    public Long findIdByEmail(String email) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("Select u.id from Utente u where u.email = :email");
             query.setParameter("email", email);

@@ -70,7 +70,9 @@ public class JPARichiestaDao implements RichiestaDAO {
     @Override
     public Richiesta getRichiestaById(long id) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            return em.find(Richiesta.class, id);
+            Query query = em.createQuery("select r from Richiesta r join r.cliente c join r.professionista p where r.id=: id");
+            query.setParameter("id", id);
+            return (Richiesta) query.getSingleResult();
         }
     }
 
@@ -88,7 +90,7 @@ public class JPARichiestaDao implements RichiestaDAO {
                 }
             }
 
-            return query.getResultList();
+            return richieste;
         }
     }
 
@@ -104,12 +106,14 @@ public class JPARichiestaDao implements RichiestaDAO {
     }
 
     @Override
-    public boolean checkRequestByOra(Disponibilita disp) throws Exception {
+    public boolean checkDisponibilitaByOra(Disponibilita disp) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select r from Richiesta r where r.ora_inizio<=:ora_inizio and r.ora_fine>=:ora_fine and r.data=:data");
+            Query query = em.createQuery("select r from Richiesta r where r.ora_inizio<=:ora_fine and r.ora_fine>=:ora_inizio and r.data=:data and r.professionista=:utente");
             query.setParameter("ora_inizio", disp.getOra_inizio());
             query.setParameter("ora_fine", disp.getOra_fine());
             query.setParameter("data", disp.getData());
+            query.setParameter("utente", disp.getUtente());
+            System.out.println(query.getResultList().isEmpty());
             return query.getResultList().isEmpty();
         }
     }

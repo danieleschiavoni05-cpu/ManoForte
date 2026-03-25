@@ -37,7 +37,29 @@ public class JPACittaDao implements CittaDAO {
         try(EntityManager em = emf.createEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.persist(citta);
+                em.persist(citta);
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void removeCitta(Long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                em.remove(em.find(Citta.class, id));
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void modificaCitta(Long id, String trim) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                Citta citta = em.find(Citta.class, id);
+                citta.setNome(trim);
+                em.merge(citta);
             transaction.commit();
         }
     }

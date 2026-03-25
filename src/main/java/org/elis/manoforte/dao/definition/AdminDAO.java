@@ -12,14 +12,6 @@ public class AdminDAO {
         return DataSourceConfig.getDataSource().getConnection();
     }
 
-    public static void aggiungiCitta(String nome) {
-        try (Connection conn = getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO citta (nome) VALUES (?)");
-            ps.setString(1, nome);
-            ps.executeUpdate();
-        } catch (Exception e) { e.printStackTrace(); }
-    }
-
     public static void aggiungiProfessione(String nome) {
         try (Connection conn = getConnection()) {
             PreparedStatement ps = conn.prepareStatement("INSERT INTO professione (nome) VALUES (?)");

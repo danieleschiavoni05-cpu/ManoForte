@@ -18,5 +18,6 @@ public class MainTest {
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.format_sql", "true");
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("default",properties);
+
     }
 }

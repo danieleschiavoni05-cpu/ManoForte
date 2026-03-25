@@ -8,38 +8,38 @@ import java.util.List;
 
 @Entity
 public class Richiesta {
-    @Id
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private LocalDate data;
-    private LocalTime ora_inizio;
-    private LocalTime ora_fine;
-    private String indirizzo;
-	@Column(columnDefinition = "check(statoRichiesta in (0,1,2))")
-    private StatoRichiesta statoRichiesta;
+	private LocalTime ora_inizio;
+	private LocalTime ora_fine;
+	private String indirizzo;
+	private StatoRichiesta statoRichiesta;
 	@ManyToOne
-    private Utente cliente;
+	private Utente cliente;
 	@ManyToOne
-    private Utente professionista;
+	private Utente professionista;
 	private String descrizione;
 
-    public Richiesta(Long id, LocalDate data, LocalTime ora_inizio, LocalTime ora_fine,
-					 String indirizzo, StatoRichiesta statoRichiesta, String descrizione, Utente cliente, Utente professionista) {
-        this.id = id;
-        this.data = data;
-        this.ora_inizio = ora_inizio;
-        this.ora_fine = ora_fine;
-        this.indirizzo = indirizzo;
-		this.descrizione = descrizione;
-        this.statoRichiesta = statoRichiesta;
-        this.cliente = cliente;
-        this.professionista = professionista;
-    }
 
-    public Richiesta() {
+	public Richiesta(Long id, LocalDate data, LocalTime ora_inizio, LocalTime ora_fine,
+					 String indirizzo, StatoRichiesta statoRichiesta, String descrizione, Utente cliente, Utente professionista) {
+		this.id = id;
+		this.data = data;
+		this.ora_inizio = ora_inizio;
+		this.ora_fine = ora_fine;
+		this.indirizzo = indirizzo;
+		this.descrizione = descrizione;
+		this.statoRichiesta = statoRichiesta;
+		this.cliente = cliente;
+		this.professionista = professionista;
 	}
 
-    public Long getId() {
+	public Richiesta() {
+	}
+
+	public Long getId() {
 		return id;
 	}
 

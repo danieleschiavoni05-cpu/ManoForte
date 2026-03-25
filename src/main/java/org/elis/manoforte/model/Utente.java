@@ -13,9 +13,7 @@ public class Utente {
 	private Long id;
 	@Column(nullable = false, unique = true, length = 50)
 	private String email;
-	@Column(nullable = false, length = 30)
 	private String nome;
-	@Column(nullable = false, length = 30)
 	private String cognome;
 	private LocalDate dataNascita;
 	@Column(nullable = false, length = 16)
@@ -25,8 +23,8 @@ public class Utente {
 	private BigDecimal tariffa;
 	@Column(nullable = false)
 	private Ruolo ruolo;
+
 	@ManyToOne
-	@JoinColumn(nullable = false)
 	private Citta citta;
 	@OneToMany(mappedBy = "utente")
 	private List<Disponibilita> disponibilita;
@@ -34,10 +32,19 @@ public class Utente {
 	private List<Professione> professione;
 	@ManyToMany
 	private List<Veicolo> veicolo;
-	@OneToMany(mappedBy = "richiesta")
-	private List<Richiesta> richiesta;
-	@OneToMany(mappedBy = "recensione")
-	private List<Recensione> recensione;
+
+	@OneToMany(mappedBy = "cliente")
+	private List<Richiesta> richiesteEffettuate;
+	@OneToMany(mappedBy = "professionista")
+	private List<Richiesta> richiesteRicevute;
+	@OneToMany(mappedBy = "cliente")
+	private List<Recensione> recensioneInviate;
+	@OneToMany(mappedBy = "professionista")
+	private List<Recensione> recensioneRicevute;
+	@OneToMany(mappedBy = "utente")
+	private List<Immagine> immagine;
+
+
 
 	// costruttore Admin
 	public Utente(String email, String password){
@@ -56,7 +63,7 @@ public class Utente {
 
 	// costruttore Cliente
 	public Utente(String email, String password, String nome,
-				  String cognome, LocalDate dataNascita, String codice_fiscale, Citta citta, List<Richiesta> richiesta) {
+				  String cognome, LocalDate dataNascita, String codice_fiscale) {
 		this.email = email;
 		this.password = password;
 		this.nome = nome;
@@ -64,11 +71,10 @@ public class Utente {
 		this.dataNascita = dataNascita;
 		this.codice_fiscale = codice_fiscale;
 		this.ruolo = Ruolo.UTENTE_BASE;
-		this.citta = citta;
+		this.citta = null;
 		this.professione = null;
 		this.tariffa = null;
 		this.veicolo = null;
-		this.richiesta = null;
 	}
 
 	// costruttore Cliente - Card Richiesta
@@ -103,8 +109,8 @@ public class Utente {
 
 	//costruttore Professionista
 	public Utente(String email, String password, String nome,
-				  String cognome, LocalDate dataNascita, String codice_fiscale, Citta citta,
-				  List<Professione> professione, BigDecimal tariffa, List<Veicolo> veicolo, List<Richiesta> richiesta) {
+				  String cognome, LocalDate dataNascita, String codice_fiscale,
+				  BigDecimal tariffa) {
 		this.email = email;
 		this.password = password;
 		this.nome = nome;
@@ -112,16 +118,14 @@ public class Utente {
 		this.dataNascita = dataNascita;
 		this.codice_fiscale = codice_fiscale;
 		this.ruolo = Ruolo.PROFESSIONISTA;
-		this.citta = citta;
-		this.professione = professione;
+		this.citta = null;
+		this.professione = null;
 		this.tariffa = tariffa;
-		this.veicolo = veicolo;
-		this.richiesta = richiesta;
+		this.veicolo = null;
 	}
 
 
 	public Utente() {
-
 	}
 
 	public Ruolo getRuolo() {
@@ -180,14 +184,6 @@ public class Utente {
 		this.veicolo = veicolo;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if(this == obj) return true;
-		if(obj instanceof Utente user)
-			return email.equals(user.email) && codice_fiscale.equals(user.codice_fiscale);
-		else return false;
-	}
-
 	public void setId_citta(Citta citta) {
 		this.citta = citta;
 	}
@@ -197,12 +193,10 @@ public class Utente {
 	}
 
 	public void setCognome(String cognome) {
-		// TODO Auto-generated method stub
 		this.cognome=cognome;
 	}
 
 	public void setCodiceFiscale(String codice_fiscale) {
-		// TODO Auto-generated method stub
 		this.codice_fiscale=codice_fiscale;
 	}
 
@@ -254,11 +248,52 @@ public class Utente {
 		this.disponibilita = disponibilita;
 	}
 
-	public List<Richiesta> getRichiesta() {
-		return richiesta;
+	public List<Immagine> getImmagine() {
+		return immagine;
 	}
 
-	public void setRichiesta(List<Richiesta> richiesta) {
-		this.richiesta = richiesta;
+	public void setImmagine(List<Immagine> immagine) {
+		this.immagine = immagine;
+	}
+
+
+	public List<Richiesta> getRichiesteEffettuate() {
+		return richiesteEffettuate;
+	}
+
+	public void setRichiesteEffettuate(List<Richiesta> richiesteEffettuate) {
+		this.richiesteEffettuate = richiesteEffettuate;
+	}
+
+	public List<Richiesta> getRichiesteRicevute() {
+		return richiesteRicevute;
+	}
+
+	public void setRichiesteRicevute(List<Richiesta> richiesteRicevute) {
+		this.richiesteRicevute = richiesteRicevute;
+	}
+
+	public List<Recensione> getRecensioneInviate() {
+		return recensioneInviate;
+	}
+
+	public void setRecensioneInviate(List<Recensione> recensioneInviate) {
+		this.recensioneInviate = recensioneInviate;
+	}
+
+	public List<Recensione> getRecensioneRicevute() {
+		return recensioneRicevute;
+	}
+
+	public void setRecensioneRicevute(List<Recensione> recensioneRicevute) {
+		this.recensioneRicevute = recensioneRicevute;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(this == obj) return true;
+		if(obj instanceof Utente user)
+			return email.equals(user.email) && codice_fiscale.equals(user.codice_fiscale);
+		else return false;
 	}
 }

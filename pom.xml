@@ -52,6 +52,11 @@
             <version>6.5.2.Final</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>tools.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-hibernate6</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

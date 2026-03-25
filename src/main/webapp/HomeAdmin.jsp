@@ -1,11 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.Utente" %>
-<%@ page import="org.elis.manoforte.model.Ruolo" %>
+<%@ page import="org.elis.manoforte.model.Citta" %>
+<%@ page import="org.elis.manoforte.model.Professione" %>
 
 <%
-    List<Object[]> citta = (List<Object[]>) request.getAttribute("citta");
-    List<Object[]> professioni = (List<Object[]>) request.getAttribute("professioni");
+    List<Citta> citta = (List<Citta>) request.getAttribute("citta");
+    List<Professione> professioni = (List<Professione>) request.getAttribute("professioni");
     Utente userSession = (Utente) session.getAttribute("utenteLoggato");
 %>
 
@@ -42,13 +43,13 @@
         <h3>Città inserite:</h3>
         <ul class="admin-list">
             <% if (citta != null) {
-                   for (Object[] c : citta) { %>
+                   for (Citta c : citta) { %>
                 <li class="admin-list-item">
-                    <strong><%= c[1] %></strong>
+                    <strong><%= c.getNome() %></strong>
                     <div class="admin-actions">
-                        <a href="EliminaCitta?id=<%= c[0] %>" class="admin-delete-link">Elimina</a>
+                        <a href="EliminaCitta?id=<%= c.getId() %>" class="admin-delete-link">Elimina</a>
                         <form action="ModificaCitta" method="post" class="admin-inline-form">
-                            <input type="hidden" name="id" value="<%= c[0] %>">
+                            <input type="hidden" name="id" value="<%= c.getId() %>">
                             <input type="text" name="nome" placeholder="Nuovo nome">
                             <button type="submit" class="admin-btn-small">Modifica</button>
                         </form>
@@ -68,13 +69,13 @@
         <h3>Professioni inserite:</h3>
         <ul class="admin-list">
             <% if (professioni != null) {
-                   for (Object[] p : professioni) { %>
+                   for (Professione p : professioni) { %>
                 <li class="admin-list-item">
-                    <strong><%= p[1] %></strong>
+                    <strong><%= p.getNome() %></strong>
                     <div class="admin-actions">
-                        <a href="EliminaProfessione?id=<%= p[0] %>" class="admin-delete-link">Elimina</a>
+                        <a href="EliminaProfessione?id=<%= p.getId() %>" class="admin-delete-link">Elimina</a>
                         <form action="ModificaProfessione" method="post" class="admin-inline-form">
-                            <input type="hidden" name="id" value="<%= p[0] %>">
+                            <input type="hidden" name="id" value="<%= p.getId() %>">
                             <input type="text" name="nome" placeholder="Nuovo nome">
                             <button type="submit" class="admin-btn-small">Modifica</button>
                         </form>

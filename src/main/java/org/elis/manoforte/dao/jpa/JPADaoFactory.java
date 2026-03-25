@@ -24,8 +24,8 @@ public class JPADaoFactory extends DaoFactory {
         properties.put("jakarta.persistence.jdbc.driver", "com.mysql.cj.jdbc.Driver");
         properties.put("jakarta.persistence.jdbc.url", "jdbc:mysql://localhost:3306/ManoForte_jpa");
         properties.put("jakarta.persistence.jdbc.user", "root");
-        properties.put("jakarta.persistence.jdbc.password", "root");
-        properties.put("jakarta.persistence.schema-generation.database.action", "drop-and-create");
+        properties.put("jakarta.persistence.jdbc.password", System.getenv("db_password"));
+        properties.put("jakarta.persistence.schema-generation.database.action", "update");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.format_sql", "true");
 
@@ -39,10 +39,10 @@ public class JPADaoFactory extends DaoFactory {
         this.richiestaDao = new JPARichiestaDao(emf);
     }
 
-    @Override
-    public AdminDAO getAdminDAO() {
-        return null;
-    }
+//    @Override
+//    public AdminDAO getAdminDAO() {
+//        return null;
+//    }
 
     @Override
     public DisponibilitaDAO getDisponibilitaDAO() {

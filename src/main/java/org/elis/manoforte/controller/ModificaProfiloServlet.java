@@ -5,26 +5,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import tools.jackson.databind.ObjectMapper;
+import org.elis.manoforte.dao.definition.DaoFactory;
 
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
-import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcCittaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.Citta;
 import org.elis.manoforte.model.Utente;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 /**
  * Servlet implementation class ModificaProfiloServlet
@@ -32,6 +31,14 @@ import org.elis.manoforte.model.Utente;
 @WebServlet("/ModificaProfilo")
 public class ModificaProfiloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+	private CittaDAO cittaDao;
+	UtenteDAO utenteDao;
+
+	public void init() throws ServletException{
+		cittaDao = DaoFactory.getInstance().getCittaDAO();
+		utenteDao = DaoFactory.getInstance().getUtenteDAO();
+	}
 
 	/**
 	 * @see HttpServlet#HttpServlet()
@@ -46,7 +53,6 @@ public class ModificaProfiloServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Utente utenteSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
-		CittaDAO cittaDao = new JdbcCittaDAO(DataSourceConfig.getDataSource());
 		// 2. Controllo sicurezza: se non c'è nessuno in sessione, rimanda al login
 		if (utenteSessione == null) {
 			response.sendRedirect(request.getContextPath() + "/login.jsp");
@@ -78,12 +84,12 @@ public class ModificaProfiloServlet extends HttpServlet {
 	    }
 
 	    // 2. Inizializzazione DAO e JSON (ora che siamo sicuri di essere loggati)
-	    UtenteDAO dao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
+
 	    response.setContentType("application/json");
 	    response.setCharacterEncoding("UTF-8");
 	    
 	    PrintWriter outJson = response.getWriter();
-	    ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
 	    try {
 	        // Recupero parametri
@@ -110,6 +116,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 	        if(nuovoNome == null || nuovoNome.trim().isEmpty()) emptyError.setErrNome();
 	        if(nuovoCognome == null || nuovoCognome.trim().isEmpty()) emptyError.setErrCognome();
 	        if(dataNascitaStr == null) emptyError.setErrData();
+			if(idCittaStr == null) emptyError.setErrCitta();
 	        if(nuovoCF == null || nuovoCF.trim().isEmpty()) emptyError.setErrCF();
 	        if(oldPassForm == null || oldPassForm.trim().isEmpty()) emptyError.setErrPassword();
 
@@ -130,12 +137,13 @@ public class ModificaProfiloServlet extends HttpServlet {
 	            outJson.flush();
 	            return;
 	        }
-	       
+
+			Citta citta = cittaDao.getCittaById(idCittaStr);
 	        // 4. Logica di Business e Database
 	        Utente utenteBase = Utility.checkInputEditUtenteBase(utenteLoggato, nuovoNome, nuovoCognome, 
-	                            dataNascitaStr, nuovoCF, idCittaStr, nuovaPass, oldPassForm, confermaPass);
+	                            dataNascitaStr, nuovoCF, citta, nuovaPass, oldPassForm, confermaPass);
 	            
-	        dao.update(utenteBase);
+	        utenteDao.update(utenteBase);
 
 	        // Aggiornamento Sessione
 	        request.getSession().setAttribute("utenteLoggato", utenteBase);

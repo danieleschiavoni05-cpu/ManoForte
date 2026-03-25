@@ -23,7 +23,7 @@ public interface RichiestaDAO {
 
     List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws Exception;
 
-    boolean checkRequestByOra(Disponibilita disp) throws Exception;
+    boolean checkDisponibilitaByOra(Disponibilita disp) throws Exception;
 
     List<Richiesta> getRichiesteListByEmailProfessionistaAndStato(String email, StatoRichiesta statoRichiesta) throws Exception;
 }

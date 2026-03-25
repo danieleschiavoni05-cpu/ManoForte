@@ -10,14 +10,11 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
-import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Recensione;
 import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.utility.DataSourceConfig;
 
 /**
  * Servlet implementation class RecensioniProfessionistiServlet
@@ -25,6 +22,16 @@ import org.elis.manoforte.utility.DataSourceConfig;
 @WebServlet("/RecensioniProfessionisti")
 public class RecensioniProfessionistiServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
+
+	UtenteDAO utenteDao;
+	RecensioneDAO recensioneDao;
+
+	@Override
+	public void init() throws ServletException{
+		utenteDao = DaoFactory.getInstance().getUtenteDAO();
+		recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+	}
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -49,8 +56,6 @@ public class RecensioniProfessionistiServlet extends HttpServlet {
         }
         try {
         // Inizializzo i DAO
-        UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-        RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
         
 
         // Recupero tutte le recensioni
@@ -62,7 +67,7 @@ public class RecensioniProfessionistiServlet extends HttpServlet {
 			tuttiUtenti = utenteDao.findAllProfessionisti();
 			for(Utente u : tuttiUtenti) {
 				String emailProfessionista = u.getEmail();
-				Long idProfessionista=utenteDao.trovaIdProfessionistaPerEmail(emailProfessionista);
+				Long idProfessionista=utenteDao.findIdByEmail(emailProfessionista);
 				request.setAttribute("idProfessionista", idProfessionista);
 				
 			}

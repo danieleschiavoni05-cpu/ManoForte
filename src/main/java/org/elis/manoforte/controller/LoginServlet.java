@@ -3,24 +3,29 @@ package org.elis.manoforte.controller;
 import jakarta.servlet.ServletException;
 
 import java.io.*;
-import java.nio.file.Files;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.definition.VeicoloDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcVeicoloDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.utility.DataSourceConfig;
 import org.elis.manoforte.utility.Utility;
 
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
+
+    private UtenteDAO utenteDao;
+    private VeicoloDAO veicoloDao;
+
+    public void init() throws ServletException{
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
+    }
 
     public LoginServlet() {
         super();
@@ -30,7 +35,7 @@ public class LoginServlet extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException, IOException {
-        String path = "C:/immagini";
+        /*String path = "C:/immagini";
         File file = new File(path);
         if (!file.exists()) {
             Files.createDirectory(file.toPath());
@@ -38,11 +43,7 @@ public class LoginServlet extends HttpServlet {
         try(DataOutputStream fos = new DataOutputStream(new FileOutputStream(file.toPath()+"/test.txt"))){
             fos.writeChars("hello world");
             fos.flush();
-        }
-
-
-        HttpSession session = request.getSession();
-        Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
+        }*/
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("/auth/login.jsp");
         dispatcher.forward(request, response);
@@ -70,14 +71,11 @@ public class LoginServlet extends HttpServlet {
             return;
         }
 
-        UtenteDAO utenteDAO = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-
         try {
-            Utente utente = utenteDAO.findByEmailPassword(email, password);
+            Utente utente = utenteDao.findByEmailPassword(email, password);
 
             if(utente.getRuolo().equals(Ruolo.PROFESSIONISTA)){
-                VeicoloDAO  veicoloDAO = new JdbcVeicoloDAO(DataSourceConfig.getDataSource());
-                utente.setVeicolo(veicoloDAO.getVeicoliByEmailProfessionista(utente.getEmail()));
+                utente.setVeicolo(veicoloDao.getVeicoliByEmailProfessionista(utente.getEmail()));
             }
 
             HttpSession session = request.getSession();

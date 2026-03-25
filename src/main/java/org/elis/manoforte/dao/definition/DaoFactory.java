@@ -1,10 +1,8 @@
 package org.elis.manoforte.dao.definition;
 
-import org.elis.manoforte.dao.jdbc.JDBCDaoFactory;
+//import org.elis.manoforte.dao.jdbc.JDBCDaoFactory;
 import org.elis.manoforte.dao.jpa.JPADaoFactory;
-import org.elis.manoforte.utility.DataSourceConfig;
-
-import javax.xml.crypto.Data;
+//import org.elis.manoforte.utility.DataSourceConfig;
 
 public abstract class DaoFactory {
     protected DaoFactory() {
@@ -16,7 +14,7 @@ public abstract class DaoFactory {
 
     static{
         FACTORY = switch(IMPL){
-            case "JDBC" -> new JDBCDaoFactory(DataSourceConfig.getDataSource());
+           // case "JDBC" -> new JDBCDaoFactory(DataSourceConfig.getDataSource());
             case "JPA" -> new JPADaoFactory();
             default -> throw new IllegalStateException("Nessuna implementazione disponibile.");
         };
@@ -26,7 +24,7 @@ public abstract class DaoFactory {
         return FACTORY;
     }
 
-    public abstract AdminDAO getAdminDAO();
+    //public abstract AdminDAO getAdminDAO();
 
     public abstract DisponibilitaDAO getDisponibilitaDAO();
 

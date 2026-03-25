@@ -7,11 +7,12 @@ public class Immagine {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 30, nullable = false)
+    @Column(nullable = false)
     private String nome;
-    @Column(length = 50, nullable = false)
+    @Column(nullable = false)
     private String percorso;
     private Boolean isFotoProfilo;
+    @ManyToOne
     private Utente utente;
 
     public Immagine() {}

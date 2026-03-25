@@ -10,18 +10,19 @@ import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.*;
 import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 @WebServlet("/dettagliRichiesta")
 public class DettagliRichiestaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    RichiestaDAO richiestaDAO;
-    CittaDAO cittaDAO;
-    UtenteDAO utenteDAO;
+    private RichiestaDAO richiestaDao;
+    private CittaDAO cittaDao;
+    private UtenteDAO utenteDao;
 
 
     public DettagliRichiestaServlet() {
@@ -30,9 +31,9 @@ public class DettagliRichiestaServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        richiestaDAO = DaoFactory.getInstance().getRichiestaDAO();
-        cittaDAO = DaoFactory.getInstance().getCittaDAO();
-        utenteDAO = DaoFactory.getInstance().getUtenteDAO();
+        richiestaDao = DaoFactory.getInstance().getRichiestaDAO();
+        cittaDao = DaoFactory.getInstance().getCittaDAO();
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
     }
 
     /**
@@ -52,12 +53,12 @@ public class DettagliRichiestaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter outJson = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
         Long id_richiesta = Long.valueOf(request.getParameter("id_richiesta"));
 
         try{
-            Richiesta richiesta = richiestaDAO.getRichiestaById(id_richiesta);
+            Richiesta richiesta = richiestaDao.getRichiestaById(id_richiesta);
 
             if(richiesta!=null){
                 Utente cliente = richiesta.getCliente();
@@ -92,12 +93,11 @@ public class DettagliRichiestaServlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
 
         PrintWriter outJson = response.getWriter();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
         Long id_richiesta = Long.valueOf(request.getParameter("id"));
         String type = request.getParameter("type");
 
-        RichiestaDAO richiestaDAO = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
         try{
             StatoRichiesta tipo;
             String messaggio;
@@ -109,7 +109,7 @@ public class DettagliRichiestaServlet extends HttpServlet {
                 messaggio = "Richiesta segnata come completata.";
             }
 
-            richiestaDAO.updateStatoRichiesta(id_richiesta, tipo);
+            richiestaDao.updateStatoRichiesta(id_richiesta, tipo);
 
             DTOGenericResponse dtoResponse = new DTOGenericResponse(true, messaggio);
             response.setStatus(HttpServletResponse.SC_OK);

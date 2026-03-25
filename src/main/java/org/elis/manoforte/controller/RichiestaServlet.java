@@ -14,14 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-import org.elis.manoforte.dao.definition.DisponibilitaDAO;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
-import org.elis.manoforte.dao.definition.RichiestaDAO;
-import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcDisponibilitaDAO;
-import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.RichiestaDAOJDBC;
+import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
@@ -35,20 +28,31 @@ import org.elis.manoforte.utility.DataSourceConfig;
 public class RichiestaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
+	ProfessioneDAO professioneDao;
+	UtenteDAO utenteDao;
+	DisponibilitaDAO disponibilitaDao;
+	RichiestaDAO richiestaDao;
+
+	@Override
+	public void init() throws ServletException{
+		professioneDao = DaoFactory.getInstance().getProfessioneDAO();
+		utenteDao = DaoFactory.getInstance().getUtenteDAO();
+		disponibilitaDao = DaoFactory.getInstance().getDisponibilitaDAO();
+		richiestaDao = DaoFactory.getInstance().getRichiestaDAO();
+	}
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
 	public RichiestaServlet() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+
 		Utente utenteSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
 		
 		if(utenteSessione ==null) {
@@ -73,25 +77,21 @@ public class RichiestaServlet extends HttpServlet {
 		}else {
 		
 		String emailProfessionista = request.getParameter("emailPro");
-		UtenteDAO utente= new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-		DisponibilitaDAO disponibilita=new JdbcDisponibilitaDAO(DataSourceConfig.getDataSource());
 		
 		
 		System.out.println("Faccio la richiesta verso: [" + emailProfessionista + "]");
-		ProfessioneDAO professionedao = new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
         
 		
         try {
             // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
-            Utente risultato = utente.getUtentebyEmail(emailProfessionista);
-            List<Disponibilita> disponibilitautente= disponibilita.findDisponibilitaByEmailProfessionista(emailProfessionista);
+            Utente risultato = utenteDao.getUtentebyEmail(emailProfessionista);
+            List<Disponibilita> disponibilitaUtente= disponibilitaDao.findDisponibilitaByEmailProfessionista(emailProfessionista);
             
             System.out.println("Faccio la richiesta verso: [" + risultato.getNome() + "]");
             
             request.setAttribute("nomeProfessione", emailProfessionista);
             request.setAttribute("listaProfessionisti", risultato);
-            request.setAttribute("disponibilita", disponibilita);
-            request.setAttribute("DisponibiltaUtente", disponibilitautente);
+            request.setAttribute("DisponibiltaUtente", disponibilitaUtente);
             request.setAttribute("utenteLoggato", utenteSessione);
             
 
@@ -111,15 +111,11 @@ public class RichiestaServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		Utente cliente = (Utente) session.getAttribute("utenteLoggato");
-		 RichiestaDAO richiestaDao = new RichiestaDAOJDBC(DataSourceConfig.getDataSource());
-		 UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
 		
 		try {
 			// Recupero parametri dal form della pagina professionisti
-			String emailBase=request.getParameter("emailBase");
 			String emailProfessionista=request.getParameter("emailProfessionista");
-			long idCliente = utenteDao.trovaIdBasePerEmail(emailBase);
-			long idProfessionista = utenteDao.trovaIdProfessionistaPerEmail( emailProfessionista);
+			Long idProfessionista = utenteDao.findIdByEmail( emailProfessionista);
 			String indirizzo = request.getParameter("indirizzo");
 			String descrizione = request.getParameter("descrizione");
 			String ora_inizioString =request.getParameter("ora_inizio");
@@ -163,7 +159,9 @@ public class RichiestaServlet extends HttpServlet {
 			    // Se non viene scelta una data, potresti voler usare oggi come default
 			    giorno = giornoOggi; 
 			}
-			
+
+			Utente professionista = utenteDao.getUtentebyEmail(emailProfessionista);
+
 			// Prepariamo i dati per la nuova Richiesta
 			Richiesta nuovaRichiesta = new Richiesta(
 					null, // L'ID verrà generato dal DB (Auto-increment)
@@ -173,8 +171,8 @@ public class RichiestaServlet extends HttpServlet {
 					indirizzo, 
 					StatoRichiesta.IN_ATTESA_DI_CONFERMA, 
 					descrizione,
-					idCliente,
-					idProfessionista
+					cliente,
+					professionista
 					);
 			
 			System.out.println("--- Dettagli Nuova Richiesta ---");

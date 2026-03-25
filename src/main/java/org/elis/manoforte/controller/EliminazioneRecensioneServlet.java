@@ -7,9 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
-import org.elis.manoforte.utility.DataSourceConfig;
 
 /**
  * Servlet implementation class EliminazioneRecensioneServlet
@@ -17,20 +16,26 @@ import org.elis.manoforte.utility.DataSourceConfig;
 @WebServlet("/eliminazionerecensione")
 public class EliminazioneRecensioneServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
+
+	private RecensioneDAO recensioneDao;
+
+	@Override
+	public void init() throws ServletException{
+		recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+	}
+
     /**
      * @see HttpServlet#HttpServlet()
      */
     public EliminazioneRecensioneServlet() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
@@ -45,11 +50,8 @@ public class EliminazioneRecensioneServlet extends HttpServlet {
 	        try {
 	            long idRecensione = Long.parseLong(idParam);
 
-	            // 2. Inizializzo il DAO
-	            RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
-
 	            // 3. Chiamo il metodo void
-	            recensioneDao.delete(idRecensione);
+	            recensioneDao.deleteRecensioneById(idRecensione);
 
 	            // 4. Feedback opzionale in sessione
 	            request.getSession().setAttribute("messaggio", "Recensione eliminata.");

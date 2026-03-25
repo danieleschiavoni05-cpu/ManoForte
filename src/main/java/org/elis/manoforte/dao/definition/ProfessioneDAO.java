@@ -10,8 +10,13 @@ public interface ProfessioneDAO {
 
     Professione findProfessioneById(Long id) throws Exception;
 
-    void inserisciProfessione(String nome) throws Exception;
-
     List<Professione> getAllProfessioni() throws Exception;
 
+    List<Professione> getProfessioniListById(List<Long> professioni) throws Exception;
+
+    void addProfessione(String professione) throws Exception;
+
+    void removeProfessione(Long id) throws Exception;
+
+    void modificaProfessione(Long id, String nome) throws Exception;
 }

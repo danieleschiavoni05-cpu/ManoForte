@@ -1,9 +1,6 @@
 package org.elis.manoforte.dao.jpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import org.elis.manoforte.dao.definition.DisponibilitaDAO;
 import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.TipoDisponibilita;
@@ -91,12 +88,14 @@ public class JPADisponibilitaDao implements DisponibilitaDAO {
     }
 
     @Override
-    public boolean checkRicorrenzaById(Long idDisponibilita) throws Exception {
+    public Disponibilita checkRicorrenzaById(Long idDisponibilita) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select d from Utente u join u.disponibilita d where d.id=:id and d.tipo=:tipo");
+            Query query = em.createQuery("select d from Disponibilita d where d.id=:id and d.tipo=:tipo");
             query.setParameter("id", idDisponibilita);
             query.setParameter("tipo", TipoDisponibilita.RICORSIVO);
-            return query.getSingleResult()!=null;
+            return (Disponibilita) query.getSingleResult();
+        }catch(NoResultException e){
+            return null;
         }
     }
 
@@ -112,16 +111,35 @@ public class JPADisponibilitaDao implements DisponibilitaDAO {
 
     @Override
     public Disponibilita checkSovrapposizione(Disponibilita disponibilita, String email) throws Exception {
-        return null;
+        try(EntityManager em = emf.createEntityManager()){
+            Query query = em.createQuery("select d from Disponibilita d where " +
+                    "d.utente.email=:email and (d.ora_inizio<=:ora_fine and d.ora_fine>=:ora_inizio) and" +
+                    "(d.data=:data or d.giorno_settimana=:giorno)");
+            query.setParameter("email", email);
+            query.setParameter("ora_fine", disponibilita.getOra_fine());
+            query.setParameter("ora_inizio", disponibilita.getOra_inizio());
+            query.setParameter("data", disponibilita.getData());
+            query.setParameter("giorno", disponibilita.getGiorno_settimana());
+            return (Disponibilita) query.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
     }
 
     @Override
-    public void updateDisponibilitaById(Disponibilita union, Long id) throws Exception {
-
+    public void updateDisponibilitaById(Disponibilita disponibilita) throws Exception {
+        try(EntityManager em = emf.createEntityManager()){
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                em.merge(disponibilita);
+            transaction.commit();
+        }
     }
 
     @Override
     public Disponibilita findDisponibilitaById(Long idDisponibilita) throws Exception {
-        return null;
+        try(EntityManager em = emf.createEntityManager()){
+            return em.find(Disponibilita.class, idDisponibilita);
+        }
     }
 }

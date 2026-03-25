@@ -20,11 +20,11 @@
     <div class="row">
       <div class="news-grid" id="pendingTasks">
         <%if(richiesteInAttesa!=null && !richiesteInAttesa.isEmpty()){
-          for(CardRichiesta r:richiesteInAttesa){ %>
-        <%=createCard(r)%>
-        <%}
-        }else{%>
-        <p class="text-muted" id="noPending">Nessuna nuova richiesta!</p>
+            for(CardRichiesta r:richiesteInAttesa){ %>
+              <%=createCard(r)%>
+          <%}%>
+        <%}else{%>
+          <p class="text-muted" id="noPending">Nessuna nuova richiesta!</p>
         <%}%>
       </div>
     </div>

@@ -29,9 +29,9 @@ import org.elis.manoforte.model.Utente;
 public class GestioneDisponibilitaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    DisponibilitaDAO disponibilitaDAO;
-    UtenteDAO utenteDao;
-    RichiestaDAO richiestaDao;
+    private DisponibilitaDAO disponibilitaDao;
+    private UtenteDAO utenteDao;
+    private RichiestaDAO richiestaDao;
 
     public GestioneDisponibilitaServlet() {
         super();
@@ -39,7 +39,7 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        disponibilitaDAO = DaoFactory.getInstance().getDisponibilitaDAO();
+        disponibilitaDao = DaoFactory.getInstance().getDisponibilitaDAO();
         utenteDao = DaoFactory.getInstance().getUtenteDAO();
         richiestaDao = DaoFactory.getInstance().getRichiestaDAO();
     }
@@ -76,7 +76,7 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
             // Parsing della data o del giorno della settimana in base al tipo
             if(tipo.equals(TipoDisponibilita.RICORSIVO)){
                 // Se ricorsivo, ci aspettiamo un giorno della settimana (es. "MONDAY")
-                giorno = DayOfWeek.from(LocalDate.parse(request.getParameter("giorno")));
+                giorno = DayOfWeek.valueOf(request.getParameter("giorno").toUpperCase());
             } else if(tipo.equals(TipoDisponibilita.SINGOLO)){
                 // Se singolo, ci aspettiamo una data specifica (YYYY-MM-DD)
                 if(request.getParameter("data") != null && !request.getParameter("data").equals(""))
@@ -88,9 +88,6 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
             LocalTime ora_fine = LocalTime.parse(request.getParameter("ora_fine"));
 
             try {
-                // Recupera l'ID del professionista
-                long id = utenteDao.trovaIdProfessionistaPerEmail(user.getEmail());
-                
                 // Se è un inserimento SINGOLO marcato come ECCEZIONE, cambia il tipo
                 if(tipo.equals(TipoDisponibilita.SINGOLO) && tipo_inserimento.equals("ECCEZIONE")) {
                     tipo = TipoDisponibilita.ECCEZIONE;
@@ -103,97 +100,81 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
 
                 // --- GESTIONE SOVRAPPOSIZIONI E UNIONI ---
                 
-                // CASO 1: Inserimento ECCEZIONE o RICORSIVO
-                if(tipo_inserimento.equals("ECCEZIONE") || tipo.equals(TipoDisponibilita.RICORSIVO)) {
+                // CASO 1: Inserimento RICORSIVO
+                if(tipo.equals(TipoDisponibilita.RICORSIVO)) {
+                    // Per le disponibilità ricorsive, la data è sempre null
+                    disponibilita.setData(null);
                     
-                    // Controlla se esiste già una disponibilità sovrapposta nel DB
-                    Disponibilita db = disponibilitaDAO.checkSovrapposizione(disponibilita, user.getEmail());
+                    Disponibilita db = disponibilitaDao.checkSovrapposizione(disponibilita, user.getEmail());
                     
-                    // Se c'è sovrapposizione e sono dello stesso tipo -> UNISCI gli intervalli
-                    if(db != null && db.getTipo().equals(disponibilita.getTipo())) {
-                        Disponibilita union = new Disponibilita();
-                        
-                        // Determina l'ora di inizio più "presto"
-                        if(db.getOra_inizio().isBefore(disponibilita.getOra_inizio())) {
-                            union.setOra_inizio(db.getOra_inizio());
-                        } else {
-                            union.setOra_inizio(disponibilita.getOra_inizio());
+                    if(db != null && db.getTipo().equals(TipoDisponibilita.RICORSIVO)) {
+                        // Se esiste già una disp. ricorsiva per quel giorno, unisci gli orari
+                        if(disponibilita.getOra_inizio().isBefore(db.getOra_inizio())) {
+                            db.setOra_inizio(disponibilita.getOra_inizio());
                         }
-
-                        // Determina l'ora di fine più "tardi"
-                        if(db.getOra_fine().isAfter(disponibilita.getOra_fine())) {
-                            union.setOra_fine(db.getOra_fine());
-                        } else {
-                            union.setOra_fine(disponibilita.getOra_fine());
+                        if(disponibilita.getOra_fine().isAfter(db.getOra_fine())) {
+                            db.setOra_fine(disponibilita.getOra_fine());
                         }
-
-                        // Copia gli altri dati
-                        union.setData(db.getData());
-                        union.setTipo(db.getTipo());
-                        union.setId_utente(db.getId_utente());
-                        union.setGiorno_settimana(giorno);
-
-                        // Aggiorna la disponibilità esistente estendendo l'orario
-                        disponibilitaDAO.updateDisponibilitaById(union, db.getId());
-
+                        disponibilitaDao.updateDisponibilitaById(db);
                     } else {
-                        // Nessuna sovrapposizione -> Inserisci nuova
-                        disponibilitaDAO.inserisciDisponibilita(disponibilita);
+                        // Altrimenti, inserisci la nuova disponibilità ricorsiva
+                        disponibilitaDao.inserisciDisponibilita(disponibilita);
                     }
 
                 // CASO 2: Inserimento SINGOLO (Non eccezione)
                 } else if(tipo_inserimento.equals("SINGOLO")) {
                     
                     // Controlla sovrapposizioni
-                    Disponibilita db = disponibilitaDAO.checkSovrapposizione(disponibilita, user.getEmail());
+                    Disponibilita db = disponibilitaDao.checkSovrapposizione(disponibilita, user.getEmail());
                     
                     if(db != null) {
                         // Logica complessa di suddivisione/intersezione intervalli
                         // Sembra gestire il caso in cui la nuova disp sia "dentro", a "sinistra" o a "destra" di quella esistente
-                        
+
                         Disponibilita union = new Disponibilita();
                         union.setData(db.getData());
                         union.setTipo(disponibilita.getTipo());
-                        union.setId_utente(db.getId_utente());
+                        union.setUtente(db.getUtente());
 
                         LocalTime dbInizio = db.getOra_inizio();
                         LocalTime dbFine = db.getOra_fine();
                         LocalTime inizioDisp = disponibilita.getOra_inizio();
                         LocalTime fineDisp = disponibilita.getOra_fine();
 
-                        if(!inizioDisp.isBefore(dbInizio) && !fineDisp.isAfter(dbFine)) { 
+                        if(!inizioDisp.isBefore(dbInizio) && !fineDisp.isAfter(dbFine)) {
                             // Caso: La nuova disponibilità è completamente INCLUSA in quella esistente.
                             // Non fare nulla, l'utente è già disponibile.
                             response.sendRedirect("homeprofessionista#availability");
                             return;
-                            
-                        } else if(inizioDisp.isBefore(dbInizio) && !fineDisp.isAfter(dbFine)) { 
+
+                        } else if(inizioDisp.isBefore(dbInizio) && !fineDisp.isAfter(dbFine)) {
                             // Caso: La nuova inizia PRIMA e finisce DENTRO quella esistente.
                             // Crea disponibilità per la parte "mancante" a sinistra.
                             union.setOra_inizio(inizioDisp);
                             union.setOra_fine(dbInizio);
-                            disponibilitaDAO.inserisciDisponibilita(union);
-                            
-                        } else if(!inizioDisp.isBefore(dbInizio)) { 
+                            disponibilitaDao.inserisciDisponibilita(union);
+
+                        } else if(!inizioDisp.isBefore(dbInizio)) {
                             // Caso: La nuova inizia DENTRO e finisce DOPO quella esistente.
                             // Crea disponibilità per la parte "mancante" a destra.
                             union.setOra_inizio(dbFine);
                             union.setOra_fine(fineDisp);
-                            disponibilitaDAO.inserisciDisponibilita(union);
-                            
+                            disponibilitaDao.inserisciDisponibilita(union);
+
                         } else {
                             // Caso: La nuova INGLOBA completamente quella esistente (inizia prima e finisce dopo).
                             // Crea due disponibilità: una prima e una dopo quella esistente.
                             Disponibilita prima = new Disponibilita(null, data, inizioDisp, dbInizio, user, tipo, giorno);
-                            disponibilitaDAO.inserisciDisponibilita(prima);
-                            
+                            disponibilitaDao.inserisciDisponibilita(prima);
+
                             Disponibilita dopo = new Disponibilita(null, data, dbFine, fineDisp, user, tipo, giorno);
-                            disponibilitaDAO.inserisciDisponibilita(dopo);
+                            disponibilitaDao.inserisciDisponibilita(dopo);
                         }
+                        disponibilitaDao.updateDisponibilitaById(db);
 
                     } else {
-                        // Nessuna sovrapposizione -> Inserisci normale
-                        disponibilitaDAO.inserisciDisponibilita(disponibilita);
+                        // Nessuna sovrapposizione -> Inserisci nuova disponibilità singola
+                        disponibilitaDao.inserisciDisponibilita(disponibilita);
                     }
                 }
 
@@ -219,27 +200,24 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
             LocalDate data = LocalDate.parse(request.getParameter("data"));
 
             try{
-                Disponibilita disp = disponibilitaDAO.findDisponibilitaById(id_disponibilita);
+                Disponibilita disp = disponibilitaDao.findDisponibilitaById(id_disponibilita);
                 
                 // Controlla se c'è una richiesta attiva in quell'ora prima di rimuovere
-                if(!richiestaDao.checkRequestByOra(disp)){
-                    
+                if(!richiestaDao.checkDisponibilitaByOra(disp)){
+
                     if(ricorrenza){
-                        // Se è una ricorrenza, elimina l'intera regola ricorrente
-                        disponibilitaDAO.deleteDisponiblitaById(id_disponibilita);
+                        // Elimina l'intera regola ricorrente
+                        disponibilitaDao.deleteDisponiblitaById(id_disponibilita);
                     } else {
-                        // Se si vuole rimuovere una singola istanza
-                        if(disponibilitaDAO.checkRicorrenzaById(id_disponibilita)){
-                            // Se era una disponibilità ricorrente, crea un'ECCEZIONE per questo giorno/ora
-                            // (Cioè: sono disponibile sempre tranne oggi a quest'ora)
-                            long id = utenteDao.trovaIdProfessionistaPerEmail(user.getEmail());
+                        // Se la disponibilità originale era RICORRENTE, crea un'ECCEZIONE
+                        if(disp.getTipo().equals(TipoDisponibilita.RICORSIVO)){
                             Disponibilita disponibilita = new Disponibilita(
                                     null, data, ora, ora.plusHours(1), user, TipoDisponibilita.ECCEZIONE, null
                             );
-                            disponibilitaDAO.inserisciDisponibilita(disponibilita);
+                            disponibilitaDao.inserisciDisponibilita(disponibilita);
                         } else {
                             // Se era una disponibilità singola, rimuovila semplicemente
-                            disponibilitaDAO.removeDisponibilitaByDataOraEmail(data, ora, user.getEmail());
+                            disponibilitaDao.removeDisponibilitaByDataOraEmail(data, ora, user.getEmail());
                         }
                     }
                 }

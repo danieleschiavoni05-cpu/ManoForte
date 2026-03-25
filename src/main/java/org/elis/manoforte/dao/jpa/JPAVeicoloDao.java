@@ -4,17 +4,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
-import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.definition.VeicoloDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
 import org.elis.manoforte.model.Veicolo;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JPAVeicoloDao implements VeicoloDAO {
     private EntityManagerFactory emf;
@@ -62,7 +56,7 @@ public class JPAVeicoloDao implements VeicoloDAO {
     }
 
     @Override
-    public List<Long> getVeicoliByEmailProfessionista(String email) throws Exception {
+    public List<Veicolo> getVeicoliByEmailProfessionista(String email) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("select u.veicolo from Utente u where u.email = :email");
             query.setParameter("email", email);

@@ -12,4 +12,7 @@ public interface CittaDAO {
 
     void inserisciCitta(Citta citta) throws Exception;
 
+    void removeCitta(Long id) throws Exception;
+
+    void modificaCitta(Long id, String trim) throws Exception;
 }

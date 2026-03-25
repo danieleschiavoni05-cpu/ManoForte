@@ -14,7 +14,7 @@ public interface VeicoloDAO {
 
     void updateVeicoliProfessionista(String email, List<Veicolo> veicoli) throws Exception;
 
-    List<Long> getVeicoliByEmailProfessionista(String email) throws Exception;
+    List<Veicolo> getVeicoliByEmailProfessionista(String email) throws Exception;
 
     List<Veicolo> getVeicoliByIds(List<Long> veicoli) throws Exception;
 }

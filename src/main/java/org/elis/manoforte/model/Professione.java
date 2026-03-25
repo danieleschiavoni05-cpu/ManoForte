@@ -2,6 +2,8 @@ package org.elis.manoforte.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Professione {
     @Id
@@ -9,6 +11,9 @@ public class Professione {
     private long id;
     @Column(unique = true)
     private String nome;
+
+    @ManyToMany(mappedBy = "professione")
+    private List<Utente> utente;
 
     public Professione(){}
 
@@ -31,6 +36,14 @@ public class Professione {
 
     public void setNome(String nome) {
         this.nome = nome;
+    }
+
+    public List<Utente> getUtente() {
+        return utente;
+    }
+
+    public void setUtente(List<Utente> utente) {
+        this.utente = utente;
     }
 
     @Override

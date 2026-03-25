@@ -21,12 +21,13 @@ public class Disponibilita {
     private LocalTime ora_inizio;
     @Column(nullable=false)
     private LocalTime ora_fine;
-    @Column(columnDefinition = "tinyint not null unsigned check(tipo in (0,1,2) check((tip")
-    private TipoDisponibilita tipo;
     @Column(nullable=false)
+    private TipoDisponibilita tipo;
     private DayOfWeek giorno_settimana;
+
     @ManyToOne
     private Utente utente;
+
 
     public Disponibilita(Long id, LocalDate data, LocalTime ora_inizio, LocalTime ora_fine, Utente utente,  TipoDisponibilita tipo, DayOfWeek giorno_settimana) {
         this.id = id;
@@ -38,9 +39,11 @@ public class Disponibilita {
         this.giorno_settimana = giorno_settimana;
     }
 
-    public Disponibilita() { }
+    public Disponibilita() {
 
-	public Long getId() {
+    }
+
+    public Long getId() {
         return id;
     }
 
@@ -56,7 +59,7 @@ public class Disponibilita {
         return ora_fine;
     }
 
-    public Utente getId_utente() {
+    public Utente getUtente() {
         return utente;
     }
 
@@ -84,7 +87,7 @@ public class Disponibilita {
 		this.ora_fine = ora_fine;
 	}
 
-    public void setId_utente(Utente utente) {
+    public void setUtente(Utente utente) {
         this.utente = utente;
     }
 
@@ -95,5 +98,4 @@ public class Disponibilita {
     public void setGiorno_settimana(DayOfWeek giorno_settimana) {
         this.giorno_settimana = giorno_settimana;
     }
-
 }

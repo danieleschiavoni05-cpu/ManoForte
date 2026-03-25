@@ -2,9 +2,7 @@ package org.elis.manoforte.dao.definition;
 
 import org.elis.manoforte.model.Utente;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 public interface UtenteDAO {
 
@@ -33,8 +31,7 @@ public interface UtenteDAO {
     void modificaProfessionista(Utente professionista) throws Exception;
 
 	Utente getUtentebyEmail(String emailProfessionista) throws Exception;
-	
-	public long trovaIdProfessionistaPerEmail(String email) throws Exception;
-	
-	public long trovaIdBasePerEmail(String email) throws Exception;
+
+	Long findIdByEmail(String email) throws Exception;
+
 }

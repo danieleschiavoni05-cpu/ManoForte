@@ -14,6 +14,9 @@ public class Veicolo {
     @ManyToMany(mappedBy = "veicolo")
     private List<Utente> utente;
 
+    @Transient
+    private Long id_utente;
+
     public Veicolo(){}
 
     public Veicolo(Long id, String nome) {

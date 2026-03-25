@@ -44,7 +44,7 @@
             <select class="form-select" name="citta" id="citta">
                 <%if(citta!=null && !citta.isEmpty()){%>
                     <%for(Citta c: citta){%>
-                        <%if(c.getId()==utente.getIdCitta()){%>
+                        <%if(c.getId().equals(utente.getCitta().getId())){%>
                             <option selected value="<%=c.getId()%>"><%=c.getNome()%></option>
                         <%}else{%>
                             <option value="<%=c.getId()%>"><%=c.getNome()%></option>
@@ -61,7 +61,7 @@
                 <% for(Veicolo veicolo:veicoli){ %>
                 <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
                     <%=veicolo.getNome()%>
-                    <%if(utente.getVeicolo()!=null&&utente.getVeicolo().contains(veicolo.getId())){%>
+                    <%if(utente.getVeicolo()!=null&&utente.getVeicolo().contains(veicolo)){%>
                     <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
                     <%}else{%>
                     <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">

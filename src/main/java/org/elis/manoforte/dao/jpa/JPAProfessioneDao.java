@@ -33,22 +33,49 @@ public class JPAProfessioneDao implements ProfessioneDAO {
     }
 
     @Override
-    public void inserisciProfessione(String nome) throws Exception {
+    public List<Professione> getAllProfessioni() throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select p from Professione p");
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Professione> getProfessioniListById(List<Long> professioni) throws Exception {
+        return List.of();
+    }
+
+    @Override
+    public void addProfessione(String nome) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-                Professione professione = new Professione();
-                professione.setNome(nome);
-                em.persist(professione);
+            Professione professione = new Professione();
+            professione.setNome(nome);
+            em.persist(professione);
             transaction.commit();
         }
     }
 
     @Override
-    public List<Professione> getAllProfessioni() throws Exception {
-        try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select p from Professione p");
-            return query.getResultList();
+    public void removeProfessione(Long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()){
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                em.remove(em.find(Professione.class, id));
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void modificaProfessione(Long id, String nome) throws Exception {
+        try(EntityManager em = emf.createEntityManager()){
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+                Professione professione = em.find(Professione.class, id);
+                professione.setNome(nome);
+                em.merge(professione);
+            transaction.commit();
         }
     }
 }
