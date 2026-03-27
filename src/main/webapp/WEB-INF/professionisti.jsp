@@ -1,3 +1,8 @@
+<%@page import="java.util.Map"%>
+<%@page import="org.elis.manoforte.utility.MediaVoti"%>
+<%@page import="org.elis.manoforte.controller.RecensioniProfessionistiServlet"%>
+<%@page import="java.text.NumberFormat"%>
+<%@page import="java.math.BigDecimal"%>
 <%@page import="java.time.LocalTime"%>
 <%@page import="org.elis.manoforte.model.*"%>
 <%@page import="java.util.List"%>
@@ -113,6 +118,9 @@
                 List<Disponibilita> dispo = (List<Disponibilita>) request.getAttribute("disponibilita");
                 LocalTime ora = LocalTime.now();
                 java.time.DayOfWeek oggi = java.time.LocalDate.now().getDayOfWeek();
+                Map<String, Double> medie = (Map<String, Double>) request.getAttribute("mappaMedie");
+                
+                
 
                 if (listaPro != null && !listaPro.isEmpty()) {
                     for (Utente u : listaPro) {
@@ -138,56 +146,86 @@
                             }
                         }
 
-                        // 3. Dati Mock (Sostituire con u.getTariffa() e u.getMediaVoti() se presenti)
-                        double tariffaPro = 35.0; 
-                        double votoPro = 4.2;    
-            %>
-            <div class="col-md-6 col-lg-4 pro-item" 
-                 data-nome="<%= u.getNome().toLowerCase() %> <%= u.getCognome().toLowerCase() %>"
-                 data-citta="<%= nomeCittaVisualizzato.toLowerCase() %>"
-                 data-voto="<%= votoPro %>"
-                 data-tariffa="<%= tariffaPro %>">
-                
-                <div class="professionista-card p-4 h-100 shadow-sm">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <h5 class="fw-bold mb-0 text-dark"><%= u.getNome() %> <%= u.getCognome() %></h5>
-                            <small class="text-muted"><i class="fa-solid fa-map-pin me-1"></i><%= nomeCittaVisualizzato %></small>
-                        </div>
-                        <div class="text-end">
-                            <span class="status-dot" style="background-color: <%= isDisponibile ? "#2ecc71" : "#e74c3c" %>"></span>
-                            <div class="small text-muted" style="font-size: 0.7rem;"><%= isDisponibile ? "Online" : "Offline" %></div>
-                        </div>
-                    </div>
+                        
+                        // 1. Gestione Tariffa (BigDecimal) - Protezione contro i NULL
+                        java.math.BigDecimal tariffaBD = u.getTariffa();
+                        String tariffaFormattata = "N/D"; // Valore di default
+                        
+                        if (tariffaBD != null) {
+                            try {
+                                java.text.NumberFormat euroFormat = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.ITALY);
+                                tariffaFormattata = euroFormat.format(tariffaBD);
+                            } catch (Exception e) {
+                                tariffaFormattata = tariffaBD.toString() + " €";
+                            }
+                        }
 
-                    <div class="mb-3 text-warning">
-                        <% for(int i=1; i<=5; i++) { %>
-                            <i class="<%= (i <= Math.round(votoPro)) ? "fa-solid" : "fa-regular" %> fa-star"></i>
-                        <% } %>
-                        <span class="text-muted small ms-1">(<%= votoPro %>)</span>
-                    </div>
+                        // 2. Gestione Media Voti (dalla Mappa via Email)
+                       
+                        Double mediaRecuperata = (medie != null) ? medie.get(u.getEmail()) : 0.0;
+                        double votoPro = (mediaRecuperata != null) ? mediaRecuperata : 0.0;
+                    %>
 
-                    <div class="mb-4">
-                        <div class="mb-2">
-                            <span class="prof-tag">Professionista Verificato</span>
+                    <div class="col-md-6 col-lg-4 pro-item" 
+                         data-nome="<%= u.getNome().toLowerCase() %> <%= u.getCognome().toLowerCase() %>"
+                         data-citta="<%= nomeCittaVisualizzato.toLowerCase() %>"
+                         data-voto="<%= votoPro %>"
+                         data-tariffa="<%= tariffaBD != null ? tariffaBD : 0 %>">
+                        
+                        <div class="rec-card p-4 h-100 shadow-sm" style="background: var(--obsidian-base); border-top: 4px solid var(--primary); border-radius: 15px;">
+                            
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div>
+                                    <h5 class="fw-bold mb-0" style="color: var(--primary);"><%= u.getNome() %> <%= u.getCognome() %></h5>
+                                    <small style="color: var(--muted-silver);">
+                                        <i class="fa-solid fa-map-pin me-1"></i><%= nomeCittaVisualizzato %>
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="status-dot" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: <%= isDisponibile ? "#2ecc71" : "#e74c3c" %>"></span>
+                                    <div class="small" style="font-size: 0.7rem; color: var(--light-silver);">
+                                        <%= isDisponibile ? "Online" : "Offline" %>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <span class="stars" style="color: var(--primary);">
+                                    <% for(int i=1; i<=5; i++) { %>
+                                        <i class="<%= (i <= Math.round(votoPro)) ? "fa-solid" : "fa-regular" %> fa-star"></i>
+                                    <% } %>
+                                </span>
+                                <span style="color: var(--muted-silver); font-size: 0.85rem; margin-left: 5px;">
+                                    (<%= String.format("%.1f", votoPro) %>)
+                                </span>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="mb-2">
+                                    <span class="badge" style="background: rgba(212, 175, 55, 0.1); color: var(--primary); border: 1px solid var(--primary); font-size: 0.7rem;">
+                                        PROFESSIONISTA VERIFICATO
+                                    </span>
+                                </div>
+                                <p class="h4 fw-bold mt-2" style="color: var(--white-text);">
+                                    <%= tariffaFormattata %> <small style="font-size: 0.9rem; font-weight: normal; color: var(--muted-silver);">/ora</small>
+                                </p>
+                            </div>
+
+                            <div class="d-grid pt-2">
+                                <% if (isDisponibile) { %>
+                                    <a href="<%=request.getContextPath()%>/richiesta?emailPro=<%= u.getEmail() %>" 
+                                       class="btn fw-bold py-2 shadow-sm" 
+                                       style="background: var(--primary); color: var(--obsidian-base); border-radius: 10px;">
+                                        <i class="fa-regular fa-paper-plane me-2"></i>Invia Richiesta
+                                    </a>
+                                <% } else { %>
+                                    <button class="btn btn-outline-secondary disabled py-2" style="border-radius: 10px; opacity: 0.5; color: var(--muted-silver);">
+                                        <i class="fa-solid fa-clock me-2"></i>Non Disponibile
+                                    </button>
+                                <% } %>
+                            </div>
                         </div>
-                        <p class="h5 fw-bold text-success mb-0"><%= tariffaPro %> €/ora</p>
                     </div>
-
-                    <div class="d-grid pt-2">
-                        <% if (isDisponibile) { %>
-                            <a href="<%=request.getContextPath()%>/richiesta?emailPro=<%= u.getEmail() %>" 
-                               class="btn btn-primary fw-bold py-2 shadow-sm" style="border-radius: 10px;">
-                                <i class="fa-regular fa-paper-plane me-2"></i>Invia Richiesta
-                            </a>
-                        <% } else { %>
-                            <button class="btn btn-secondary disabled py-2" style="border-radius: 10px; opacity: 0.6;">
-                                <i class="fa-solid fa-clock me-2"></i>Non Disponibile
-                            </button>
-                        <% } %>
-                    </div>
-                </div>
-            </div>
             <% 
                     } 
                 } else { 
