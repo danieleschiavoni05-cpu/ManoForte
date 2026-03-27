@@ -8,12 +8,12 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
-import org.elis.manoforte.dao.jdbc.RecensioneDAOJDBC;
+
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Recensione;
 import org.elis.manoforte.model.Utente;
@@ -26,12 +26,15 @@ import org.elis.manoforte.utility.DataSourceConfig;
 public class DettagliProfessionistaServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public DettagliProfessionistaServlet() {
-        super();
-        // TODO Auto-generated constructor stub
+	private UtenteDAO utenteDao;
+    private RecensioneDAO recensioneDao;
+    private ProfessioneDAO professioneDao;
+
+    @Override
+    public void init() throws ServletException{
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+        professioneDao =DaoFactory.getInstance().getProfessioneDAO();
     }
 
 	/**
@@ -40,24 +43,21 @@ public class DettagliProfessionistaServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String nomeProfessione = request.getParameter("nome");
-		UtenteDAO utente= new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-		ProfessioneDAO professione=new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
-		RecensioneDAO recensioneDao = new RecensioneDAOJDBC(DataSourceConfig.getDataSource());
 		
 		try {
 	        // Recupero tutte le recensioni
 	        List<Recensione> recensioni = recensioneDao.findAll();
 	        List<Utente> tuttiUtenti;
 			
-			tuttiUtenti = utente.findAllProfessionisti();
+			tuttiUtenti = utenteDao.findAllProfessionisti();
 			for(Utente u : tuttiUtenti) {
 				String emailProfessionista = u.getEmail();
-				Long idProfessionista=utente.trovaIdProfessionistaPerEmail(emailProfessionista);
+				Long idProfessionista=utenteDao.findIdByEmail(emailProfessionista);
 				request.setAttribute("idProfessionista", idProfessionista);
 			}
             // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
-            List<Utente> risultato = utente.findAllProfessionistibyProfessione(nomeProfessione);
-            List<Professione> professioni= professione.getAllProfessioni();
+            List<Utente> risultato = utenteDao.findAllProfessionistibyProfessione(nomeProfessione);
+            List<Professione> professioni= professioneDao.getAllProfessioni();
 
             request.setAttribute("nomeProfessione", nomeProfessione);
             request.setAttribute("listaProfessioni", professioni);

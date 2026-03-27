@@ -61,8 +61,6 @@ public class Professione {
             return id==prof.id;
         else return false;
     }
- public void setId(long id) {
-		this.id = id;
-	}
+
 	
 }

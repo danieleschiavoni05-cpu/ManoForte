@@ -139,7 +139,7 @@
                         String nomeCittaVisualizzato = "N/D";
                         if (listaCitta != null) {
                             for (Citta c : listaCitta) {
-                                if (c.getId() == u.getIdCitta()) {
+                                if (c.getId() == u.getCitta().getId()) {
                                     nomeCittaVisualizzato = c.getNome();
                                     break;
                                 }

@@ -104,7 +104,7 @@
 			} else {
 			// Mostriamo le ultime recensioni per mantenere la griglia pulita
 			for (Recensione r : recensioni) {
-				Utente prof = (mappaProf != null) ? mappaProf.get(r.getId_professionista()) : null;
+				Utente prof = (mappaProf != null) ? mappaProf.get(r.getProfessionista().getId()) : null;
 			%>
 			<div class="rec-card">
 				<div class="stars">

@@ -78,4 +78,10 @@ public class JPAProfessioneDao implements ProfessioneDAO {
             transaction.commit();
         }
     }
+
+	@Override
+	public List<Professione> findProfessioniByName(String nome) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -25,13 +25,8 @@
             color: var(--light-silver);
             border: 1px solid var(--steel-variant);
         }
-        .prof-card h3 {
-            color: var(--craft-gold);
-        }
-        .prof-card p {
-            color: var(--muted-silver);
-            font-size: 0.9rem;
-        }
+        .prof-card h3 { color: var(--craft-gold); }
+        .prof-card p { color: var(--muted-silver); font-size: 0.9rem; }
         .prof-footer a {
             background: var(--craft-gold);
             color: var(--obsidian-base);
@@ -41,9 +36,7 @@
             font-weight: bold;
             transition: 0.3s;
         }
-        .prof-footer a:hover {
-            background: var(--gold-variant);
-        }
+        .prof-footer a:hover { background: var(--gold-variant); }
         .no-results {
             grid-column: 1 / -1;
             text-align: center;
@@ -52,12 +45,9 @@
             border-radius: 12px;
             color: var(--light-silver);
         }
-        .no-results a {
-            color: var(--craft-gold);
-            font-weight: bold;
-        }
+        .no-results a { color: var(--craft-gold); font-weight: bold; }
         .filter-section {
-            background: var(--deep-steel);
+            background: #279AF1; 
             padding: 30px 0;
             border-bottom: 1px solid var(--steel-variant);
         }
@@ -68,16 +58,14 @@
 
 <jsp:include page="WEB-INF/includes/Navbar.jsp"/>
 
-<div class="filter-section" 
-     style="background: #279AF1; padding:30px 0;">
+<div class="filter-section">
     <div class="container">
-        <form class="search-box" action="ListaProfessionisti" method="get" 
-              style="display:flex; gap:10px; justify-content:center;">
+        <form class="search-box" action="ListaProfessionisti" method="get" style="display:flex; gap:10px; justify-content:center;">
             <%
-                String cerca = request.getParameter("cercaNome");
+                String cerca = request.getParameter("nome"); // Uniformato al Controller
                 if (cerca == null) cerca = "";
             %>
-            <input type="text" name="cercaNome" placeholder="Cerca per nome..." value="<%= cerca %>">
+            <input type="text" name="nome" placeholder="Cerca per nome..." value="<%= cerca %>">
             <button type="submit">Cerca</button>
         </form>
     </div>
@@ -89,14 +77,13 @@
     <div class="prof-grid">
         <%
             List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessionisti");
-        List<Utente> utentiPro = (List<Utente>) request.getAttribute("listaUtenteProfessionisti");
         %>
 
         <% if (professioni != null && !professioni.isEmpty()) { %>
             <% for (Professione p : professioni) { %>
                 <div class="prof-card">
                     <h3><%= p.getNome() %></h3>
-                    <p>Nessuna descrizione disponibile.</p>
+                    <p>Esplora i professionisti specializzati in questa categoria.</p>
                     <div class="prof-footer" style="margin-top:15px;">
                         <a href="<%=request.getContextPath()%>/DettagliProfessionista?nome=<%=p.getNome()%>">Vedi Profilo</a>
                     </div>
@@ -105,6 +92,7 @@
         <% } else { %>
             <div class="no-results">
                 <h3>Nessun risultato trovato</h3>
+                <p>Prova a cambiare i filtri di ricerca.</p>
                 <a href="ListaProfessionisti">Mostra tutti</a>
             </div>
         <% } %>

@@ -166,7 +166,7 @@
                     if (tutteRecensioni != null) {
                         for (Recensione r : tutteRecensioni) {
                             // CORRETTO: confrontiamo l'id del professionista della recensione con l'id dell'utente nel ciclo
-                            if (r.getId_professionista() == r.getId_professionista()) {
+                            if (r.getProfessionista() == r.getProfessionista()) {
                                 somma += r.getVoto();
                                 contatore++;
                             }

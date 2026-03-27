@@ -9,13 +9,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
+
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
-import org.elis.manoforte.dao.jdbc.JdbcUtenteDAO;
+
+
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.utility.DataSourceConfig;
+
 
 /**
  * Servlet implementation class ricercaProfessioniServlet
@@ -24,22 +26,19 @@ import org.elis.manoforte.utility.DataSourceConfig;
 public class RicercaProfessioniServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public RicercaProfessioniServlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+	private UtenteDAO utenteDao;
+    private ProfessioneDAO professioneDao;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    @Override
+    public void init() throws ServletException{
+        utenteDao = DaoFactory.getInstance().getUtenteDAO(); 
+        professioneDao =DaoFactory.getInstance().getProfessioneDAO();
+    }
+    
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         String nomeProfessione = request.getParameter("cercaNome");
-        UtenteDAO utenteDao = new JdbcUtenteDAO(DataSourceConfig.getDataSource());
-        ProfessioneDAO professioneDao = new JdbcProfessioneDAO(DataSourceConfig.getDataSource());
+        
         
         try {
             List<Professione> listaDaMostrare;
