@@ -1,9 +1,6 @@
 package org.elis.manoforte.dao.jpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
+import jakarta.persistence.*;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
@@ -93,8 +90,9 @@ public class JPAUtenteDao implements UtenteDAO {
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("Select u from Utente u where u.email = :email");
             query.setParameter("email", email);
-            Utente user = (Utente) query.getSingleResult();
-            return user == null;
+            return query.getSingleResult() != null;
+        }catch(NoResultException e){
+            return true;
         }
     }
 
@@ -103,8 +101,9 @@ public class JPAUtenteDao implements UtenteDAO {
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("Select u from Utente u where u.codice_fiscale = :codice_fiscale");
             query.setParameter("codice_fiscale", codice_fiscale);
-            Utente user = (Utente) query.getSingleResult();
-            return user == null;
+            return query.getSingleResult() == null;
+        }catch(NoResultException e){
+            return true;
         }
     }
 

@@ -29,7 +29,7 @@ public class JPADaoFactory extends DaoFactory {
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.format_sql", "true");
 
-        this.emf = Persistence.createEntityManagerFactory("default", properties);
+        this.emf = Persistence.createEntityManagerFactory("manoforte", properties);
         this.utenteDao = new JPAUtenteDao(emf);
         this.cittaDao = new JPACittaDao(emf);
         this.professioneDao = new JPAProfessioneDao(emf);

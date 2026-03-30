@@ -52,25 +52,25 @@
                     <%}%>
                 <%}%>
             </select>
-        </div> <%-- Citta --%>
+        </div> <%--  Citta --%>
 
         <div class="col-12">
             <label class="section-title">Veicoli utilizzati (lasciare libero se non si utilizzano veicoli)</label>
             <div class="checkboxes-container shadow-sm">
                 <% if(veicoli!=null) { %>
-                <% for(Veicolo veicolo:veicoli){ %>
-                <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
-                    <%=veicolo.getNome()%>
-                    <%if(utente.getVeicolo()!=null&&utente.getVeicolo().contains(veicolo)){%>
-                    <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
-                    <%}else{%>
-                    <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                    <% for(Veicolo veicolo:veicoli){ %>
+                        <label class="veicolo-label" for="veicolo_<%=veicolo.getNome()%>">
+                            <%=veicolo.getNome()%>
+                            <%if(utente.getVeicolo()!=null&&utente.getVeicolo().contains(veicolo)){%>
+                                <input checked type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                            <%}else{%>
+                                <input type="checkbox" value="<%=veicolo.getId()%>" name="veicolo" id="veicolo_<%=veicolo.getNome()%>">
+                            <%}%>
+                        </label>
                     <%}%>
-                </label>
-                <%}%>
                 <%}%>
             </div>
-        </div> <%-- Veicoli --%>
+        </div>  <%-- Veicoli --%>
 
         <div class="col-md-12">
             <label class="section-title" for="tariffa">Inserire una tariffa oraria</label>

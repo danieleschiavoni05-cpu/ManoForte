@@ -42,7 +42,11 @@ public class JPAProfessioneDao implements ProfessioneDAO {
 
     @Override
     public List<Professione> getProfessioniListById(List<Long> professioni) throws Exception {
-        return List.of();
+        try(EntityManager em = emf.createEntityManager()){
+            Query query = em.createQuery("select p from Professione p where id in :professioni");
+            query.setParameter("professioni", professioni);
+            return query.getResultList();
+        }
     }
 
     @Override

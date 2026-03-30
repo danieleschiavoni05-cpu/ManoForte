@@ -11,7 +11,7 @@ import org.elis.manoforte.model.Ruolo;
 /**
  * Servlet Filter implementation class ProfessionistaFilter
  */
-@WebFilter("/ProfessionistaFilter")
+@WebFilter("/professionista/*")
 public class ProfessionistaFilter extends HttpFilter implements Filter {
        
 	  @Override

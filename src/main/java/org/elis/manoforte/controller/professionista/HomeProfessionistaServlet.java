@@ -63,7 +63,8 @@ public class HomeProfessionistaServlet extends HttpServlet {
 
             List<CardRecensione> recensioni = recensioneDao.getRecensioneByEmailProfessionistaLimit(loggedUser.getEmail(), 4);
 
-
+            List<Citta> citta = cittaDao.getAllCitta();
+            List<Veicolo> veicolo = veicoloDao.getAllVeicolo();
 
             List<Disponibilita> disponibilita = disponibilitaDao.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.SINGOLO);
             Map<LocalDate, List<Disponibilita>> disponibilitaSingole = disponibilita.stream()
@@ -88,8 +89,8 @@ public class HomeProfessionistaServlet extends HttpServlet {
             // Atrributi per le mie recensioni
             request.setAttribute("recensioni", recensioni);
             // Attributi per la modifica del profilo
-            request.setAttribute("citta", cittaDao.getAllCitta());
-            request.setAttribute("veicoli", veicoloDao.getAllVeicolo());
+            request.setAttribute("citta", citta);
+            request.setAttribute("veicoli", veicolo);
             // Attributi disponibilità
             request.setAttribute("disponibilitaSingole", disponibilitaSingole);
             request.setAttribute("disponibilitaRicorrenti", disponibilitaRicorsive);

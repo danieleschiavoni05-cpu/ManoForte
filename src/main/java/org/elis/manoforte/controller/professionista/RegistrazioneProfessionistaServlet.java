@@ -18,6 +18,7 @@ import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.model.Veicolo;
 import org.elis.manoforte.utility.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
@@ -154,8 +155,11 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
         }
 
         try {
+            List<Veicolo> veicoloList = veicoloDao.getVeicoliByIds(veicoli);
             List<Professione> professioniDb = professioneDao.getProfessioniListById(professioni);
             Utente professionista = Utility.checkInputProfessionista(nome, cognome, email, data_nascita, codice_fiscale, professioniDb, tariffa, password, confermaPassword);
+            professionista.setCitta(cittaDao.getCittaById(citta));
+            professionista.setVeicolo(veicoloList);
             professionista.setProfessione(professioniDb);
             utenteDao.inserisciProfessionista(professionista);
 
