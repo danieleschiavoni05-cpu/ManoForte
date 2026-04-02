@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
+import org.hibernate.Hibernate;
 
 import java.util.List;
 
@@ -150,6 +151,19 @@ public class JPAUtenteDao implements UtenteDAO {
             Query query = em.createQuery("Select u.id from Utente u where u.email = :email");
             query.setParameter("email", email);
             return (Long) query.getSingleResult();
+        }
+    }
+
+    @Override
+    public Utente inizializzaUtente(Long id){
+        try(EntityManager em = emf.createEntityManager()){
+            Utente u = em.find(Utente.class, id);
+            Hibernate.initialize(u.getProfessione());
+            Hibernate.initialize(u.getVeicolo());
+            Hibernate.initialize(u.getRecensioneRicevute());
+            Hibernate.initialize(u.getRichiesteRicevute());
+            Hibernate.initialize(u.getDisponibilita());
+            return u;
         }
     }
 }

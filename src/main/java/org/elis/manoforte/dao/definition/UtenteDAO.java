@@ -34,4 +34,5 @@ public interface UtenteDAO {
 
 	Long findIdByEmail(String email) throws Exception;
 
+    Utente inizializzaUtente(Long id) throws Exception;
 }

@@ -1,0 +1,8 @@
+/*
+Questo file serve per sovrascrivere regole CSS globali
+specificamente per la Homepage, senza intaccare il resto del sito.
+*/
+
+body {
+    display: block !important; /* Annulla il display:flex di professionista-style.css per permettere un layout a sezioni */
+}

@@ -1,0 +1,41 @@
+:root {
+    --color1: var(--obsidian-base);
+    --color2: var(--deep-steel);
+    --color3: var(--craft-gold);
+    --color4: var(--muted-silver);
+    --activeCheck: #1dd1a1;
+    --notActiveCheck: #4b5563;
+    --sp: 0.35s;
+    --bg-noeffect: #efd6b1;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(var(--gradient-angle), var(--color1) 0%, var(--color2) 100%);
+    min-height: 100vh;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.rotation{
+    animation: rotate-gradient1 3s linear infinite;
+}
+
+@property --gradient-angle {
+    syntax: "<angle>";
+    initial-value: 235deg;
+    inherits: false;
+}
+
+@keyframes rotate-gradient1 {
+    0% {
+        --gradient-angle: 0deg;
+    }
+    100% {
+        --gradient-angle: 360deg;
+    }
+}

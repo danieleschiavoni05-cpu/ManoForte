@@ -1,12 +1,12 @@
 package org.elis.manoforte.utility;
 
 import org.elis.manoforte.dao.definition.DaoFactory;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.List;
@@ -102,15 +102,20 @@ public class Utility {
             );
         }
     }
+
     public static Utente checkInputEditProfessionista(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
-                                                        String codiceFiscale, BigDecimal tariffa,
-                                                         String nuovaPassword, String password, String confermaPassword) throws Exception{
+                                                      String codiceFiscale, List<Professione> professione, BigDecimal tariffa,
+                                                      String nuovaPassword, String password, String confermaPassword) throws Exception{
 
         DatiErratiException e;
-        if(codiceFiscale.equals(utenteLoggato.getCodiceFiscale()))
-            e = checkEditInput(dataNascita, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
-        else e = checkEditInput(dataNascita, codiceFiscale, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
 
+        if(codiceFiscale.equals(utenteLoggato.getCodiceFiscale())) {
+            e = checkEditInput(dataNascita, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+        }else{
+            e = checkEditInput(dataNascita, codiceFiscale, nuovaPassword, password, confermaPassword, utenteLoggato.getPassword());
+        }
+
+        if(professione==null || professione.isEmpty()) e.setErrProfessioni();
         if(!Utility.checkTariffa(tariffa)) e.setErrTariffa();
 
         if(e.checkErrors()) throw e;
@@ -144,6 +149,7 @@ public class Utility {
         }else if(!utenteDao.checkCFAvailability(codice_fiscale)){
             e.setErrCFGiaPresente();
         }
+
         if(!Utility.checkData(data_nascita))
             e.setErrData();
 
@@ -152,7 +158,7 @@ public class Utility {
 
     public static DatiErratiException checkEditInput(LocalDate data_nascita, String nuovaPassword,
                                                      String vecchiaPassword, String confermaPassword,
-                                                     String savedPassword) throws Exception {
+                                                     String savedPassword) {
 
         DatiErratiException e = new DatiErratiException();
 
@@ -232,7 +238,14 @@ public class Utility {
         codiceFiscale
     );
 }
-    
+
+    public static BigDecimal calcolaMedia(List<Recensione> recensioni) {
+        if (recensioni == null || recensioni.isEmpty()) return BigDecimal.ZERO;
+        return recensioni.stream().map(recensione ->
+                        recensione.getVoto())
+                .reduce(BigDecimal.ZERO, (a,b)->a.add(b))
+                .divide(BigDecimal.valueOf(recensioni.size()), RoundingMode.DOWN);
+    }
     
     
 }

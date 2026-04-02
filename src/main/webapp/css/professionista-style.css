@@ -1,48 +1,14 @@
-:root {
-    --color1: var(--obsidian-base);
-    --color2: var(--deep-steel);
-    --color3: var(--craft-gold);
-    --color4: var(--muted-silver);
-    --activeCheck: #1dd1a1;
-    --notActiveCheck: #4b5563;
-    --sp: 0.35s;
-    --bg-noeffect: #efd6b1;
-}
-
-@property --gradient-angle {
-    syntax: "<angle>";
-    initial-value: 235deg;
-    inherits: false;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: linear-gradient(var(--gradient-angle), var(--color1) 0%, var(--color2) 100%);
-    min-height: 100vh;
-    margin: 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-}
-
-.rotation{
-    animation: rotate-gradient1 3s linear infinite;
-}
-
-@keyframes rotate-gradient1 {
-    0% {
-        --gradient-angle: 0deg;
-    }
-    100% {
-        --gradient-angle: 360deg;
-    }
-}
 
 .button-row {
     position: absolute;
     top: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.with-nav {
+    position: absolute;
+    top: 65px;
     right: 20px;
     z-index: 1000;
 }
@@ -61,62 +27,3 @@ body {
 .disable-effect:hover {
     background-color: #424242;
 }
-/*
-
-:root {
-    --color1: #ad4689;
-    --color2: #ed5c86;
-    --color3: #3c72e7;
-    --color4: #aee73c;
-    /* Colori extra gestiti dal tuo JS */
-    /*--color5: #1dd1a1;
-    --color6: #4b5563;
-}
-
-@property --angle {
-    syntax: "<angle>";
-    initial-value: 0deg;
-    inherits: false;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    position: relative;
-    z-index: 0;
-    font-family: Arial, sans-serif;
-    /* Il contenuto del body starà qui sopra */
-/*}*/
-
-/* Creiamo il contenitore dello sfondo *//*
-.bg-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    z-index: -1; /* Lo manda dietro a tutto il resto */
-   /* pointer-events: none; /* Impedisce allo sfondo di bloccare click sui bottoni */
-/*}
-
-.quad {
-    width: 100%;
-    height: 100%;
-}*/
-
-/* Animazioni */
-/*@keyframes spin-cw {
-    to { --angle: 360deg; }
-}
-@keyframes spin-ccw {
-    to { --angle: -360deg; }
-}*/
-
-/* Applicazione ai quadranti con direzioni diverse *//*
-.q1 { background: linear-gradient(var(--angle), var(--color1), var(--color2)); animation: spin-cw 5s linear infinite; }
-.q2 { background: linear-gradient(var(--angle), var(--color3), var(--color4)); animation: spin-ccw 4s linear infinite; }
-.q3 { background: linear-gradient(var(--angle), var(--color5), var(--color6)); animation: spin-ccw 6s linear infinite; }
-.q4 { background: linear-gradient(var(--angle), var(--color2), var(--color4)); animation: spin-cw 3s linear infinite; }*/

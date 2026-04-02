@@ -7,7 +7,6 @@ import jakarta.persistence.Query;
 import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.model.*;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,12 +76,12 @@ public class JPARichiestaDao implements RichiestaDAO {
     }
 
     @Override
-    public List<CardRichiesta> getRichiesteByEmailProfessionistaAndStato(String email, StatoRichiesta stato) throws Exception {
+    public List<CardRichiesta> getRichiesteByIdProfessionistaAndStato(Long id, StatoRichiesta stato) throws Exception {
         List<CardRichiesta> richieste = new ArrayList<>();
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("select r from Richiesta r join " +
-                    "r.professionista p where p.id = (select u.id from Utente u where u.email = :email) and r.statoRichiesta = :stato");
-            query.setParameter("email", email);
+                    "r.professionista p where p.id = (select u.id from Utente u where u.id = :id) and r.statoRichiesta = :stato");
+            query.setParameter("id", id);
             query.setParameter("stato", stato);
             if(!query.getResultList().isEmpty()) {
                 for(Richiesta r: (List<Richiesta>)query.getResultList()){
@@ -95,11 +94,11 @@ public class JPARichiestaDao implements RichiestaDAO {
     }
 
     @Override
-    public List<Richiesta> getRichiesteListByEmailProfessionistaAndStato(String email, StatoRichiesta statoRichiesta) throws Exception {
+    public List<Richiesta> getRichiesteListByIdProfessionistaAndStato(Long id, StatoRichiesta statoRichiesta) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
             Query query = em.createQuery("select r from Richiesta r join " +
-                    "r.professionista p where p.id = (select u.id from Utente u where u.email = :email) and r.statoRichiesta = :stato");
-            query.setParameter("email", email);
+                    "r.professionista p where p.id = (select u.id from Utente u where u.id = :id) and r.statoRichiesta = :stato");
+            query.setParameter("id", id);
             query.setParameter("stato", statoRichiesta);
             return query.getResultList();
         }
@@ -115,6 +114,17 @@ public class JPARichiestaDao implements RichiestaDAO {
             query.setParameter("utente", disp.getUtente());
             System.out.println(query.getResultList().isEmpty());
             return query.getResultList().isEmpty();
+        }
+    }
+
+    @Override
+    public List<Richiesta> getRichiesteByIdClienteAndStato(Long id, StatoRichiesta statoRichiesta) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select r from Richiesta r join " +
+                    "r.cliente c where c.id = (select u.id from Utente u where u.id = :id) and r.statoRichiesta = :stato");
+            query.setParameter("id", id);
+            query.setParameter("stato", statoRichiesta);
+            return query.getResultList();
         }
     }
 }

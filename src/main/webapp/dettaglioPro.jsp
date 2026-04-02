@@ -3,6 +3,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.Utente" %>
 <%@ page import="org.elis.manoforte.model.Professione" %>
+<%@ page import="java.math.BigDecimal" %>
+<%@ page import="org.elis.manoforte.utility.Utility" %>
+<%@ page import="java.math.RoundingMode" %>
 
 <!DOCTYPE html>
 <html lang="it">
@@ -12,7 +15,8 @@
     
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
-     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css"> 
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -144,6 +148,8 @@
     </style>
 </head>
 <body>
+    <% List<Utente> professionisti = (List<Utente>) request.getAttribute("listaProfessionisti"); %>
+    <% List<Recensione> tutteRecensioni = (List<Recensione>) request.getAttribute("recensioni"); %>
 
     <jsp:include page="/WEB-INF/includes/Navbar.jsp" />
 
@@ -153,66 +159,44 @@
     </header>
 
     <div class="prof-list-container">
-        <%
-            List<Utente> professionisti = (List<Utente>) request.getAttribute("listaProfessionisti");
-            List<Recensione> tutteRecensioni = (List<Recensione>) request.getAttribute("recensioni");
+        <%if(professionisti != null && !professionisti.isEmpty()){%>
+            <%for(Utente u : professionisti){ %>
+                <%List<Recensione> recensioniProfessionista = tutteRecensioni.stream().filter(recensione -> recensione.getProfessionista().equals(u)).toList();%>
+                <%BigDecimal media = Utility.calcolaMedia(recensioniProfessionista).setScale(1, RoundingMode.DOWN);%>
+                <%String iniziali = (u.getNome().charAt(0)+". "+u.getCognome().charAt(0)+".").toUpperCase();%>
 
-            if (professionisti != null && !professionisti.isEmpty()) {
-                for (Utente u : professionisti) {
-                    
-                    double somma = 0;
-                    int contatore = 0;
-                    
-                    if (tutteRecensioni != null) {
-                        for (Recensione r : tutteRecensioni) {
-                            // CORRETTO: confrontiamo l'id del professionista della recensione con l'id dell'utente nel ciclo
-                            if (r.getProfessionista() == r.getProfessionista()) {
-                                somma += r.getVoto();
-                                contatore++;
-                            }
-                        }
-                    }
-                    
-                    double media = (contatore > 0) ? (somma / contatore) : 0;
-                    String iniziali = (u.getNome().substring(0,1) + u.getCognome().substring(0,1)).toUpperCase();
-        %>
-            <div class="prof-item">
-                <div class="avatar-circle">
-                    <%= iniziali %>
-                </div>
-                
-                <div class="prof-info">
-                    <h3>
-                        <%= u.getNome() %> <%= u.getCognome() %>
-                        
-                        <span class="rating-badge">
-                            <i class="fa-solid fa-star"></i>
-                            <% if (contatore > 0) { %>
-                                <%= String.format("%.1f", media) %> <span style="font-size: 0.75rem; opacity: 0.7;">(<%= contatore %>)</span>
-                            <% } else { %>
-                                Nuova Mano
-                            <% } %>
+                <div class="prof-item">
+                    <div class="avatar-circle">
+                        <%= iniziali %>
+                    </div>
+
+                    <div class="prof-info">
+                        <h3>
+                            <%= u.getNome() %> <%= u.getCognome() %>
+                            <span class="rating-badge">
+                                <i class="fa-solid fa-star"></i>
+                                <%if(!recensioniProfessionista.isEmpty()){%>
+                                    <%=media%> <span style="font-size: 0.75rem; opacity: 0.7;">(<%= recensioniProfessionista.size() %>)</span>
+                                <%}else{%>
+                                    Nuova Mano
+                                <%}%>
+                            </span>
+                        </h3>
+                        <span class="category-label">
+                            <i class="fa-solid fa-tools" style="margin-right: 5px;"></i>
+                            <%= request.getAttribute("nomeProfessione") %>
                         </span>
-                    </h3>
-                    <span class="category-label">
-                        <i class="fa-solid fa-tools" style="margin-right: 5px;"></i>
-                        <%= request.getAttribute("nomeProfessione") %>
-                    </span>
+                    </div>
                 </div>
-
-                
-            </div>
-        <% 
-                }
-            } else { 
-        %>
+            <%}%>
+        <%}else{%>
             <div class="no-data">
                 <i class="fa-solid fa-user-slash" style="font-size: 4rem; color: var(--steel-variant); margin-bottom: 20px;"></i>
                 <h2 style="color: white;">Nessun professionista trovato</h2>
                 <p>Non ci sono ancora esperti registrati per questa categoria.</p>
                 <a href="Homepage" style="color: var(--craft-gold); text-decoration: none; font-weight: bold;">Torna alla Home</a>
             </div>
-        <% } %>
+        <%}%>
     </div>
 
     <jsp:include page="/WEB-INF/includes/Footer.jsp" />

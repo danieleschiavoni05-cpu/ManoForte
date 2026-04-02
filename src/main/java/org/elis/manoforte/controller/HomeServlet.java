@@ -1,9 +1,7 @@
 package org.elis.manoforte.controller;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
@@ -14,7 +12,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.elis.manoforte.model.Recensione;
-import org.elis.manoforte.model.Utente;
 
 @WebServlet("/Homepage")
 public class HomeServlet extends HttpServlet {
@@ -31,44 +28,10 @@ public class HomeServlet extends HttpServlet {
     @Override
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	
-    	String task = request.getParameter("task");
-        if (task != null && !task.trim().isEmpty()) {
-            response.sendRedirect("ListaProfessionisti?cercaNome=" + task);
-            return;
-        }
-        
+
         try {
-        	// ... dentro il try della HomeServlet ...
-
-        	List<Recensione> recensioni = recensioneDao.findAllwithConditions();
-        	List<Utente> professionisti = utenteDao.findAllProfessionisti();
-
-        	// 1. Creiamo la mappa
-        	Map<Long, Utente> mappaProfessionisti = new HashMap<>();
-
-        	if (professionisti != null) {
-        	    for (Utente u : professionisti) {
-        	        // 2. RECUPERO ID: Usiamo il tuo metodo DAO per ottenere l'ID tramite l'email
-        	        Long idProfessionista = utenteDao.findIdByEmail(u.getEmail());
-        	        
-        	        if (idProfessionista != null) {
-        	            // 3. ASSOCIAZIONE: Chiave = ID (Long), Valore = Oggetto Utente
-        	            mappaProfessionisti.put(idProfessionista, u);
-        	        }
-        	    }
-        	}
-
-        	// 4. PASSIAMO I DATI ALLA JSP
+        	List<Recensione> recensioni = recensioneDao.findRecensioneLimit(3);
         	request.setAttribute("recensioni", recensioni);
-        	request.setAttribute("mappaProfessionisti", mappaProfessionisti);
-
-        	// Debug rapido in console per sicurezza
-        	System.out.println("Mappa creata con " + mappaProfessionisti.size() + " professionisti");
-        	
-            request.setAttribute("recensioni", recensioni);
-            request.setAttribute("mappaProfessionisti", mappaProfessionisti);
-       
 
         } catch (Exception e) {
             e.printStackTrace();

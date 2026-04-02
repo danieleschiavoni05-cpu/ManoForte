@@ -1,0 +1,80 @@
+body {
+    display: block; /* Annulla il display:flex di professionista-style.css */
+}
+
+/* Sezioni Generali */
+.content-section {
+    padding: 100px 0;
+}
+.section-title {
+    font-family: 'Poppins', sans-serif; /* Font del progetto */
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1600585152220-90363fe7e115?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 140px 0;
+}
+.hero-section h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 3.5rem;
+    color: var(--craft-gold);
+    text-transform: uppercase;
+}
+.hero-section .lead {
+    font-size: 1.2rem;
+    color: var(--light-silver);
+    max-width: 600px;
+    margin: 1rem auto;
+}
+.hero-section .form-control {
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: 1px solid var(--steel-variant);
+    background-color: var(--deep-steel);
+    color: var(--light-silver);
+}
+.hero-section .form-control::placeholder {
+    color: var(--muted-silver);
+}
+.hero-section .btn-search {
+    border-radius: 8px;
+    padding: 0 2.5rem;
+    font-weight: 700;
+    border: none;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Sezione Vantaggi */
+.feature-card {
+    background: transparent;
+    border: 1px solid var(--steel-variant);
+    border-radius: 15px;
+    padding: 40px 30px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+.feature-card:hover {
+    transform: translateY(-10px);
+    background-color: var(--deep-steel);
+    border-color: var(--craft-gold);
+}
+.feature-icon {
+    font-size: 3rem;
+    color: var(--craft-gold);
+    margin-bottom: 1.5rem;
+}
+.feature-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    color: var(--white-text);
+    text-transform: uppercase;
+    font-weight: 600;
+}

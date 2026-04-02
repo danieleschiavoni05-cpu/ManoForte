@@ -12,6 +12,8 @@ import org.elis.manoforte.dao.definition.RichiestaDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.*;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import org.elis.manoforte.utility.dto.DTOResponseDettagliRichiesta;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.datatype.hibernate6.Hibernate6Module;

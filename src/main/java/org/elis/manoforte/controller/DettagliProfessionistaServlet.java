@@ -12,12 +12,10 @@ import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.ProfessioneDAO;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
 import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.jdbc.JdbcProfessioneDAO;
 
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Recensione;
 import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.utility.DataSourceConfig;
 
 /**
  * Servlet implementation class DettagliProfessionistaServlet

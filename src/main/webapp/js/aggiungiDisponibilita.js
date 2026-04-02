@@ -7,8 +7,6 @@ const orariCalendario = [
 
 function gestisciClick(dateStr, hour, isAvailable, id) {
     if (isAvailable) {
-        document.getElementById('inputOraRimuovi').value = hour;
-        document.getElementById('inputDataRimuovi').value = dateStr;
         document.getElementById('inputIdRimuovi').value = id;
         let modaleElement = document.getElementById('modalRimuovi');
         let modale = bootstrap.Modal.getInstance(modaleElement);
@@ -39,7 +37,6 @@ function gestisciClick(dateStr, hour, isAvailable, id) {
         document.getElementById("tipoEccezione").disabled = false;
 
         document.getElementById('checkRicorsivo').checked = false;
-        document.getElementById('inputTipoAggiungi').value = "SINGOLO";
         let modalElement = document.getElementById('modalAggiungi');
         let modale = bootstrap.Modal.getInstance(modalElement);
         if (!modale) {
@@ -48,10 +45,6 @@ function gestisciClick(dateStr, hour, isAvailable, id) {
         modale.show();
     }
 }
-
-document.getElementById('checkRicorsivo').addEventListener('change', function() {
-    document.getElementById('inputTipoAggiungi').value = this.checked ? "RICORSIVO" : "SINGOLO";
-});
 
 document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('checkRicorsivo').addEventListener('change', function() {

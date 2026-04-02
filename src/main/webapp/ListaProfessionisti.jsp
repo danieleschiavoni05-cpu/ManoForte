@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
+
     <style>
         .prof-grid {
             display: grid;

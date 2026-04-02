@@ -1,6 +1,7 @@
 
 <%@ page import="org.elis.manoforte.model.Utente" %>
 <%@ page import="org.elis.manoforte.model.Ruolo" %>
+<%@ page import="org.elis.manoforte.utility.Utility" %>
 
 <%
     Utente user = (Utente) session.getAttribute("utenteLoggato");
@@ -12,32 +13,33 @@
         <div class="nav-left-group">
             <a href="Homepage" class="brand">ManoForte</a>
             <ul class="nav-links">
-                <li><a href="Homepage">Home</a></li>
-                <% if (ruolo == Ruolo.UTENTE_BASE) { %>
-           
-                    <li><a href="<%=request.getContextPath()%>/RecensioniProfessionisti">Visualizza recensioni </a></li>
-                    <li><a href="<%=request.getContextPath()%>/lista_professioni">Effettua una richiesta</a></li>
-                    <li><a href="<%=request.getContextPath()%>/ModificaProfilo">Modifica Profilo</a></li>
-                    <li><a href="<%=request.getContextPath()%>/homeBase">Ritorna alla tua home</a></li>
-                    
-                <% } %>
-                <% if (ruolo == Ruolo.PROFESSIONISTA) { %>
-                    <li><a href="ListaClienti">I miei Clienti</a></li>
-                    <li><a href="professioniProfessionista">I miei lavori</a></li>
-                <% } %>
-                <% if (ruolo == Ruolo.ADMIN) { %>
-                    <li><a href="ListaProfessionisti">Gestione Professionisti</a></li>
-                    <li><a href="ManageUsers">Gestione utenti</a></li>
-                <% } %>
+                <%if(user!=null){%>
+                    <li><a href="<%=request.getContextPath()%>/<%=Utility.getUserHomePage(user)%>">Il mio profilo</a></li>
+                    <%if(ruolo == Ruolo.UTENTE_BASE){%>
+                        <li><a href="<%=request.getContextPath()%>/RecensioniProfessionisti">Visualizza recensioni </a></li>
+                        <li><a href="<%=request.getContextPath()%>/lista_professioni">Effettua una richiesta</a></li>
+                        <li><a href="<%=request.getContextPath()%>/ModificaProfilo">Modifica Profilo</a></li>
+                        <li><a href="<%=request.getContextPath()%>/homeBase">Ritorna alla tua home</a></li>
+                    <%}else if(ruolo == Ruolo.PROFESSIONISTA){%>
+                        <li><a href="<%=request.getContextPath()%>/homeprofessionista#requests">I miei lavori</a></li>
+                        <li><a href="<%=request.getContextPath()%>/homeprofessionista#reviews">Le mie recensioni</a></li>
+                        <li><a href="<%=request.getContextPath()%>/homeprofessionista#availability">La mia agenda</a></li>
+                    <%}if(ruolo == Ruolo.ADMIN){%>
+                        <li><a href="<%=request.getContextPath()%>/HomeAdmin">Dashboard</a></li>
+                    <%}%>
+                <%}else{%>
+                    <li><a href="<%=request.getContextPath()%>/ListaProfessionisti">Lista professionisti</a></li>
+                    <li><a href="<%=request.getContextPath()%>/lista_professioni">Lista professioni</a></li>
+                <%}%>
             </ul>
         </div>
         <div>
-            <% if (user == null) { %>
+            <%if(user == null){%>
                 <a href="login" class="btn-login">Accedi</a>
-            <% } else { %>
+            <%}else{%>
                 <span style="margin-right: 15px; color: var(--light-silver);">Ciao, <strong><%= user.getNome() %></strong> <strong><%= user.getCognome() %></strong></span>
                 <a href="logout" class="btn-login">Logout</a>
-            <% } %>
+            <%}%>
         </div>
     </div>
 </nav>

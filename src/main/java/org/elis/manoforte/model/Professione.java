@@ -58,7 +58,7 @@ public class Professione {
     public boolean equals(Object obj) {
         if(this == obj) return true;
         if(obj instanceof Professione prof)
-            return id==prof.id;
+            return nome.equals(prof.nome);
         else return false;
     }
 

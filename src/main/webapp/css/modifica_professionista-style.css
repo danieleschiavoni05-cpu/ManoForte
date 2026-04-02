@@ -133,3 +133,11 @@ input::placeholder {
 .login-register-button:active {
     transform: scale(0.98);
 }
+.valuta{
+    background: rgb(15 23 42 / 60%);
+    color: white;
+    border: var(--obsidian-base);
+}
+.psw::placeholder{
+    color: var(--muted-silver)
+}

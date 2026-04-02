@@ -26,7 +26,7 @@ public interface DisponibilitaDAO {
 
     Disponibilita checkRicorrenzaById(Long idDisponibilita) throws Exception;
 
-    List<Disponibilita> findDisponibilitaByEmailProfessionistaAndTipo(String email, TipoDisponibilita tipoDisponibilita) throws Exception;
+    List<Disponibilita> findDisponibilitaByIdProfessionistaAndTipo(Long id, TipoDisponibilita tipoDisponibilita) throws Exception;
 
     Disponibilita checkSovrapposizione(Disponibilita disponibilita, String email) throws Exception;
 

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.elis.manoforte.dao.definition.DaoFactory;
 
-import org.elis.manoforte.utility.DTOResponseRegistrazione;
+import org.elis.manoforte.utility.dto.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.Utility;
 
 import java.io.IOException;

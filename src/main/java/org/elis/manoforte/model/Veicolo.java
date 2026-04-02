@@ -3,6 +3,7 @@ package org.elis.manoforte.model;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Veicolo {
@@ -46,5 +47,11 @@ public class Veicolo {
 
     public void setUtente(List<Utente> utente) {
         this.utente = utente;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Veicolo veicolo)) return false;
+        return Objects.equals(id, veicolo.id) && Objects.equals(nome, veicolo.nome);
     }
 }

@@ -6,8 +6,12 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
+
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
+
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/spinning-background.css">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>

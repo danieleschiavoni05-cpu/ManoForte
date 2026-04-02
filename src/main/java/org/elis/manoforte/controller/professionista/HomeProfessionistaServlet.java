@@ -23,9 +23,11 @@ public class HomeProfessionistaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private RichiestaDAO richiestaDao;
     private RecensioneDAO recensioneDao;
-    private  DisponibilitaDAO disponibilitaDao;
+    private DisponibilitaDAO disponibilitaDao;
     private CittaDAO cittaDao;
     private VeicoloDAO veicoloDao;
+    private UtenteDAO utenteDao;
+    private ProfessioneDAO professioneDAO;
 
     public HomeProfessionistaServlet() {
         super();
@@ -38,6 +40,8 @@ public class HomeProfessionistaServlet extends HttpServlet {
         cittaDao = DaoFactory.getInstance().getCittaDAO();
         veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
         disponibilitaDao = DaoFactory.getInstance().getDisponibilitaDAO();
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        professioneDAO = DaoFactory.getInstance().getProfessioneDAO();
     }
 
     /**
@@ -57,31 +61,33 @@ public class HomeProfessionistaServlet extends HttpServlet {
         }
 
         try{
-            List<CardRichiesta> richiesteInAttesa = richiestaDao.getRichiesteByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
-            List<CardRichiesta> richiesteInCorso = richiestaDao.getRichiesteByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.IN_CORSO);
-            List<CardRichiesta> richiesteComplete = richiestaDao.getRichiesteByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.COMPLETA);
+            loggedUser = utenteDao.inizializzaUtente(loggedUser.getId());
 
-            List<CardRecensione> recensioni = recensioneDao.getRecensioneByEmailProfessionistaLimit(loggedUser.getEmail(), 4);
 
-            List<Citta> citta = cittaDao.getAllCitta();
-            List<Veicolo> veicolo = veicoloDao.getAllVeicolo();
+            List<CardRichiesta> richiesteInAttesa = richiestaDao.getRichiesteByIdProfessionistaAndStato(loggedUser.getId(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
+            List<CardRichiesta> richiesteInCorso = richiestaDao.getRichiesteByIdProfessionistaAndStato(loggedUser.getId(), StatoRichiesta.IN_CORSO);
+            List<CardRichiesta> richiesteComplete = richiestaDao.getRichiesteByIdProfessionistaAndStato(loggedUser.getId(), StatoRichiesta.COMPLETA);
 
-            List<Disponibilita> disponibilita = disponibilitaDao.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.SINGOLO);
+            List<Recensione> recensioni = recensioneDao.getRecensioneByIdProfessionista(loggedUser.getId());
+
+            List<Disponibilita> disponibilita = disponibilitaDao.findDisponibilitaByIdProfessionistaAndTipo(loggedUser.getId(), TipoDisponibilita.SINGOLO);
             Map<LocalDate, List<Disponibilita>> disponibilitaSingole = disponibilita.stream()
                     .collect(Collectors.groupingBy(d -> d.getData()));
 
-            disponibilita = disponibilitaDao.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.RICORSIVO);
+            disponibilita = disponibilitaDao.findDisponibilitaByIdProfessionistaAndTipo(loggedUser.getId(), TipoDisponibilita.RICORSIVO);
             Map<DayOfWeek, List<Disponibilita>> disponibilitaRicorsive = disponibilita.stream()
                     .collect(Collectors.groupingBy(d -> d.getGiorno_settimana()));
 
-            disponibilita = disponibilitaDao.findDisponibilitaByEmailProfessionistaAndTipo(loggedUser.getEmail(), TipoDisponibilita.ECCEZIONE);
+            disponibilita = disponibilitaDao.findDisponibilitaByIdProfessionistaAndTipo(loggedUser.getId(), TipoDisponibilita.ECCEZIONE);
             Map<LocalDate, List<Disponibilita>> disponibilitaEccezioni = disponibilita.stream()
                     .collect(Collectors.groupingBy(d -> d.getData()));
 
-            List<Richiesta> richieste = richiestaDao.getRichiesteListByEmailProfessionistaAndStato(loggedUser.getEmail(), StatoRichiesta.IN_CORSO);
+            List<Richiesta> richieste = richiestaDao.getRichiesteListByIdProfessionistaAndStato(loggedUser.getId(), StatoRichiesta.IN_CORSO);
             Map<LocalDate, List<Richiesta>> richiesteRicevute = richieste.stream()
                     .collect(Collectors.groupingBy(r -> r.getData()));
 
+            // Dati utente loggato con attributi inizializzati
+            request.setAttribute("utenteLoggato", loggedUser);
             // Attibuti per le mie richieste
             request.setAttribute("richiesteInAttesa", richiesteInAttesa);
             request.setAttribute("richiesteInCorso", richiesteInCorso);
@@ -89,8 +95,9 @@ public class HomeProfessionistaServlet extends HttpServlet {
             // Atrributi per le mie recensioni
             request.setAttribute("recensioni", recensioni);
             // Attributi per la modifica del profilo
-            request.setAttribute("citta", citta);
-            request.setAttribute("veicoli", veicolo);
+            request.setAttribute("citta", cittaDao.getAllCitta());
+            request.setAttribute("veicoli", veicoloDao.getAllVeicolo());
+            request.setAttribute("professioni", professioneDAO.getAllProfessioni());
             // Attributi disponibilità
             request.setAttribute("disponibilitaSingole", disponibilitaSingole);
             request.setAttribute("disponibilitaRicorrenti", disponibilitaRicorsive);
@@ -104,8 +111,10 @@ public class HomeProfessionistaServlet extends HttpServlet {
         }catch(NessunValoreTrovatoException e){
             e.printStackTrace();
             request.setAttribute("errore", e.getMessage());
+            return;
         }catch(Exception e){
             e.printStackTrace();
+            return;
         }
 
         RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/professionista/homeprofessionista.jsp");

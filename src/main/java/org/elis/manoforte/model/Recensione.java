@@ -3,6 +3,7 @@ package org.elis.manoforte.model;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Check;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,8 +14,8 @@ public class Recensione {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String descrizione;
-    @Column(columnDefinition = "tinyint unsigned check(voto>0 AND voto<6)")
-    private Integer voto;
+    @Column(columnDefinition = "float unsigned check(voto>0 AND voto<6)", nullable = false)
+    private BigDecimal voto;
     @Column(nullable = false)
     private LocalDate data;
     @ManyToOne
@@ -24,7 +25,7 @@ public class Recensione {
     @JoinColumn(nullable = false)
     private Utente professionista;
 
-    public Recensione(Long id, String descrizione, Integer voto, LocalDate data, Utente cliente, Utente professionista) {
+    public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data, Utente cliente, Utente professionista) {
         this.id = id;
         this.descrizione = descrizione;
         this.voto = voto;
@@ -33,7 +34,7 @@ public class Recensione {
         this.professionista = professionista;
     }
 
-    public Recensione(Long id, String descrizione, Integer voto, LocalDate data) {
+    public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data) {
         this.id = id;
         this.descrizione = descrizione;
         this.voto = voto;
@@ -62,11 +63,11 @@ public class Recensione {
         this.descrizione = descrizione;
     }
 
-    public int getVoto() {
+    public BigDecimal getVoto() {
         return voto;
     }
 
-    public void setVoto(int voto){
+    public void setVoto(BigDecimal voto){
         this.voto = voto;
     }
 

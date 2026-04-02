@@ -100,10 +100,10 @@ public class JPADisponibilitaDao implements DisponibilitaDAO {
     }
 
     @Override
-    public List<Disponibilita> findDisponibilitaByEmailProfessionistaAndTipo(String email, TipoDisponibilita tipoDisponibilita) throws Exception {
+    public List<Disponibilita> findDisponibilitaByIdProfessionistaAndTipo(Long id, TipoDisponibilita tipoDisponibilita) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email and d.tipo=:tipo");
-            query.setParameter("email", email);
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.id=:id and d.tipo=:tipo");
+            query.setParameter("id", id);
             query.setParameter("tipo", tipoDisponibilita);
             return query.getResultList();
         }

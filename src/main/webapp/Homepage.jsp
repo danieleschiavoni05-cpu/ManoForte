@@ -1,160 +1,135 @@
 <%@page import="org.elis.manoforte.model.Utente"%>
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="org.elis.manoforte.model.Recensione"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.Map"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="org.elis.manoforte.model.Recensione" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="java.math.BigDecimal" %>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ManoForte - Trova la tua mano di fiducia</title>
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ManoForte - La tua mano di fiducia</title>
 
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-	rel="stylesheet">
+    <!-- Frameworks -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/color-var.css">
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/header.css">
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/style-home.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/spinning-background.css">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/homepage-style.css">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
 
 </head>
 
-<body>
+<body class="rotation">
 
-	<jsp:include page="WEB-INF/includes/Navbar.jsp" />
+    <% List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni"); %>
 
+    <jsp:include page="WEB-INF/includes/Navbar.jsp"/>
 
-	<div class="carousel-wrapper" style="position: relative;">
-		<div class="carousel"
-			style="background: linear-gradient(180deg, #279AF1 0%, #4FB4FF 100%); min-height: 400px; display: flex; align-items: center; justify-content: center;">
-			<div class="slide active">
-				<div class="slide-content text-center text-white">
-					<h1>Esperti Idraulici pronti per te</h1>
-					<p>Risolvi ogni problema domestico con professionisti
-						verificati.</p>
-				</div>
-			</div>
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero-section text-center">
+            <div class="container">
+                <h1>La tua casa, in mani sicure.</h1>
+                <p class="lead">ManoForte è la piattaforma che ti connette con i migliori professionisti della tua zona. Dimentica lo stress, trova la tua mano di fiducia.</p>
+                <div class="mt-5">
+                    <form class="d-flex justify-content-center" action="ListaProfessionisti" method="get">
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <input type="text" name="cercaNome" class="form-control" placeholder="Di quale professionista hai bisogno?">
+                                <button class="btn custom-button btn-search" type="submit">Cerca</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-			<div class="slide">
-				<div class="slide-content text-center text-white">
-					<h1>Elettricisti Certificati</h1>
-					<p>Manutenzione sicura e certificata per la tua casa.</p>
-				</div>
-			</div>
-		</div>
+        <!-- I VANTAGGI DI MANOFORTE -->
+        <section class="content-section" style="background-color: var(--obsidian-base);">
+            <div class="container text-center">
+                <h2 class="section-title">I Vantaggi di ManoForte</h2>
+                <div class="row g-4 mt-4">
+                    <div class="col-md-3">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                            <h3 class="feature-title">Interventi Rapidi</h3>
+                            <p style="color: var(--light-silver);">Trova professionisti disponibili nella tua zona e risolvi il problema in tempi record.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-award"></i></div>
+                            <h3 class="feature-title">Qualità Certificata</h3>
+                            <p style="color: var(--light-silver);">Solo esperti qualificati e con recensioni verificate. La qualità è il nostro primo obiettivo.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-lock"></i></div>
+                            <h3 class="feature-title">Pagamenti Sicuri</h3>
+                            <p style="color: var(--light-silver);">Paga solo a lavoro concluso e approvato, attraverso la nostra piattaforma sicura e protetta.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i class="fas fa-headset"></i></div>
+                            <h3 class="feature-title">Supporto Dedicato</h3>
+                            <p style="color: var(--light-silver);">Il nostro team di assistenza è sempre a tua disposizione per qualsiasi dubbio o necessità.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-		<div class="search-container">
-			<form class="search-box"
-				action="<%=request.getContextPath()%>/ricercaProfessioni"
-				method="get">
-				<input type="text" name="cercaNome"
-					placeholder="Cosa stai cercando? (es. Idraulico)" required>
-				<button type="submit">Trova Esperto</button>
-			</form>
-		</div>
-	</div>
+        <!-- RECENSIONI -->
+        <section class="content-section">
+            <div class="container">
+                <h2 class="section-title text-center">La parola ai nostri clienti</h2>
+                <div class="row g-4 mt-5">
+                    <%if(recensioni == null || recensioni.isEmpty()){%>
+                        <div class="col-12 text-center">
+                            <p style="color: var(--light-silver);">Ancora nessuna recensione. Sii il primo a condividere la tua esperienza!</p>
+                        </div>
+                    <%}else{%>
+                        <%for(Recensione r : recensioni){%>
+                            <div class="col-md-4">
+                                <div class="detail-card h-100">
+                                    <div class="star-rating mb-3">
+                                        <%for(int i = 1; i <= 5; i++){%>
+                                            <i class="<%= (BigDecimal.valueOf(i).compareTo(r.getVoto()) <= 0) ? "fas fa-star" : "far fa-star" %>" style="color: var(--craft-gold);"></i>
+                                        <%}%>
+                                    </div>
+                                    <p class="fst-italic" style="color: var(--light-silver);">
+                                        "<%= (r.getDescrizione() != null && !r.getDescrizione().isEmpty()) ? r.getDescrizione() : "Ottimo servizio!" %>"
+                                    </p>
+                                    <div class="author mt-3" style="color: var(--light-silver);">
+                                        Cliente per <%=(r.getProfessionista() != null) ?
+                                            (r.getProfessionista().getNome() + " " + r.getProfessionista().getCognome().charAt(0))+"."
+                                            : "un nostro professionista"%>
+                                    </div>
+                                </div>
+                            </div>
+                        <%}%>
+                    <%}%>
+                </div>
+            </div>
+        </section>
+    </main>
 
-	<div class="container">
-		<h2>Scegli per Categoria</h2>
-		<div class="categories-grid">
-			<a
-				href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=idraulico"
-				class="cat-item"> <span class="cat-icon">🔧</span> <span>Idraulici</span>
-			</a> <a
-				href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Elettricista"
-				class="cat-item"> <span class="cat-icon">⚡</span> <span>Elettricisti</span>
-			</a> <a
-				href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Pulizia"
-				class="cat-item"> <span class="cat-icon">🧹</span> <span>Pulizie</span>
-			</a> <a
-				href="<%=request.getContextPath()%>/ricercaProfessioni?cercaNome=Pittore"
-				class="cat-item"> <span class="cat-icon">🎨</span> <span>Pittori</span>
-			</a>
-		</div>
-	</div>
+    <jsp:include page="WEB-INF/includes/Footer.jsp"/>
 
-
-
-	<section class="container"
-		style="margin-top: 80px; margin-bottom: 80px;">
-		<h2>Cosa dicono i nostri utenti</h2>
-
-		<div class="recensioni-grid">
-			<%
-			Map<Long, Utente> mappaProf = (Map<Long, Utente>) request.getAttribute("mappaProfessionisti");
-			List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni");
-
-			if (recensioni == null || recensioni.isEmpty()) {
-			%>
-			<div class="rec-card text-center w-100"
-				style="grid-column: 1/-1; border-top: none; border: 1px dashed var(--muted-silver);">
-				<i class="fa-solid fa-comment-slash fa-2x mb-3"
-					style="color: var(--muted-silver);"></i>
-				<p style="color: var(--muted-silver);">Ancora nessuna recensione
-					disponibile.</p>
-			</div>
-			<%
-			} else {
-			// Mostriamo le ultime recensioni per mantenere la griglia pulita
-			for (Recensione r : recensioni) {
-				Utente prof = (mappaProf != null) ? mappaProf.get(r.getProfessionista().getId()) : null;
-			%>
-			<div class="rec-card">
-				<div class="stars">
-					<%
-					for (int i = 1; i <= 5; i++) {
-					%>
-					<i
-						class="<%=(i <= r.getVoto()) ? "fa-solid fa-star" : "fa-regular fa-star"%>"></i>
-					<%
-					}
-					%>
-				</div>
-
-				<div class="rec-content"
-					style="font-style: italic; color: var(--white-text); margin-bottom: 15px;">
-					"<%=(r.getDescrizione() != null && !r.getDescrizione().isEmpty())
-		? r.getDescrizione()
-		: "Servizio eccellente, altamente professionale."%>"
-				</div>
-
-				<div
-					class="rec-meta d-flex align-items-center justify-content-between">
-					<div>
-						<i class="fa-solid fa-user-check me-2"
-							style="color: var(--primary);"></i> <span
-							style="font-weight: 600; color: var(--primary);"> <%=(prof != null) ? (prof.getNome() + " " + prof.getCognome()) : "Esperto ManoForte"%>
-						</span>
-					</div>
-					<small style="font-size: 0.75rem; opacity: 0.7;">Verificato</small>
-				</div>
-			</div>
-			<%
-			}
-			}
-			%>
-		</div>
-	</section>
-
-
-
-	<script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        setInterval(() => {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (currentSlide + 1) % slides.length;
-            slides[currentSlide].classList.add('active');
-        }, 5000);
-    </script>
-
-	<jsp:include page="WEB-INF/includes/Footer.jsp" />
+    <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

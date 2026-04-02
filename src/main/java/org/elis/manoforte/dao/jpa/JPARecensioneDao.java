@@ -5,7 +5,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
 import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.model.CardRecensione;
 import org.elis.manoforte.model.Recensione;
 
 import java.util.List;
@@ -25,8 +24,11 @@ public class JPARecensioneDao implements RecensioneDAO {
     }
 
     @Override
-    public List<Recensione> findAllwithConditions() {
-        return List.of();
+    public List<Recensione> findRecensioneLimit(int limit) {
+        try(EntityManager em = emf.createEntityManager()){
+            Query query = em.createQuery("select r from Recensione r join r.professionista");
+            return query.setMaxResults(limit).getResultList();
+        }
     }
 
     @Override
@@ -59,12 +61,21 @@ public class JPARecensioneDao implements RecensioneDAO {
     }
 
     @Override
-    public List<CardRecensione> getRecensioneByEmailProfessionistaLimit(String email, int i) throws Exception {
+    public List<Recensione> getRecensioneByIdProfessionista(Long id) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select r from Utente u join u.recensioneRicevute r where u.email=:email");
-            query.setParameter("email", email);
-            query.setMaxResults(i);
+            Query query = em.createQuery("select r from Utente u join u.recensioneRicevute r where u.id=:id");
+            query.setParameter("id", id);
             return query.getResultList();
         }
     }
+
+    @Override
+    public List<Recensione> getRecensioneByIdCliente(Long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select r from Utente u join u.recensioneInviate r where u.id=:id");
+            query.setParameter("id", id);
+            return query.getResultList();
+        }
+    }
+
 }

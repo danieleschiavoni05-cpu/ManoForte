@@ -19,7 +19,7 @@ import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.model.Veicolo;
-import org.elis.manoforte.utility.DTOResponseRegistrazione;
+import org.elis.manoforte.utility.dto.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
@@ -181,6 +181,7 @@ public class RegistrazioneProfessionistaServlet extends HttpServlet {
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,
                     "Errore inserimento nel database, riprovare più tardi.", null);
             outJson.print(mapper.writeValueAsString(risposta));
+
         }catch (Exception e){
             e.printStackTrace();
             DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(false,

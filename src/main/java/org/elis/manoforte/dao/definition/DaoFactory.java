@@ -14,7 +14,6 @@ public abstract class DaoFactory {
 
     static{
         FACTORY = switch(IMPL){
-           // case "JDBC" -> new JDBCDaoFactory(DataSourceConfig.getDataSource());
             case "JPA" -> new JPADaoFactory();
             default -> throw new IllegalStateException("Nessuna implementazione disponibile.");
         };

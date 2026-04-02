@@ -11,15 +11,13 @@ import java.util.List;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
-import org.elis.manoforte.dao.definition.CittaDAO;
-import org.elis.manoforte.dao.definition.DaoFactory;
-import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.definition.VeicoloDAO;
+import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.Citta;
+import org.elis.manoforte.model.Professione;
 import org.elis.manoforte.model.Utente;
 import org.elis.manoforte.model.Veicolo;
-import org.elis.manoforte.utility.DTOResponseRegistrazione;
+import org.elis.manoforte.utility.dto.DTOResponseRegistrazione;
 import org.elis.manoforte.utility.Utility;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
@@ -32,6 +30,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
     private UtenteDAO utenteDao;
     private VeicoloDAO veicoloDao;
     private CittaDAO cittaDao;
+    private ProfessioneDAO professioneDao;
 
     public ModificaProfiloProfessionistaServlet() {
         super();
@@ -42,6 +41,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         utenteDao = DaoFactory.getInstance().getUtenteDAO();
         veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
         cittaDao = DaoFactory.getInstance().getCittaDAO();
+        professioneDao = DaoFactory.getInstance().getProfessioneDAO();
     }
 
     /**
@@ -66,6 +66,7 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         Long id_citta = null;
         BigDecimal tariffa = null;
         List<Long> veicoliIds = new ArrayList<>();
+        List<Long> professioniIds = new ArrayList<>();
 
 
         String nome = request.getParameter("nome");
@@ -82,6 +83,10 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
         String nuovaPassword = request.getParameter("nuovaPassword");
         String confermaPassword = request.getParameter("conferma_password");
         String password = request.getParameter("password_attuale");
+
+        if(request.getParameterValues("professione")!=null)
+            for(String str:request.getParameterValues("professione"))
+                professioniIds.add(Long.parseLong(str));
 
         if(request.getParameterValues("veicolo")!=null)
             for(String str : request.getParameterValues("veicolo"))
@@ -103,6 +108,9 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
         if(data_nascita==null)
             emptyError.setErrData();
+
+        if(professioniIds.isEmpty())
+            emptyError.setErrProfessioni();
 
         if(codice_fiscale==null || codice_fiscale.trim().isEmpty())
             emptyError.setErrCF();
@@ -137,13 +145,16 @@ public class ModificaProfiloProfessionistaServlet extends HttpServlet {
 
             Citta citta = cittaDao.getCittaById(id_citta);
             List<Veicolo> veicolo = veicoloDao.getVeicoliByIds(veicoliIds);
+            List<Professione> professione = professioneDao.getProfessioniListById(professioniIds);
 
             Utente professionista = Utility.checkInputEditProfessionista(
-                    utenteLoggato, nome, cognome, data_nascita, codice_fiscale,
+                    utenteLoggato, nome, cognome, data_nascita, codice_fiscale, professione,
                     tariffa, nuovaPassword, password, confermaPassword);
 
             professionista.setCitta(citta);
             professionista.setVeicolo(veicolo);
+            professionista.setProfessione(professione);
+            professionista.setId(utenteLoggato.getId());
 
             utenteDao.modificaProfessionista(professionista);
             veicoloDao.updateVeicoliProfessionista(utenteLoggato.getEmail(), veicolo);
