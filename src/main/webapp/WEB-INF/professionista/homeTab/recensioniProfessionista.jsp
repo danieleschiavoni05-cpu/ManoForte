@@ -25,7 +25,7 @@
                 "</div>" +
                 "<div class='text flex-grow-1'>" +
                   "<div class='d-flex justify-content-between align-items-center'>" +
-                    "<span class='titolo'>" + r.getCliente().getNome() + " " + r.getCliente().getCognome().substring(0, 1) + ".</span>" +
+                    "<span class='titolo'>" + r.getCliente().getNome() + " " + r.getCliente().getCognome().charAt(0) + ".</span>" +
                     "<span class='subtitle' style='font-size: 0.75rem;'>" + r.getData() + "</span>" +
                   "</div>" +
                   "<div class='text-muted'>"+ r.getVoto() +"/5.0 </div>"+

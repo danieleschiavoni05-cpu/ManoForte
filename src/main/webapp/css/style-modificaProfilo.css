@@ -122,5 +122,8 @@
 .fa-solid {
     background: linear-gradient(135deg, #818cf8, #c084fc);
     -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+}
+
+.modal-border{
+    border-bottom: var(--obsidian-base) solid 1px;
 }

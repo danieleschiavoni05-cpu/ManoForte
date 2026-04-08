@@ -69,7 +69,61 @@
 
 </div>
 
-<%!
+<div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-danger">Annulla Richiesta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Sei sicuro di voler annullare questa richiesta? Il professionista non potrà più vederla o accettarla.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                <a id="confirmCancelBtn" href="#" class="btn btn-danger">Conferma Annullamento</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form action="SalvaRecensioneServlet" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title">Raccontaci la tua esperienza</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="richiestaId" id="modalRichiestaId">
+
+                    <div class="mb-3 text-center">
+                        <label class="form-label d-block">Voto</label>
+                        <select name="voto" class="form-select w-50 mx-auto" required>
+                            <option value="5">5 Stelle (Eccellente)</option>
+                            <option value="4">4 Stelle (Ottimo)</option>
+                            <option value="3">3 Stelle (Buono)</option>
+                            <option value="2">2 Stelle (Sufficiente)</option>
+                            <option value="1">1 Stella (Scarso)</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">La tua recensione</label>
+                        <textarea name="descrizione" class="form-control" rows="4" placeholder="Com'è andato il lavoro?" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="submit" class="btn btn-success text-white">Invia Recensione</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%--<%!
     public String createCardRequest(Richiesta r) {
         String professionistaNome = (r.getProfessionista() != null) ? r.getProfessionista().getNome() + " " + r.getProfessionista().getCognome() : "Non assegnato";
         String badgeClass = "";
@@ -113,5 +167,63 @@
                         "<p class='mb-0'>" + r.getDescrizione() + "</p>" +
                     "</div>" +
                "</div>";
+    }
+%>--%>
+
+<%!
+    public String createCardRequest(Richiesta r) {
+        String professionistaNome = (r.getProfessionista() != null) ? r.getProfessionista().getNome() + " " + r.getProfessionista().getCognome() : "Non assegnato";
+        String badgeClass = "";
+        String statoText = r.getStatoRichiesta().toString().replace("_", " ");
+
+        // Gestione classi badge
+        switch (r.getStatoRichiesta()) {
+            case IN_ATTESA_DI_CONFERMA: badgeClass = "bg-warning text-dark"; break;
+            case IN_CORSO: badgeClass = "bg-info text-dark"; break;
+            case COMPLETA: badgeClass = "bg-success text-white"; break;
+            default: badgeClass = "bg-secondary text-white";
+        }
+
+        String actionButton = "";
+
+        if (r.getStatoRichiesta().name().equals("IN_ATTESA_DI_CONFERMA")) {
+            actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
+                    "<button class='btn btn-outline-danger btn-sm' data-bs-toggle='modal' data-bs-target='#cancelRequestModal' onclick='setCancelRequestId(" + r.getId() + ")'>" +
+                    "<i class='fas fa-times me-1'></i> Annulla" +
+                    "</button>" +
+                    "</div>";
+        }else if (r.getStatoRichiesta().name().equals("COMPLETA")) {
+            actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
+                    "<button class='btn btn-success btn-sm text-white' data-bs-toggle='modal' data-bs-target='#reviewModal' onclick='prepareReviewModal(" + r.getId() + ")'>" +
+                    "<i class='fas fa-star me-1'></i> Lascia una Recensione" +
+                    "</button>" +
+                    "</div>";
+        }
+
+        return "<div class='detail-card h-100' id='richiesta-" + r.getId() + "'>" +
+                "<div class='d-flex justify-content-between align-items-start'>" +
+                "<div>" +
+                "<div class='detail-label'>Professionista</div>" +
+                "<div class='detail-value'>" + professionistaNome + "</div>" +
+                "</div>" +
+                "<span class='badge " + badgeClass + "'>" + statoText + "</span>" +
+                "</div>" +
+
+                "<div class='detail-group mt-3'>" +
+                "<div class='detail-label'>Data e Ora</div>" +
+                "<div class='detail-value'><i class='far fa-calendar-alt me-2'></i>" + r.getData() + " | " + r.getOra_inizio() + " - " + r.getOra_fine() + "</div>" +
+                "</div>" +
+
+                "<div class='detail-group'>" +
+                "<div class='detail-label'>Indirizzo</div>" +
+                "<div class='detail-value'><i class='fas fa-map-marker-alt me-2'></i>" + r.getIndirizzo() + "</div>" +
+                "</div>" +
+
+                "<div class='description-box'>" +
+                "<div class='detail-label'>Descrizione richiesta</div>" +
+                "<p class='mb-0'>" + r.getDescrizione() + "</p>" +
+                "</div>" +
+                actionButton +
+                "</div>";
     }
 %>

@@ -155,14 +155,9 @@ public class JPAUtenteDao implements UtenteDAO {
     }
 
     @Override
-    public Utente inizializzaUtente(Long id){
+    public Utente reinizializzaUtente(Long id){
         try(EntityManager em = emf.createEntityManager()){
             Utente u = em.find(Utente.class, id);
-            Hibernate.initialize(u.getProfessione());
-            Hibernate.initialize(u.getVeicolo());
-            Hibernate.initialize(u.getRecensioneRicevute());
-            Hibernate.initialize(u.getRichiesteRicevute());
-            Hibernate.initialize(u.getDisponibilita());
             return u;
         }
     }

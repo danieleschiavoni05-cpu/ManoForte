@@ -81,9 +81,6 @@
 
   </div>
   <button type="submit" class="login-register-button">Modifica profilo</button>
-  <a href="<%=request.getContextPath()%>/homeBase" class="btn-back d-block text-center mt-4">
-    Annulla e torna alla Home
-  </a>
 </form>
 
 

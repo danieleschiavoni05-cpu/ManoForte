@@ -35,6 +35,8 @@
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/spinning-background.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/modifica_professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-modificaProfilo.css">
   </head>
 
   <body class="rotation">
@@ -51,7 +53,7 @@
     <%}%>
 
     <div class="row welcome-row">
-      <div class="col-12 welcome-text text-start">
+      <div class="col-12 welcome-text center">
         <h2>Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
         <p>Gestisci le tue richieste e trova i migliori professionisti.</p>
       </div>
@@ -84,21 +86,21 @@
             <%@include file="/WEB-INF/cliente/modificaProfiloNew.jsp"%>
           </div>
           <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="pills-reviews" tabindex="0">
-             <%--<%@include file="/WEB-INF/cliente/modificaProfiloNew.jsp"%>--%>
+             <%@include file="/WEB-INF/cliente/recensioniCliente.jsp"%>
           </div>
         </div>
       </div>
 
       <div class="col-md-2">
         <div class="card border-none shadow-sm p-3 border-radius-15 action-column">
-          <ul class="nav nav-pills mb-3 flex-column" id="pills-tab" role="tablist">
+          <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
 
-            <li class="nav-item" role="presentation">
+            <li class="nav-item mb-2" role="presentation">
               <button class="nav-link active w-100 text-start" id="pills-requests" data-bs-toggle="pill" data-bs-target="#requests" type="button" role="tab" aria-controls="requests" aria-selected="true">
                 Le mie richieste
               </button>
             </li>
-            <li class="nav-item mt-2">
+            <li class="nav-item mb-2">
               <button class="nav-link w-100 text-start" id="pills-reviews" data-bs-toggle="pill" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
                 Recensioni
               </button>
@@ -159,6 +161,7 @@
   <jsp:include page="../includes/Footer.jsp"/>
 
   <script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+  <script src="<%=request.getContextPath()%>/js/recensioniCliente.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

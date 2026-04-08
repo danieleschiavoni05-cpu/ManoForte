@@ -80,7 +80,7 @@ body {
 
 /* --- STELLE E TESTO --- */
 .star-rating {
-	color: var(--star-color);
+	color: var(--craft-gold);
 	font-size: 1.1rem;
 	margin: 0.8rem 0;
 }

@@ -61,7 +61,7 @@ public class HomeBaseServlet extends HttpServlet {
 		}
 
 		try {
-			loggedUser = utenteDao.inizializzaUtente(loggedUser.getId());
+			loggedUser = utenteDao.reinizializzaUtente(loggedUser.getId());
 
 			List<Richiesta> richiesteInAttesa = richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
 			List<Richiesta> richiesteInCorso = richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.IN_CORSO);

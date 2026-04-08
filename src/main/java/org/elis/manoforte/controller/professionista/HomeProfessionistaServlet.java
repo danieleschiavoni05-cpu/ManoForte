@@ -17,6 +17,7 @@ import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.Utility;
+import org.hibernate.Hibernate;
 
 @WebServlet("/homeprofessionista")
 public class HomeProfessionistaServlet extends HttpServlet {
@@ -61,7 +62,11 @@ public class HomeProfessionistaServlet extends HttpServlet {
         }
 
         try{
-            loggedUser = utenteDao.inizializzaUtente(loggedUser.getId());
+            loggedUser.setVeicolo(veicoloDao.getVeicoliByEmailProfessionista(loggedUser.getEmail()));
+            loggedUser.setProfessione(professioneDAO.findProfessioniByIdProfessionista(loggedUser.getId()));
+            loggedUser.setRecensioneRicevute(recensioneDao.getRecensioneByIdProfessionista(loggedUser.getId()));
+            loggedUser.setRichiesteRicevute(richiestaDao.findRichiestaByIdProfessionista(loggedUser.getId()));
+            loggedUser.setDisponibilita(disponibilitaDao.findDisponibilitaByIdProfessionista(loggedUser.getId()));
 
 
             List<CardRichiesta> richiesteInAttesa = richiestaDao.getRichiesteByIdProfessionistaAndStato(loggedUser.getId(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
@@ -104,16 +109,13 @@ public class HomeProfessionistaServlet extends HttpServlet {
             request.setAttribute("disponibilitaEccezioni", disponibilitaEccezioni);
             request.setAttribute("richiesteRicevute", richiesteRicevute);
 
-        }catch(SQLException e) {
-            e.printStackTrace();
-            response.sendRedirect(request.getContextPath()+"/errorPage");
-            return;
-        }catch(NessunValoreTrovatoException e){
+        } catch(NessunValoreTrovatoException e){
             e.printStackTrace();
             request.setAttribute("errore", e.getMessage());
             return;
-        }catch(Exception e){
+        } catch(Exception e){
             e.printStackTrace();
+            response.sendRedirect(request.getContextPath()+"/errorPage");
             return;
         }
 

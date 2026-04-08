@@ -97,23 +97,23 @@
 
         <div class="col-md-2 ">
             <div class="card border-none shadow-sm p-3 border-radius-15 action-column">
-                <ul class="nav nav-pills mb-3 flex-column" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
+                <ul class="nav nav-pills flex-column" id="pills-tab" role="tablist">
+                    <li class="nav-item mb-2" role="presentation">
                         <button class="nav-link active" id="pills-requests" data-bs-toggle="pill" data-bs-target="#requests" type="button" role="tab" aria-controls="tab-requests" aria-selected="true">
                             Le mie richieste
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item mb-2" role="presentation">
                         <button class="nav-link" id="pills-availability" data-bs-toggle="pill" data-bs-target="#availability" type="button" role="tab" aria-controls="tab-availability" aria-selected="false">
                             Disponibilità
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item mb-2" role="presentation">
                         <button class="nav-link" id="pills-reviews" data-bs-toggle="pill" data-bs-target="#reviews" type="button" role="tab" aria-controls="tab-reviews" aria-selected="false">
                             Recensioni
                         </button>
                     </li>
-                    <li class="nav-item" role="presentation">
+                    <li class="nav-item mb-2" role="presentation">
                         <button class="nav-link" id="pills-edit" data-bs-toggle="pill" data-bs-target="#edit" type="button" role="tab" aria-controls="tab-edit" aria-selected="false">
                             Modifica profilo
                         </button>
