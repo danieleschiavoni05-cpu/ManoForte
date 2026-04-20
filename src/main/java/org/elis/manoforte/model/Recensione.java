@@ -94,4 +94,11 @@ public class Recensione {
     public void setProfessionista(Utente professionista){
         this.professionista = professionista;
     }
+
+	@Override
+	public String toString() {
+		return "Recensione [id=" + id + ", descrizione=" + descrizione + ", voto=" + voto + ", data=" + data
+				+ ", cliente=" + cliente + ", professionista=" + professionista + "]";
+	}
+    
 }

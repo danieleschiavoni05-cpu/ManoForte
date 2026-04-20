@@ -1,283 +1,329 @@
 <%@page import="java.util.Map"%>
 <%@page import="java.math.BigDecimal"%>
-<%@page import="java.time.LocalTime"%>
 <%@page import="org.elis.manoforte.model.*"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lista Professionisti | ManoForte</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Professionisti | ManoForte</title>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
-    
-    <style>
-        body { background-color: #121212; color: white; min-height: 100vh; }
-        .filter-section { 
-            background: rgba(255,255,255,0.05); 
-            border-radius: 15px; 
-            padding: 25px; 
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-        }
-        .professionista-card { 
-            background: white; 
-            border-radius: 15px; 
-            transition: all 0.3s ease; 
-            border: none; 
-            color: #333; 
-            overflow: hidden;
-        }
-        .professionista-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4); 
-        }
-        .status-dot { 
-            width: 12px; 
-            height: 12px; 
-            border-radius: 50%; 
-            display: inline-block; 
-        }
-        .prof-tag { 
-            background: rgba(39, 154, 241, 0.1); 
-            color: #279AF1;
-            padding: 4px 12px; 
-            border-radius: 20px; 
-            font-size: 0.75rem; 
-            font-weight: bold;
-            margin-right: 5px; 
-        }
-        .form-control, .form-select {
-            border-radius: 8px;
-        }
-    </style>
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/color-var.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/header.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/footer.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/spinning-background.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/home_professionista-style.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/professionista-style.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/modifica_professionista-style.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/css/style-modificaProfilo.css">
+
+<style>
+:root {
+	--primary: #d4af37; /* Oro */
+	--obsidian-base: #121212;
+	--muted-silver: #a0a0a0;
+	--white-text: #ffffff;
+}
+
+body {
+	background-color: var(--obsidian-base);
+	color: var(--white-text);
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Container Filtri */
+.filter-section {
+	background: rgba(255, 255, 255, 0.03);
+	backdrop-filter: blur(15px);
+	border-radius: 20px;
+	padding: 30px;
+	border: 1px solid rgba(212, 175, 55, 0.15);
+	margin-bottom: 50px;
+}
+
+.filter-label {
+	font-size: 0.8rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: var(--primary);
+	margin-bottom: 8px;
+	font-weight: 700;
+}
+
+.form-control, .form-select {
+	background-color: rgba(0, 0, 0, 0.3) !important;
+	border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	color: white !important;
+	height: 45px;
+}
+
+.form-control:focus, .form-select:focus {
+	border-color: var(--primary) !important;
+	box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Card Professionista */
+.rec-card {
+	background: #1a1a1a;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+	border-radius: 18px;
+	transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+	position: relative;
+	overflow: hidden;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+.rec-card:hover {
+	transform: translateY(-12px);
+	border-color: var(--primary);
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.rec-card::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background: linear-gradient(90deg, transparent, var(--primary),
+		transparent);
+}
+
+.badge-profession {
+	background: rgba(212, 175, 55, 0.1) !important;
+	color: var(--primary) !important;
+	border: 1px solid rgba(212, 175, 55, 0.3);
+	font-size: 0.7rem;
+	padding: 5px 10px;
+}
+
+.btn-contact {
+	background: var(--primary);
+	color: #000 !important;
+	border: none;
+	border-radius: 12px;
+	padding: 12px;
+	font-weight: 700;
+	transition: 0.3s;
+}
+
+.btn-contact:hover {
+	background: #f1c40f;
+	transform: scale(1.02);
+	box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.stars {
+	color: var(--primary);
+}
+</style>
 </head>
 
 <body>
-    <jsp:include page="/WEB-INF/includes/Navbar.jsp" />
+	<jsp:include page="/WEB-INF/includes/Navbar.jsp" />
 
-    <div class="container py-5">
-        <div class="text-center mb-5">
-            <h1 class="fw-bold text-white">I Nostri <span style="color: var(--craft-gold);">Professionisti</span></h1>
-            <p class="text-white-50">Trova l'esperto perfetto filtrando per nome, città, voto o prezzo</p>
-        </div>
+	<div class="container py-5">
+		<div class="text-center mb-5">
+			<h1 class="fw-bold">
+				I NOSTRI <span style="color: var(--primary);">PROFESSIONISTI</span>
+			</h1>
+			<p class="text-muted">Esperti verificati pronti ad aiutarti</p>
+		</div>
 
-        <div class="filter-section mb-5 shadow">
-            <div class="row g-3">
-                <div class="col-md-3">
-                    <label class="small text-white-50 fw-bold mb-1">Cerca Nome</label>
-                    <input type="text" id="fNome" class="form-control bg-dark text-white border-secondary" placeholder="Es. Mario Rossi...">
-                </div>
+		<div class="filter-section shadow">
+			<div class="row g-4">
+				<div class="col-md-4 col-lg-2">
+					<label class="filter-label">Nome</label> <input type="text"
+						id="fNome" class="form-control" placeholder="Cerca...">
+				</div>
 
-                <div class="col-md-3">
-                    <label class="small text-white-50 fw-bold mb-1">Città</label>
-                    <select id="fCitta" class="form-select bg-dark text-white border-secondary">
-                        <option value="all">Tutte le città</option>
-                        <% 
+				<div class="col-md-4 col-lg-2">
+					<label class="filter-label">Città</label> <select id="fCitta"
+						class="form-select">
+						<option value="all">Tutte</option>
+						<% 
                         List<Citta> listaCitta = (List<Citta>) request.getAttribute("listaCitta");
                         if(listaCitta != null) {
                             for(Citta c : listaCitta) { 
                         %>
-                            <option value="<%= c.getNome().toLowerCase() %>"><%= c.getNome() %></option>
-                        <% 
-                            }
-                        } 
-                        %>
-                    </select>
-                </div>
+						<option value="<%= c.getNome().toLowerCase() %>"><%= c.getNome() %></option>
+						<% } } %>
+					</select>
+				</div>
 
-                <div class="col-md-3">
-                    <label class="small text-white-50 fw-bold mb-1">Valutazione Minima</label>
-                    <select id="fVoto" class="form-select bg-dark text-white border-secondary">
-                        <option value="0">Tutti i voti</option>
-                        <option value="4">4+ Stelle ⭐</option>
-                        <option value="3">3+ Stelle ⭐</option>
-                        <option value="2">2+ Stelle ⭐</option>
-                    </select>
-                </div>
+				<div class="col-md-4 col-lg-2">
+					<label class="filter-label">Professione</label> <select
+						id="fProfessione" class="form-select">
+						<option value="all">Tutte</option>
+						<% 
+                        List<Professione> tutteLeProf = (List<Professione>) request.getAttribute("listaProfessioni");
+                        if(tutteLeProf != null) {
+                            for(Professione pr : tutteLeProf) { %>
+						<option value="<%= pr.getNome().toLowerCase() %>"><%= pr.getNome() %></option>
+						<% } } %>
+					</select>
+				</div>
 
-                <div class="col-md-3">
-                    <label class="small text-white-50 fw-bold mb-1">Tariffa Max (€/h)</label>
-                    <input type="number" id="fTariffa" class="form-control bg-dark text-white border-secondary" placeholder="Es. 50">
-                </div>
-            </div>
-        </div>
 
-        <div class="row g-4" id="listaContainer">
-            <%
+				<div class="col-md-4 col-lg-2">
+					<label class="filter-label">Valutazione</label> <select id="fVoto"
+						class="form-select">
+						<option value="0">Tutte</option>
+						<option value="4">4+ Stelle</option>
+						<option value="3">3+ Stelle</option>
+					</select>
+				</div>
+
+				<div class="col-md-4 col-lg-2">
+					<label class="filter-label">Prezzo Max</label> <input type="number"
+						id="fTariffa" class="form-control" placeholder="€/h">
+				</div>
+			</div>
+		</div>
+
+		<div class="row g-4" id="listaContainer">
+			<%
                 List<Utente> listaPro = (List<Utente>) request.getAttribute("listaProfessionisti");
-                List<Disponibilita> dispo = (List<Disponibilita>) request.getAttribute("disponibilita");
-                LocalTime ora = LocalTime.now();
-                java.time.DayOfWeek oggi = java.time.LocalDate.now().getDayOfWeek();
                 Map<String, BigDecimal> medie = (Map<String, BigDecimal>) request.getAttribute("mappaMedie");
-                
-                
 
                 if (listaPro != null && !listaPro.isEmpty()) {
                     for (Utente u : listaPro) {
-                        // 1. Logica Disponibilità
-                        boolean isDisponibile = false;
-                        if (dispo != null) {
-                            for (Disponibilita d : dispo) {
-                                if (d.getGiorno_settimana() == oggi && !ora.isBefore(d.getOra_inizio()) && !ora.isAfter(d.getOra_fine())) {
-                                    isDisponibile = true; 
-                                    break;
-                                }
-                            }
-                        }
                         
-                        // 2. Recupero Nome Città da ID
-                        String nomeCittaVisualizzato = "N/D";
-                        if (listaCitta != null) {
+                        // 1. Nome Città
+                        String nomeCitta = "N/D";
+                        if (listaCitta != null && u.getCitta() != null) {
                             for (Citta c : listaCitta) {
                                 if (c.getId().equals(u.getCitta().getId())) {
-                                    nomeCittaVisualizzato = c.getNome();
+                                    nomeCitta = c.getNome();
                                     break;
                                 }
                             }
                         }
 
-                        
-                        // 1. Gestione Tariffa (BigDecimal) - Protezione contro i NULL
-                        java.math.BigDecimal tariffaBD = u.getTariffa();
-                        String tariffaFormattata = "N/D"; // Valore di default
-                        
-                        if (tariffaBD != null) {
-                            try {
-                                java.text.NumberFormat euroFormat = java.text.NumberFormat.getCurrencyInstance(java.util.Locale.ITALY);
-                                tariffaFormattata = euroFormat.format(tariffaBD);
-                            } catch (Exception e) {
-                                tariffaFormattata = tariffaBD.toString() + " €";
-                            }
+                        // 2. Professioni
+                        StringBuilder sbProf = new StringBuilder();
+                        List<Professione> profs = u.getProfessione(); 
+                        if (profs != null) {
+                            for(Professione p : profs) sbProf.append(p.getNome().toLowerCase()).append(" ");
                         }
 
-                        // 2. Gestione Media Voti (dalla Mappa via Email)
-                       
-                        BigDecimal mediaRecuperata = (medie != null) ? medie.get(u.getEmail()) : BigDecimal.ZERO;
-                        BigDecimal votoPro = (mediaRecuperata != null) ? mediaRecuperata : BigDecimal.ZERO;
-                    %>
-
-                    <div class="col-md-6 col-lg-4 pro-item" 
-                         data-nome="<%= u.getNome().toLowerCase() %> <%= u.getCognome().toLowerCase() %>"
-                         data-citta="<%= nomeCittaVisualizzato.toLowerCase() %>"
-                         data-voto="<%= votoPro %>"
-                         data-tariffa="<%= tariffaBD != null ? tariffaBD : 0 %>">
-                        
-                        <div class="rec-card p-4 h-100 shadow-sm" style="background: var(--obsidian-base); border-top: 4px solid var(--primary); border-radius: 15px;">
-                            
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <div>
-                                    <h5 class="fw-bold mb-0" style="color: var(--primary);"><%= u.getNome() %> <%= u.getCognome() %></h5>
-                                    <small style="color: var(--muted-silver);">
-                                        <i class="fa-solid fa-map-pin me-1"></i><%= nomeCittaVisualizzato %>
-                                    </small>
-                                </div>
-                                <div class="text-end">
-                                    <span class="status-dot" style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background-color: <%= isDisponibile ? "#2ecc71" : "#e74c3c" %>"></span>
-                                    <div class="small" style="font-size: 0.7rem; color: var(--light-silver);">
-                                        <%= isDisponibile ? "Online" : "Offline" %>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <span class="stars" style="color: var(--primary);">
-                                    <% for(int i=1; i<=5; i++) { %>
-                                        <i class="<%= (votoPro.compareTo(BigDecimal.valueOf(i))>=0) ? "fa-solid" : "fa-regular" %> fa-star"></i>
-                                    <% } %>
-                                </span>
-                                <span style="color: var(--muted-silver); font-size: 0.85rem; margin-left: 5px;">
-                                    (<%= String.format("%.1f", votoPro) %>)
-                                </span>
-                            </div>
-
-                            <div class="mb-4">
-                                <div class="mb-2">
-                                    <span class="badge" style="background: rgba(212, 175, 55, 0.1); color: var(--primary); border: 1px solid var(--primary); font-size: 0.7rem;">
-                                        PROFESSIONISTA VERIFICATO
-                                    </span>
-                                </div>
-                                <p class="h4 fw-bold mt-2" style="color: var(--white-text);">
-                                    <%= tariffaFormattata %> <small style="font-size: 0.9rem; font-weight: normal; color: var(--muted-silver);">/ora</small>
-                                </p>
-                            </div>
-
-                            <div class="d-grid pt-2">
-                                <% if (isDisponibile) { %>
-                                    <a href="<%=request.getContextPath()%>/richiesta?emailPro=<%= u.getEmail() %>" 
-                                       class="btn fw-bold py-2 shadow-sm" 
-                                       style="background: var(--primary); color: var(--obsidian-base); border-radius: 10px;">
-                                        <i class="fa-regular fa-paper-plane me-2"></i>Invia Richiesta
-                                    </a>
-                                <% } else { %>
-                                    <button class="btn btn-outline-secondary disabled py-2" style="border-radius: 10px; opacity: 0.5; color: var(--muted-silver);">
-                                        <i class="fa-solid fa-clock me-2"></i>Non Disponibile
-                                    </button>
-                                <% } %>
-                            </div>
-                        </div>
-                    </div>
-            <% 
-                    } 
-                } else { 
+                        // 3. Tariffa e Voto
+                        BigDecimal tariffa = u.getTariffa() != null ? u.getTariffa() : BigDecimal.ZERO;
+                        BigDecimal voto = (medie != null && medie.get(u.getEmail()) != null) ? medie.get(u.getEmail()) : BigDecimal.ZERO;
             %>
-                <div class="col-12 text-center py-5">
-                    <i class="fa-solid fa-magnifying-glass fa-3x mb-3 text-white-50"></i>
-                    <h3 class="text-white-50">Nessun professionista trovato</h3>
-                    <p class="text-muted">Prova a cambiare i filtri di ricerca</p>
-                </div>
-            <% } %>
-        </div>
-    </div>
 
-    <jsp:include page="/WEB-INF/includes/Footer.jsp" />
+			<div class="col-md-6 col-lg-4 pro-item"
+				data-nome="<%= u.getNome().toLowerCase() %> <%= u.getCognome().toLowerCase() %>"
+				data-citta="<%= nomeCitta.toLowerCase() %>" data-voto="<%= voto %>"
+				data-tariffa="<%= tariffa %>"
+				data-professioni="<%= sbProf.toString().trim() %>"
+				data-giorni="lunedì martedì mercoledì giovedì venerdì">
+				<div class="rec-card p-4">
+					<div class="d-flex justify-content-between mb-3">
+						<div>
+							<h5 class="fw-bold mb-0" style="color: var(--primary);"><%= u.getNome() %>
+								<%= u.getCognome() %></h5>
+							<small class="text-muted"><i
+								class="fa-solid fa-map-pin me-1"></i><%= nomeCitta %></small>
+						</div>
+						<span class="badge bg-dark border border-secondary text-primary"
+							style="font-size: 0.6rem; height: fit-content;">PRO</span>
+					</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
+					<div class="mb-3">
+						<% if (profs != null) { for(Professione p : profs) { %>
+						<span class="badge badge-profession rounded-pill me-1"><%= p.getNome() %></span>
+						<% } } %>
+					</div>
+
+					<div class="mb-3">
+						<span class="stars"> <% for(int i=1; i<=5; i++) { %> <i
+							class="<%= (voto.doubleValue() >= i) ? "fa-solid" : "fa-regular" %> fa-star"></i>
+							<% } %>
+						</span> <small class="ms-2 text-muted">(<%= String.format("%.1f", voto) %>)
+						</small>
+					</div>
+
+					<div class="mt-auto">
+						<p class="h4 fw-bold mb-3"><%= tariffa %>
+							€ <small class="fs-6 fw-normal text-muted">/ora</small>
+						</p>
+						<div class="d-grid">
+							<a
+								href="<%=request.getContextPath()%>/richiesta?emailPro=<%= u.getEmail() %>"
+								class="btn btn-contact"> <i
+								class="fa-regular fa-paper-plane me-2"></i>Invia Richiesta
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<% } } else { %>
+			<div class="col-12 text-center py-5">
+				<h3 class="text-muted">Nessun professionista disponibile</h3>
+			</div>
+			<% } %>
+		</div>
+	</div>
+
+	<jsp:include page="/WEB-INF/includes/Footer.jsp" />
+
+	<script>
         document.addEventListener('DOMContentLoaded', () => {
             const fNome = document.getElementById('fNome');
+            const fProf = document.getElementById('fProfessione');
+            const fGiorno = document.getElementById('fGiorno');
             const fCitta = document.getElementById('fCitta');
             const fVoto = document.getElementById('fVoto');
             const fTariffa = document.getElementById('fTariffa');
             const items = document.querySelectorAll('.pro-item');
 
             const filterEngine = () => {
-                const queryNome = fNome.value.toLowerCase().trim();
-                const queryCitta = fCitta.value.toLowerCase();
-                const queryVoto = parseFloat(fVoto.value);
-                const queryTariffa = parseFloat(fTariffa.value) || Infinity;
+                const valNome = fNome.value.toLowerCase();
+                const valProf = fProf.value;
+                const valGiorno = fGiorno.value;
+                const valCitta = fCitta.value;
+                const valVoto = parseFloat(fVoto.value);
+                const valTariffa = parseFloat(fTariffa.value) || Infinity;
 
                 items.forEach(item => {
-                    const dataNome = item.dataset.nome;
-                    const dataCitta = item.dataset.citta;
-                    const dataVoto = parseFloat(item.dataset.voto);
-                    const dataTariffa = parseFloat(item.dataset.tariffa);
+                    const d = item.dataset;
+                    const match = d.nome.includes(valNome) &&
+                                  (valProf === 'all' || d.professioni.includes(valProf)) &&
+                                  (valGiorno === 'all' || d.giorni.includes(valGiorno)) &&
+                                  (valCitta === 'all' || d.citta === valCitta) &&
+                                  parseFloat(d.voto) >= valVoto &&
+                                  parseFloat(d.tariffa) <= valTariffa;
 
-                    const matchNome = dataNome.includes(queryNome);
-                    const matchCitta = (queryCitta === 'all' || dataCitta === queryCitta);
-                    const matchVoto = dataVoto >= queryVoto;
-                    const matchTariffa = dataTariffa <= queryTariffa;
-
-                    if (matchNome && matchCitta && matchVoto && matchTariffa) {
-                        item.classList.remove('d-none');
-                    } else {
-                        item.classList.add('d-none');
-                    }
+                    item.style.display = match ? "block" : "none";
                 });
             };
 
-            // Eventi per il filtraggio in tempo reale
-            fNome.addEventListener('input', filterEngine);
-            fCitta.addEventListener('change', filterEngine);
-            fVoto.addEventListener('change', filterEngine);
-            fTariffa.addEventListener('input', filterEngine);
+            [fNome, fProf, fGiorno, fCitta, fVoto, fTariffa].forEach(el => {
+                el.addEventListener('input', filterEngine);
+                el.addEventListener('change', filterEngine);
+            });
         });
     </script>
 </body>

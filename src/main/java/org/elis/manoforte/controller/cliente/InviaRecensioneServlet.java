@@ -72,10 +72,11 @@ public class InviaRecensioneServlet extends HttpServlet {
 		        long idRichiesta = Long.parseLong(request.getParameter("idRichiesta"));
 		        String descrizione = request.getParameter("descrizione");
 		        int voto = Integer.parseInt(request.getParameter("voto"));
-		        // Se possibile, genera la data internamente invece di riceverla dal form
 		        LocalDate data = LocalDate.now(); 
 		        
-		        long idProfessionista = Long.parseLong(request.getParameter("id_professionista"));
+		        System.out.println("DEBUG: ID=" + idRichiesta + " Voto=" + voto);
+		        
+		        
 		        Utente utenteSessione = (Utente) request.getSession().getAttribute("utenteLoggato");
 		        String emailBase = utenteSessione.getEmail();
 		        Long idBase=utenteDao.findIdByEmail(emailBase);
@@ -88,7 +89,8 @@ public class InviaRecensioneServlet extends HttpServlet {
 		            StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta()) &&
 		            richiesta.getCliente().getId().equals(idBase)) {
 
-		            Recensione rec = new Recensione(idRichiesta, descrizione, new BigDecimal(voto), data, richiesta.getCliente(), richiesta.getProfessionista());
+		            Recensione rec = new Recensione(null, descrizione, new BigDecimal(voto), data, richiesta.getCliente(), richiesta.getProfessionista());
+		            System.out.println("DEBUG: rec:" +rec);
 		            recensioneDao.inserisciRecensione(rec);
 		            session.setAttribute("messaggioSuccesso", "Recensione inviata con successo!");
 		            
@@ -102,6 +104,6 @@ public class InviaRecensioneServlet extends HttpServlet {
 		        e.printStackTrace();
 		    }
 
-		    response.sendRedirect(request.getContextPath() + "cliente/homeBase");
+		    response.sendRedirect(request.getContextPath() + "/homeBase");
 		}
 	}

@@ -81,25 +81,26 @@ public class RichiestaServlet extends HttpServlet {
 		System.out.println("Faccio la richiesta verso: [" + emailProfessionista + "]");
         
 		
-        try {
-            // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
-            Utente risultato = utenteDao.getUtentebyEmail(emailProfessionista);
-            List<Disponibilita> disponibilitaUtente= disponibilitaDao.findDisponibilitaByEmailProfessionista(emailProfessionista);
-            
-            System.out.println("Faccio la richiesta verso: [" + risultato.getNome() + "]");
-            
-            request.setAttribute("nomeProfessione", emailProfessionista);
-            request.setAttribute("listaProfessionisti", risultato);
-            request.setAttribute("DisponibiltaUtente", disponibilitaUtente);
-            request.setAttribute("utenteLoggato", utenteSessione);
-            
+		try {
+		    // 1. Recupero i dati dal DB
+		    Utente risultato = utenteDao.getUtentebyEmail(emailProfessionista);
+		    List<Disponibilita> disponibilitaUtente = disponibilitaDao.findDisponibilitaByEmailProfessionista(emailProfessionista);
+		    
+		    // DEBUG: Controlla in console se i dati arrivano davvero
+		    System.out.println("Professionista trovato: " + (risultato != null ? risultato.getNome() : "NULL"));
+		    System.out.println("Disponibilità trovate: " + (disponibilitaUtente != null ? disponibilitaUtente.size() : "0"));
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("errore", "Impossibile recuperare i professionisti.");
-        }
+		    // 2. SETTO GLI ATTRIBUTI (Usa questi nomi esatti per far funzionare la JSP)
+		    request.setAttribute("professionista", risultato); 
+		    request.setAttribute("listaDisponibilita", disponibilitaUtente);
+		    request.setAttribute("utenteLoggato", utenteSessione); // Assicurati che utenteSessione non sia null
 
-        request.getRequestDispatcher("/WEB-INF/richiesta.jsp").forward(request, response);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    request.setAttribute("errore", "Impossibile recuperare i dati.");
+		}
+
+        request.getRequestDispatcher("/WEB-INF/cliente/richiesta.jsp").forward(request, response);
     }
 }
 		

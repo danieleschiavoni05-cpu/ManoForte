@@ -5,6 +5,7 @@
 <% List<Richiesta> richiesteInAttesa = (List<Richiesta>) request.getAttribute("richiesteInAttesa");%>
 <% List<Richiesta> richiesteInCorso = (List<Richiesta>) request.getAttribute("richiesteInCorso");%>
 <% List<Richiesta> richiesteCompletate = (List<Richiesta>) request.getAttribute("richiesteCompletate");%>
+<% List<Richiesta> richiesteAnnullate = (List<Richiesta>) request.getAttribute("richiesteAnnullate");%>
 
 <nav class="mb-4">
     <div class="nav nav-pills" id="nav-request" role="tablist">
@@ -16,6 +17,9 @@
         </a>
         <a class="nav-item nav-link" id="nav-completed-tab" data-bs-toggle="tab" href="#nav-completed" role="tab" aria-controls="nav-completed" aria-selected="false">
             Completate
+        </a>
+        <a class="nav-item nav-link" id="nav-canceled-tab" data-bs-toggle="tab" href="#nav-canceled" role="tab" aria-controls="nav-canceled" aria-selected="false">
+            Annullate
         </a>
     </div>
 </nav>
@@ -66,23 +70,40 @@
             <%}%>
         </div>
     </div>
+    
+        <div class="tab-pane fade" id="nav-canceled" role="tabpanel" aria-labelledby="nav-canceled-tab">
+        <div class="row section-title running mb-3">
+            <h2>Richieste Annullate</h2>
+        </div>
+        <div class="row row-cols-12 g-4">
+            <%if(richiesteAnnullate!=null && !richiesteAnnullate.isEmpty()){
+                for(Richiesta r:richiesteAnnullate){ %>
+                    <div class="col"><%=createCardRequest(r)%></div>
+                <%}%>
+            <%}else{%>
+                <p class="ms-3" style="color: var(--light-silver);" id="noCanceled">Nessuna richiesta annullata.</p>
+            <%}%>
+        </div>
+    </div>
 
 </div>
 
 <div class="modal fade" id="cancelRequestModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title text-danger">Annulla Richiesta</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Sei sicuro di voler annullare questa richiesta? Il professionista non potrÃ  piÃ¹ vederla o accettarla.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-                <a id="confirmCancelBtn" href="#" class="btn btn-danger">Conferma Annullamento</a>
-            </div>
+            <form action="<%=request.getContextPath()%>/eliminaRichiesta" method="POST"> <div class="modal-header">
+                    <h5 class="modal-title text-danger">Annulla Richiesta</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Sei sicuro di voler annullare questa richiesta? Il professionista non potrà più vederla.
+                    <input type="hidden" name="id_richiesta" id="id_eliminare">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="submit" class="btn btn-danger">Conferma Annullamento</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -90,13 +111,13 @@
 <div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form action="SalvaRecensioneServlet" method="POST">
+            <form action="<%=request.getContextPath()%>/InviaRecensione" method="POST">
                 <div class="modal-header">
                     <h5 class="modal-title">Raccontaci la tua esperienza</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" name="richiestaId" id="modalRichiestaId">
+                    <input type="hidden" name="idRichiesta" id="modalRichiestaId">
 
                     <div class="mb-3 text-center">
                         <label class="form-label d-block">Voto</label>
@@ -111,7 +132,7 @@
 
                     <div class="mb-3">
                         <label class="form-label">La tua recensione</label>
-                        <textarea name="descrizione" class="form-control" rows="4" placeholder="Com'Ã¨ andato il lavoro?" required></textarea>
+                        <textarea name="descrizione" class="form-control" rows="4" placeholder="Com'e' andato il lavoro?" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -181,6 +202,7 @@
             case IN_ATTESA_DI_CONFERMA: badgeClass = "bg-warning text-dark"; break;
             case IN_CORSO: badgeClass = "bg-info text-dark"; break;
             case COMPLETA: badgeClass = "bg-success text-white"; break;
+            case ANNULLATA: badgeClass = "bg-danger text-white"; break;
             default: badgeClass = "bg-secondary text-white";
         }
 
@@ -188,7 +210,7 @@
 
         if (r.getStatoRichiesta().name().equals("IN_ATTESA_DI_CONFERMA")) {
             actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
-                    "<button class='btn btn-outline-danger btn-sm' data-bs-toggle='modal' data-bs-target='#cancelRequestModal' onclick='setCancelRequestId(" + r.getId() + ")'>" +
+                    "<button class='btn btn-outline-danger btn-sm' data-bs-toggle='modal' data-bs-target='#cancelRequestModal' onclick='setDeleteId(" + r.getId() + ")'>" +
                     "<i class='fas fa-times me-1'></i> Annulla" +
                     "</button>" +
                     "</div>";

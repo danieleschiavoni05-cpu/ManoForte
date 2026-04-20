@@ -24,7 +24,7 @@
       <div class="modal-header modal-border">
         <h5 class="modal-title">Conferma Eliminazione</h5>
       </div>
-      <form method="post" action="eliminaRecensione">
+      <form method="post" action="<%=request.getContextPath()%>/eliminazionerecensione">
         <input type="hidden" id="id_eliminare" name="id_recensione" value="">
         <div class="modal-body modal-border">
           Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non &egrave; reversibile.

@@ -44,7 +44,7 @@ public class EliminazioneRecensioneServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	    // 1. Recupero l'id della recensione dalla JSP
-	    String idParam = request.getParameter("idRecensione");
+	    String idParam = request.getParameter("id_recensione");
 
 	    if (idParam != null && !idParam.isEmpty()) {
 	        try {
@@ -66,7 +66,7 @@ public class EliminazioneRecensioneServlet extends HttpServlet {
 	    }
 
 	    // 5. Ricarico la pagina delle recensioni
-	    response.sendRedirect(request.getContextPath() + "/RecensioniProfessionisti");
+	    response.sendRedirect(request.getContextPath() + "/homeBase#reviews");
 	}
 
 }

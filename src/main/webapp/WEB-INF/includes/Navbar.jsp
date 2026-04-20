@@ -16,10 +16,11 @@
                 <%if(user!=null){%>
                     <li><a href="<%=request.getContextPath()%>/<%=Utility.getUserHomePage(user)%>">Il mio profilo</a></li>
                     <%if(ruolo == Ruolo.UTENTE_BASE){%>
-                        <li><a href="<%=request.getContextPath()%>/RecensioniProfessionisti">Visualizza recensioni </a></li>
-                        <li><a href="<%=request.getContextPath()%>/lista_professioni">Effettua una richiesta</a></li>
-                        <li><a href="<%=request.getContextPath()%>/ModificaProfilo">Modifica Profilo</a></li>
-                        <li><a href="<%=request.getContextPath()%>/homeBase">Ritorna alla tua home</a></li>
+                        
+                        
+                        <li><a href="<%=request.getContextPath()%>/professionisti">Effettua una richiesta</a></li>
+                       
+                       
                     <%}else if(ruolo == Ruolo.PROFESSIONISTA){%>
                         <li><a href="<%=request.getContextPath()%>/homeprofessionista#requests">I miei lavori</a></li>
                         <li><a href="<%=request.getContextPath()%>/homeprofessionista#reviews">Le mie recensioni</a></li>

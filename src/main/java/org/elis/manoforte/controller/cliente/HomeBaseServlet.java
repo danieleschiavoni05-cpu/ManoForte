@@ -66,6 +66,7 @@ public class HomeBaseServlet extends HttpServlet {
 			List<Richiesta> richiesteInAttesa = richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.IN_ATTESA_DI_CONFERMA);
 			List<Richiesta> richiesteInCorso = richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.IN_CORSO);
 	        List<Richiesta> richiesteCompletate= richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.COMPLETA);
+	        List<Richiesta> richiesteAnnullate= richiestaDao.getRichiesteByIdClienteAndStato(loggedUser.getId(), StatoRichiesta.ANNULLATA);
 
 			List<Recensione> recensioni = recensioneDao.getRecensioneByIdCliente(loggedUser.getId());
 
@@ -75,6 +76,7 @@ public class HomeBaseServlet extends HttpServlet {
 			request.setAttribute("richiesteInAttesa", richiesteInAttesa);
 	        request.setAttribute("richiesteInCorso", richiesteInCorso);
 			request.setAttribute("richiesteCompletate", richiesteCompletate);
+			request.setAttribute("richiesteAnnullate", richiesteAnnullate);
 			// Attributi per la modifica del profilo
 			request.setAttribute("citta", cittaDao.getAllCitta());
 			// Attributi per le mie recensioni
