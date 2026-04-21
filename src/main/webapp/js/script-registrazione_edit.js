@@ -100,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 					            let formData = new URLSearchParams(temp);
 
 					            let path = executeFetch("ModificaProfilo", formData);
+								console.log(path);
 					        })
 				}
 });
