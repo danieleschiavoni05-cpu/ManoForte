@@ -5,6 +5,7 @@ import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.exception.DatiErratiException;
 import org.elis.manoforte.model.*;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.ResultSet;
@@ -14,6 +15,7 @@ import java.util.regex.Pattern;
 
 public class Utility {
 
+    public static final String DEFAULT_PROPIC_PATH = "https://images.unsplash.com/photo-1772371272218-d39eca1efdeb?q=80&w=880&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
     private static final String patternEmail = "^(.+)@(.+)$";
     private static final String patternCodiceFiscale = "^[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-ABCDEHLMPRST]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$";
     private static final String patternPIVA = "^[0-9]{11}$";
@@ -198,14 +200,13 @@ public class Utility {
         nuovo.setCognome(cognome);
         nuovo.setDataNascita(dataNascita);
         nuovo.setCodiceFiscale(codice_fiscale);
+
         
         // Evita null sul database
 
         return nuovo;
     }
-    
-    
-    
+
     public static Utente checkInputEditUtenteBase(Utente utenteLoggato, String nome, String cognome, LocalDate dataNascita,
             String codiceFiscale, Citta citta,
             String nuovaPassword, String password, String confermaPassword) throws Exception {
@@ -247,6 +248,13 @@ public class Utility {
                 .reduce(BigDecimal.ZERO, (a,b)->a.add(b))
                 .divide(BigDecimal.valueOf(recensioni.size()), RoundingMode.DOWN);
     }
-    
+
+    public static File getFile(String path){
+        if(path==null || path.isEmpty()){
+            throw new RuntimeException();
+        }
+
+        return new File(path);
+    }
     
 }

@@ -27,3 +27,61 @@
 .disable-effect:hover {
     background-color: #424242;
 }
+
+.custom-file-input {
+    color: #f8fafc !important;
+}
+
+.custom-file-input::file-selector-button {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    margin-right: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.custom-file-input::file-selector-button:hover {
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+}
+
+
+.profile-header-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+}
+
+.profile-image-container {
+    flex-shrink: 0;
+}
+
+.welcome-text-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+}
+
+.welcome-row-custom {
+    padding: 80px 0 10px 0;
+}
+
+@media (max-width: 768px) {
+    .profile-header-container {
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+    .welcome-text-container {
+        text-align: center;
+    }
+    .button-row.with-nav {
+        justify-content: center;
+    }
+}

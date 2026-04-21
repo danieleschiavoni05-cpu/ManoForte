@@ -3,6 +3,5 @@ function setDeleteId(id) {
 }
 
 function prepareReviewModal(id) {
-	console.log(id);
 	document.getElementById("modalRichiestaId").value=id;
 }

@@ -1,5 +1,6 @@
 package org.elis.manoforte.controller.professionista;
 
+import jakarta.persistence.NoResultException;
 import jakarta.servlet.ServletException;
 
 import java.io.*;
@@ -15,6 +16,7 @@ import jakarta.servlet.annotation.*;
 import jakarta.servlet.RequestDispatcher;
 import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
+import org.elis.manoforte.exception.NoImageException;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.Utility;
 import org.hibernate.Hibernate;
@@ -29,6 +31,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
     private VeicoloDAO veicoloDao;
     private UtenteDAO utenteDao;
     private ProfessioneDAO professioneDAO;
+    private ImmagineDAO immagineDAO;
 
     public HomeProfessionistaServlet() {
         super();
@@ -43,6 +46,7 @@ public class HomeProfessionistaServlet extends HttpServlet {
         disponibilitaDao = DaoFactory.getInstance().getDisponibilitaDAO();
         utenteDao = DaoFactory.getInstance().getUtenteDAO();
         professioneDAO = DaoFactory.getInstance().getProfessioneDAO();
+        immagineDAO = DaoFactory.getInstance().getImmagineDAO();
     }
 
     /**
@@ -91,6 +95,13 @@ public class HomeProfessionistaServlet extends HttpServlet {
             Map<LocalDate, List<Richiesta>> richiesteRicevute = richieste.stream()
                     .collect(Collectors.groupingBy(r -> r.getData()));
 
+            Immagine img;
+            try{
+                img = immagineDAO.getImmagineByIdUtente(loggedUser.getId());
+            }catch (NoImageException e){
+                img = null;
+            }
+
             // Dati utente loggato con attributi inizializzati
             request.setAttribute("utenteLoggato", loggedUser);
             // Attibuti per le mie richieste
@@ -108,6 +119,8 @@ public class HomeProfessionistaServlet extends HttpServlet {
             request.setAttribute("disponibilitaRicorrenti", disponibilitaRicorsive);
             request.setAttribute("disponibilitaEccezioni", disponibilitaEccezioni);
             request.setAttribute("richiesteRicevute", richiesteRicevute);
+            // Immagine profilo
+            request.setAttribute("propic", img==null?null:img.getPercorso());
 
         } catch(NessunValoreTrovatoException e){
             e.printStackTrace();

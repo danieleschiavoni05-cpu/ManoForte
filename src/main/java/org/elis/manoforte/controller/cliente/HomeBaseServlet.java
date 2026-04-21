@@ -15,6 +15,7 @@ import java.util.List;
 import jakarta.servlet.http.HttpSession;
 import org.elis.manoforte.dao.definition.*;
 import org.elis.manoforte.exception.NessunValoreTrovatoException;
+import org.elis.manoforte.exception.NoImageException;
 import org.elis.manoforte.model.*;
 import org.elis.manoforte.utility.Utility;
 
@@ -29,6 +30,7 @@ public class HomeBaseServlet extends HttpServlet {
 	private CittaDAO cittaDao;
 	private RichiestaDAO richiestaDao;
 	private RecensioneDAO recensioneDao;
+	private ImmagineDAO immagineDAO;
 
 	@Override
 	public void init() throws ServletException{
@@ -36,6 +38,7 @@ public class HomeBaseServlet extends HttpServlet {
 		cittaDao = DaoFactory.getInstance().getCittaDAO();
 		richiestaDao = DaoFactory.getInstance().getRichiestaDAO();
 		recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+		immagineDAO = DaoFactory.getInstance().getImmagineDAO();
 	}
        
     /**
@@ -70,6 +73,13 @@ public class HomeBaseServlet extends HttpServlet {
 
 			List<Recensione> recensioni = recensioneDao.getRecensioneByIdCliente(loggedUser.getId());
 
+			Immagine img;
+			try{
+				img = immagineDAO.getImmagineByIdUtente(loggedUser.getId());
+			}catch (NoImageException e){
+				img = null;
+			}
+
 			// Dati utente loggato con attributi inizializzati
 			request.setAttribute("loggedUser", loggedUser);
 			// Attibuti per le mie richieste
@@ -81,6 +91,8 @@ public class HomeBaseServlet extends HttpServlet {
 			request.setAttribute("citta", cittaDao.getAllCitta());
 			// Attributi per le mie recensioni
 			request.setAttribute("recensioni", recensioni);
+			// Immagine profilo
+			request.setAttribute("propic", img==null?null:img.getPercorso());
 
 	    }catch(SQLException e){
 			e.printStackTrace();
@@ -95,7 +107,7 @@ public class HomeBaseServlet extends HttpServlet {
 			return;
 		}
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/cliente/homeBaseNew.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("WEB-INF/cliente/homeBase.jsp");
 		dispatcher.forward(request, response);
 	}
 

@@ -18,6 +18,7 @@ public class JPADaoFactory extends DaoFactory {
     private final JPAVeicoloDao veicoloDao;
     private final JPARecensioneDao recensioneDao;
     private final JPARichiestaDao richiestaDao;
+    private final JPAImmagineDao immagineDao;
 
     public JPADaoFactory() {
         Map<String,String> properties = new HashMap<>();
@@ -37,6 +38,7 @@ public class JPADaoFactory extends DaoFactory {
         this.veicoloDao = new JPAVeicoloDao(emf);
         this.recensioneDao = new JPARecensioneDao(emf);
         this.richiestaDao = new JPARichiestaDao(emf);
+        this.immagineDao = new JPAImmagineDao(emf);
     }
 
 //    @Override
@@ -51,7 +53,7 @@ public class JPADaoFactory extends DaoFactory {
 
     @Override
     public ImmagineDAO getImmagineDAO() {
-        return null;
+        return immagineDao;
     }
 
     @Override

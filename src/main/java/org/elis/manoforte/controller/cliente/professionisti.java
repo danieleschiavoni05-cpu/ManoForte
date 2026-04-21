@@ -13,17 +13,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.elis.manoforte.dao.definition.DaoFactory;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
-import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.dao.definition.UtenteDAO;
-import org.elis.manoforte.dao.definition.CittaDAO; // Assicurati che esista
+import org.elis.manoforte.dao.definition.*;
 
 
-import org.elis.manoforte.model.Professione;
-import org.elis.manoforte.model.Recensione;
-import org.elis.manoforte.model.Utente;
-import org.elis.manoforte.model.Citta;
+import org.elis.manoforte.exception.NoImageException;
+import org.elis.manoforte.model.*;
 
 import org.elis.manoforte.utility.Utility;
 
@@ -35,6 +29,7 @@ public class professionisti extends HttpServlet {
     private ProfessioneDAO professioneDao;
     private RecensioneDAO recensioneDao;
     private CittaDAO cittaDao;
+    private ImmagineDAO immagineDao;
    
 
     @Override
@@ -44,7 +39,7 @@ public class professionisti extends HttpServlet {
         professioneDao = factory.getProfessioneDAO();
         recensioneDao = factory.getRecensioneDAO();
         cittaDao = factory.getCittaDAO();
-        
+        immagineDao = factory.getImmagineDAO();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -55,18 +50,26 @@ public class professionisti extends HttpServlet {
             List<Professione> tutteLeProfessioni = professioneDao.getAllProfessioni();
             List<Citta> tutteLeCitta = cittaDao.getAllCitta();
             Map<String, BigDecimal> mappaMedie = new HashMap<>();
+            Map<Long, String> propics = new HashMap<>();
 
             for (Utente p : professionisti) {
                 String emailPro = p.getEmail();
                 long idPro = utenteDao.findIdByEmail(emailPro);
-                
-    
+
+                Immagine propic;
+                try{
+                    propic = immagineDao.getImmagineByIdUtente(p.getId());
+                }catch(NoImageException e){
+                    propic = null;
+                }
+
                 List<Professione> professioniDiQuestoUtente = professioneDao.findProfessioniByIdProfessionista(idPro);
                 p.setProfessione(professioniDiQuestoUtente); 
                 // -----------------------------------------------------------------
 
                 List<Recensione> recensioni = recensioneDao.findByIdProfessionista(idPro);
                 mappaMedie.put(emailPro, Utility.calcolaMedia(recensioni));
+                propics.put(idPro, propic==null?null:propic.getPercorso());
             }
 
             request.setAttribute("nomeProfessione", nomeProfessione);
@@ -74,7 +77,7 @@ public class professionisti extends HttpServlet {
             request.setAttribute("listaProfessioni", tutteLeProfessioni); 
             request.setAttribute("listaCitta", tutteLeCitta);
             request.setAttribute("mappaMedie", mappaMedie);
-
+            request.setAttribute("propics", propics);
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("errore", "Errore nel caricamento dei dati.");

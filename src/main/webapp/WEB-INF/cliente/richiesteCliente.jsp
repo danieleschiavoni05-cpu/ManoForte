@@ -96,7 +96,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Sei sicuro di voler annullare questa richiesta? Il professionista non potrà più vederla.
+                    Sei sicuro di voler annullare questa richiesta? Il professionista non potrï¿½ piï¿½ vederla.
                     <input type="hidden" name="id_richiesta" id="id_eliminare">
                 </div>
                 <div class="modal-footer">
@@ -143,53 +143,6 @@
         </div>
     </div>
 </div>
-
-<%--<%!
-    public String createCardRequest(Richiesta r) {
-        String professionistaNome = (r.getProfessionista() != null) ? r.getProfessionista().getNome() + " " + r.getProfessionista().getCognome() : "Non assegnato";
-        String badgeClass = "";
-        String statoText = r.getStatoRichiesta().toString().replace("_", " ");
-
-        switch (r.getStatoRichiesta()) {
-            case IN_ATTESA_DI_CONFERMA:
-                badgeClass = "bg-warning text-dark";
-                break;
-            case IN_CORSO:
-                badgeClass = "bg-info text-dark";
-                break;
-            case COMPLETA:
-                badgeClass = "bg-success text-white";
-                break;
-            default:
-                badgeClass = "bg-secondary text-white";
-        }
-
-        return "<div class='detail-card h-100' id='richiesta-" + r.getId() + "'>" +
-                    "<div class='d-flex justify-content-between align-items-start'>" +
-                        "<div>" +
-                            "<div class='detail-label'>Professionista</div>" +
-                            "<div class='detail-value'>" + professionistaNome + "</div>" +
-                        "</div>" +
-                        "<span class='badge " + badgeClass + "'>" + statoText + "</span>" +
-                    "</div>" +
-
-                    "<div class='detail-group mt-3'>" +
-                        "<div class='detail-label'>Data e Ora</div>" +
-                        "<div class='detail-value'><i class='far fa-calendar-alt me-2'></i>" + r.getData() + " | " + r.getOra_inizio() + " - " + r.getOra_fine() + "</div>" +
-                    "</div>" +
-
-                    "<div class='detail-group'>" +
-                        "<div class='detail-label'>Indirizzo</div>" +
-                        "<div class='detail-value'><i class='fas fa-map-marker-alt me-2'></i>" + r.getIndirizzo() + "</div>" +
-                    "</div>" +
-
-                    "<div class='description-box'>" +
-                        "<div class='detail-label'>Descrizione richiesta</div>" +
-                        "<p class='mb-0'>" + r.getDescrizione() + "</p>" +
-                    "</div>" +
-               "</div>";
-    }
-%>--%>
 
 <%!
     public String createCardRequest(Richiesta r) {

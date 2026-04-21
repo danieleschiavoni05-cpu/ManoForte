@@ -1,4 +1,4 @@
-<%@page import="java.util.List"%>
+<%@ page import="org.elis.manoforte.utility.Utility" %>
 <%@ page import="org.elis.manoforte.model.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
@@ -25,8 +25,6 @@
 
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/header.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/footer.css">
-
-
 </head>
 <body class="rotation">
 
@@ -46,27 +44,41 @@
 
 
 <% Utente utente = (Utente) request.getAttribute("utenteLoggato");%>
+<% String propicHome = (String) request.getAttribute("propic");%>
 
 <%@include file="/WEB-INF/includes/Navbar.jsp"%>
 
 <div class="container container-home">
-    <div class="row welcome-row">
-        <div class="col-12 welcome-text">
-            <h2>Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
-            <p>Cosa vuoi fare oggi?</p>
+
+    <div class="row welcome-row-custom">
+        <div class="col-12 d-flex justify-content-between align-items-end flex-wrap gap-3">
+
+            <div class="profile-header-container">
+                <%if(propicHome==null){%>
+                    <img id="homePropic" src="<%=Utility.DEFAULT_PROPIC_PATH%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+                <%}else{%>
+                    <img id="homePropic" src="getImmagine?path=<%=propicHome%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+                <%}%>
+                <div class="welcome-text-container">
+                    <h2 class="mb-1 display-6 fw-bold" style="color: var(--craft-gold); font-family: 'Poppins', sans-serif;">Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
+                    <p class="mb-0 fs-5" style="color: #cbd5e1;">Cosa vuoi fare oggi?</p>
+                </div>
+            </div>
+
+            <div class="button-row with-nav">
+                <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+                    <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+                    <label class="form-check-label ms-2" for="disableEffect">
+                        Effettis
+                    </label>
+                </div>
+            </div>
+
         </div>
     </div>
 
-    <div class="button-row with-nav">
-        <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
-            <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
-            <label class="form-check-label ms-2" for="disableEffect">
-                Effettis
-            </label>
-        </div>
-    </div>
 
-    <div class="row mt-2 mb-4">
+    <div class="row mt-3 mb-4">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <hr style="border-color: white; border-width: 1px; align-self: center">
@@ -90,7 +102,7 @@
                     <%@include file="/WEB-INF/professionista/homeTab/recensioniProfessionista.jsp"%>
                 </div>
                 <div class="tab-pane fade" id="propic" role="tabpanel" aria-labelledby="pills-propic" tabindex="0">
-                    <%--<%@include file="/WEB-INF/professionista/recensioniProfessionista.jsp"%>--%>
+                    <%@include file="/WEB-INF/modificaPropic.jsp"%>
                 </div>
             </div>
         </div>
@@ -160,9 +172,7 @@
     }
 
     window.addEventListener('DOMContentLoaded', changeTab);
-
     window.addEventListener('hashchange', changeTab);
-
 </script>
 
 </body>

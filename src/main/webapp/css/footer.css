@@ -5,7 +5,7 @@
     font-family: sans-serif;
     margin-top: 60px;
     border-top: 1px solid var(--steel-variant);
-    width: 98%;
+    width: 100%;
 }
 .footer-content {
     display: flex;

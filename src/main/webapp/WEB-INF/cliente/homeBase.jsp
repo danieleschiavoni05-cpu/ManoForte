@@ -1,11 +1,13 @@
 <%@page import="org.elis.manoforte.model.StatoRichiesta"%>
 <%@page import="org.elis.manoforte.model.Richiesta"%>
+<%@ page import="org.elis.manoforte.utility.Utility" %>
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@page import="org.elis.manoforte.model.Utente"%>
 
   <%Utente utente = (Utente) session.getAttribute("utenteLoggato");%>
 
+<% String propicHome = (String) request.getAttribute("propic");%>
   <%
     Cookie effect = null;
     Cookie[] cookies = request.getCookies();
@@ -52,19 +54,29 @@
       <%session.removeAttribute("messaggioSuccesso"); %>
     <%}%>
 
-    <div class="row welcome-row">
-      <div class="col-12 welcome-text center">
-        <h2>Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
-        <p>Gestisci le tue richieste e trova i migliori professionisti.</p>
-      </div>
-    </div>
+    <div class="row welcome-row-custom">
+      <div class="col-12 d-flex justify-content-between align-items-end flex-wrap gap-3">
+        <div class="profile-header-container">
+          <div class="profile-image-container">
+            <%if(propicHome==null){%>
+            <img id="homePropic" src="<%=Utility.DEFAULT_PROPIC_PATH%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+            <%}else{%>
+            <img id="homePropic" src="getImmagine?path=<%=propicHome%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+            <%}%></div>
+          <div class="welcome-text-container">
+            <h2 class="mb-1 display-6 fw-bold" style="color: var(--craft-gold); font-family: 'Poppins', sans-serif;">Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
+            <p class="mb-0 fs-5" style="color: #cbd5e1;">Gestisci le tue richieste e trova i migliori professionisti.</p>
+          </div>
+        </div>
 
-    <div class="button-row with-nav">
-      <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
-        <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
-        <label class="form-check-label ms-2" for="disableEffect">
-          Effettis
-        </label>
+        <div class="button-row with-nav">
+          <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+            <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+            <label class="form-check-label ms-2" for="disableEffect">
+              Effettis
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -83,10 +95,13 @@
             <%@include file="/WEB-INF/cliente/richiesteCliente.jsp"%>
           </div>
           <div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="pills-edit" tabindex="0">
-            <%@include file="/WEB-INF/cliente/modificaProfiloNew.jsp"%>
+            <%@include file="/WEB-INF/cliente/modificaProfilo.jsp"%>
           </div>
           <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="pills-reviews" tabindex="0">
              <%@include file="/WEB-INF/cliente/recensioniCliente.jsp"%>
+          </div>
+          <div class="tab-pane fade" id="propic" role="tabpanel" aria-labelledby="pills-propic" tabindex="0">
+            <%@include file="/WEB-INF/modificaPropic.jsp"%>
           </div>
         </div>
       </div>
@@ -105,9 +120,14 @@
                 Recensioni
               </button>
             </li>
-            <li class="nav-item">
+            <li class="nav-item mb-2">
               <button class="nav-link w-100 text-start" id="pills-edit" data-bs-toggle="pill" data-bs-target="#edit" type="button" role="tab" aria-controls="edit" aria-selected="false">
                 Modifica profilo
+              </button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link w-100 text-start" id="pills-propic" data-bs-toggle="pill" data-bs-target="#propic" type="button" role="tab" aria-controls="propic" aria-selected="false">
+                Foto profilo
               </button>
             </li>
           </ul>

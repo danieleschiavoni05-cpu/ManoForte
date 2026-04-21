@@ -19,7 +19,7 @@ public class JPADisponibilitaDao implements DisponibilitaDAO {
     @Override
     public List<Disponibilita> findDisponibilitaByIdProfessionista(long id) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select d from Utente u join u.disponibilita where u.id=:id");
+            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.id=:id");
             query.setParameter("id", id);
             return query.getResultList();
         }
