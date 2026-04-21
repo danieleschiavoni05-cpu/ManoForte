@@ -10,7 +10,8 @@ import org.elis.manoforte.dao.definition.ProfessioneDAO;
 
 @WebServlet("/AggiungiProfessione")
 public class AggiungiProfessione extends HttpServlet {
-    private ProfessioneDAO professioneDAO;
+    private static final long serialVersionUID = 1L;
+	private ProfessioneDAO professioneDAO;
 
     @Override
     public void init()throws ServletException{

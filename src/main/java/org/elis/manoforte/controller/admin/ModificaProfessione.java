@@ -11,7 +11,8 @@ import org.elis.manoforte.dao.definition.ProfessioneDAO;
 @WebServlet("/ModificaProfessione")
 public class ModificaProfessione extends HttpServlet {
 
-    ProfessioneDAO professioneDao;
+    private static final long serialVersionUID = 1L;
+	ProfessioneDAO professioneDao;
 
     public void init() throws ServletException{
         professioneDao = DaoFactory.getInstance().getProfessioneDAO();

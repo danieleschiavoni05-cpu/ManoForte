@@ -10,38 +10,41 @@ import org.elis.manoforte.dao.definition.ProfessioneDAO;
 
 @WebServlet("/EliminaProfessione")
 public class EliminaProfessione extends HttpServlet {
-    private ProfessioneDAO professioneDao;
+    private static final long serialVersionUID = 1L;
+    private ProfessioneDAO professioneDAO;
 
     @Override
-    public void init() throws ServletException{
-        professioneDao = DaoFactory.getInstance().getProfessioneDAO();
+    public void init() throws ServletException {
+        professioneDAO = DaoFactory.getInstance().getProfessioneDAO();
     }
 
+    // Usiamo doGet perché il link <a> nella JSP invia una richiesta GET
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-
-        Long id = Long.parseLong(request.getParameter("id"));
-        try {
-            professioneDao.removeProfessione(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        
+        String idParam = request.getParameter("id");
+        
+        if (idParam != null && !idParam.isEmpty()) {
+            try {
+                Long id = Long.parseLong(idParam);
+                professioneDAO.removeProfessione(id);
+                request.getSession().setAttribute("successo", "Professione rimossa con successo.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                
+                // Messaggio specifico per l'utente associato
+                String msgErrore = "Impossibile eliminare la professione selezionata . " +
+                        "Ci sono ancora professionisti registrati con questa qualifica.";
+                request.getSession().setAttribute("errore", msgErrore);
+            }
         }
 
         response.sendRedirect("HomeAdmin");
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
-
-        Long id = Long.parseLong(request.getParameter("id"));
-        try {
-            professioneDao.removeProfessione(id);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-        response.sendRedirect("HomeAdmin");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        doGet(request, response);
     }
 }

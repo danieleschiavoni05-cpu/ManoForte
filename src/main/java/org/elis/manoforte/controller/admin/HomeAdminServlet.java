@@ -17,7 +17,8 @@ import java.util.List;
 
 @WebServlet("/HomeAdmin")
 public class HomeAdminServlet extends HttpServlet {
-    private CittaDAO cittaDao;
+    private static final long serialVersionUID = 1L;
+	private CittaDAO cittaDao;
     private ProfessioneDAO professioneDao;
 
     @Override

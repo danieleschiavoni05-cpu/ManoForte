@@ -26,7 +26,7 @@
                         <li><a href="<%=request.getContextPath()%>/homeprofessionista#reviews">Le mie recensioni</a></li>
                         <li><a href="<%=request.getContextPath()%>/homeprofessionista#availability">La mia agenda</a></li>
                     <%}if(ruolo == Ruolo.ADMIN){%>
-                        <li><a href="<%=request.getContextPath()%>/HomeAdmin">Dashboard</a></li>
+
                     <%}%>
                 <%}else{%>
                     <li><a href="<%=request.getContextPath()%>/ListaProfessionisti">Lista professionisti</a></li>
@@ -35,12 +35,15 @@
             </ul>
         </div>
         <div>
-            <%if(user == null){%>
-                <a href="login" class="btn-login">Accedi</a>
-            <%}else{%>
-                <span style="margin-right: 15px; color: var(--light-silver);">Ciao, <strong><%= user.getNome() %></strong> <strong><%= user.getCognome() %></strong></span>
-                <a href="logout" class="btn-login">Logout</a>
-            <%}%>
+           <% if (user == null) { %>
+    <a href="login" class="btn-login">Accedi</a>
+<% } else if (ruolo == Ruolo.ADMIN) { %>
+    <span style="margin-right: 15px; color: var(--craft-gold);">CIAO,<strong>GRANDE CAPO SUPREMO DELLE FORZE DI FREEZER</strong></span>
+    <a href="logout" class="btn-login">Logout</a>
+<% } else { %>
+    <span style="margin-right: 15px; color: var(--light-silver);"> Ciao, <strong><%= user.getNome() %></strong> <strong><%= user.getCognome() %></strong></span>
+    <a href="logout" class="btn-login">Logout</a>
+<% } %>
         </div>
     </div>
 </nav>

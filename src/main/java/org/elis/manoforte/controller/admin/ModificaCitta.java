@@ -11,7 +11,8 @@ import org.elis.manoforte.dao.definition.DaoFactory;
 @WebServlet("/ModificaCitta")
 public class ModificaCitta extends HttpServlet {
 
-    CittaDAO cittaDao;
+    private static final long serialVersionUID = 1L;
+	CittaDAO cittaDao;
 
     public void init() throws ServletException{
         cittaDao = DaoFactory.getInstance().getCittaDAO();

@@ -11,7 +11,8 @@ import org.elis.manoforte.model.Citta;
 
 @WebServlet("/AggiungiCitta")
 public class AggiungiCitta extends HttpServlet {
-    private CittaDAO cittaDao;
+    private static final long serialVersionUID = 1L;
+	private CittaDAO cittaDao;
 
     @Override
     public void init()throws ServletException{
