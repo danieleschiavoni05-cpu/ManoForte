@@ -5,7 +5,6 @@ import org.hibernate.annotations.Check;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Check(constraints = "cliente_id!=professionista_id")

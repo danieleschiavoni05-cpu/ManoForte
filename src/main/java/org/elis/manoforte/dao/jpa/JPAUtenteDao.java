@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.model.Ruolo;
 import org.elis.manoforte.model.Utente;
-import org.hibernate.Hibernate;
 
 import java.util.List;
 

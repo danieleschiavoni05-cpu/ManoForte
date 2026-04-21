@@ -30,7 +30,7 @@
                     <%}%>
                 <%}else{%>
                     <li><a href="<%=request.getContextPath()%>/ListaProfessionisti">Lista professionisti</a></li>
-                    <li><a href="<%=request.getContextPath()%>/lista_professioni">Lista professioni</a></li>
+                    <li><a href="<%=request.getContextPath()%>/ChiSiamo.jsp">Chi Siamo</a></li>
                 <%}%>
             </ul>
         </div>

@@ -190,7 +190,8 @@ public class Utility {
         }
 
         // Assicurati che tutti i campi siano passati correttamente al costruttore
-        Utente nuovo = new Utente();
+        Utente nuovo = new Utente( email,password,nome,
+				  cognome,dataNascita,codice_fiscale);
         nuovo.setEmail(email);
         nuovo.setPassword(password);
         nuovo.setNome(nome);

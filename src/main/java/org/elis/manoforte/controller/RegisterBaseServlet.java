@@ -83,23 +83,23 @@ public class RegisterBaseServlet extends HttpServlet {
 			ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
 		    try {
-		        // 1. Recupero parametri
-		        String nome = request.getParameter("campoNome");
-		        String cognome = request.getParameter("campoCognome");
-		        String email = request.getParameter("campoEmail");
-		        String codice_fiscale = request.getParameter("campoCodiceFiscale");
-		        String password = request.getParameter("campoPassword");
-		        String confermapassword = request.getParameter("campoConfermaPassword");
-		        
-		        LocalDate data_nascita = null;
-		        if(request.getParameter("campoData") != null && !request.getParameter("campoData").isEmpty()) {
-		            data_nascita = LocalDate.parse(request.getParameter("campoData"));
-		        }
+		    	// 1. Recupero parametri (Nomi basati sull'attributo 'name' del tuo HTML)
+		    	String nome = request.getParameter("nome");
+		    	String cognome = request.getParameter("cognome");
+		    	String email = request.getParameter("email");
+		    	String codice_fiscale = request.getParameter("codice_fiscale");
+		    	String password = request.getParameter("password");
+		    	String confermapassword = request.getParameter("conferma_password");
 
-		        Long id_citta = null;
-		        if(request.getParameter("campoCitta") != null && !request.getParameter("campoCitta").isEmpty()) {
-		            id_citta = Long.parseLong(request.getParameter("campoCitta"));
-		        }
+		    	LocalDate data_nascita = null;
+		    	if(request.getParameter("data_nascita") != null && !request.getParameter("data_nascita").isEmpty()) {
+		    	    data_nascita = LocalDate.parse(request.getParameter("data_nascita"));
+		    	}
+
+		    	Long id_citta = null;
+		    	if(request.getParameter("citta") != null && !request.getParameter("citta").isEmpty()) {
+		    	    id_citta = Long.parseLong(request.getParameter("citta"));
+		    	}
 
 		        // 2. Validazione sintattica immediata
 		        DatiErratiException emptyError = new DatiErratiException();

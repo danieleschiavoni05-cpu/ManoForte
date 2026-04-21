@@ -115,7 +115,6 @@ public class RichiestaServlet extends HttpServlet {
 		try {
 			// Recupero parametri dal form della pagina professionisti
 			String emailProfessionista=request.getParameter("emailProfessionista");
-			Long idProfessionista = utenteDao.findIdByEmail( emailProfessionista);
 			String indirizzo = request.getParameter("indirizzo");
 			String descrizione = request.getParameter("descrizione");
 			String ora_inizioString =request.getParameter("ora_inizio");

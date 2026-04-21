@@ -15,7 +15,7 @@
             <ul>
                 <li><a href="Homepage">Home</a></li>
                 <li><a href="ListaProfessionisti">Servizi</a></li>
-                <li><a href="<%=request.getContextPath()%>/lista_professioni">Professionisti</a></li>
+                <li><a href="<%=request.getContextPath()%>/ChiSiamo.jsp">Chi Siamo</a></li>
                 <li><a href="login">Accedi</a></li>
             </ul>
         </div>
