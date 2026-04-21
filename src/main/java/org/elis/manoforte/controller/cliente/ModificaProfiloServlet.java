@@ -92,6 +92,10 @@ public class ModificaProfiloServlet extends HttpServlet {
 
 	    try {
 	        // Recupero parametri
+	    	String idString = request.getParameter("idUtente"); // Deve coincidere col 'name' nell'HTML
+	        
+	        if (idString != null && !idString.isEmpty()) {
+	            Long id = Long.parseLong(idString);
 	        String nuovoNome = request.getParameter("nome");
 	        String nuovoCognome = request.getParameter("cognome");
 	        String nuovoCF = request.getParameter("codiceFiscale");
@@ -141,7 +145,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 	        // 4. Logica di Business e Database
 	        Utente utenteBase = Utility.checkInputEditUtenteBase(utenteLoggato, nuovoNome, nuovoCognome, 
 	                            dataNascitaStr, nuovoCF, citta, nuovaPass, oldPassForm, confermaPass);
-	            
+	        utenteBase.setId(id);
 	        utenteDao.update(utenteBase);
 
 	        // Aggiornamento Sessione
@@ -150,7 +154,7 @@ public class ModificaProfiloServlet extends HttpServlet {
 	        DTOResponseRegistrazione risposta = new DTOResponseRegistrazione(true,
                     "Modifica completata con successo.", null);
             outJson.print(mapper.writeValueAsString(risposta));
-
+	        }
         }catch(DatiErratiException e) {
             e.printStackTrace();
             e.buildErrorEditMessageBase();

@@ -10,7 +10,8 @@
 <h2>
   MODIFICA PROFILO
 </h2>
-<form method="post" id="formModificaProfiloProfessionista">
+<form method="post" id="formModificaProfiloUtenteBase">
+<input type="hidden" name="idUtente" value="<%=utente.getId()%>">
   <div class="row g-3" id="mainRow">
     <div class="col-md-6">
       <label class="section-title" for="nome">Nome</label>
@@ -29,17 +30,17 @@
 
     <div class="col-md-4">
       <label class="section-title" for="data">Data</label>
-      <input type="date" class="form-control" id="data" value="<%=utente.getDataNascita()%>" name="data_nascita">
+      <input type="date" class="form-control" id="data" value="<%=utente.getDataNascita()%>" name="dataNascita">
     </div> <%-- Data di nascita --%>
 
     <div class="col-md-4">
       <label class="section-title" for="codice_fiscale">Codice fiscale</label>
-      <input type="text" class="form-control" id="codice_fiscale" name="codice_fiscale" value="<%=utente.getCodiceFiscale()%>" maxlength="16" placeholder="Inserire un codice fiscale/partita IVA">
+      <input type="text" class="form-control" id="codice_fiscale" name="codiceFiscale" value="<%=utente.getCodiceFiscale()%>" maxlength="16" placeholder="Inserire un codice fiscale/partita IVA">
     </div> <%-- Codice fiscale --%>
 
     <div class="col-md-8">
-      <label class="section-title" for="citta">Citt√† di residenza</label>
-      <select class="form-select vf" name="citta" id="citta">
+      <label class="section-title" for="citta">CittA† di residenza</label>
+      <select class="form-select vf" name="campoCitta" id="citta">
         <%if(citta!=null && !citta.isEmpty()){%>
           <%for(Citta c: citta){%>
             <%if(c.getId().equals(utente.getCitta().getId())){%>
@@ -54,17 +55,17 @@
 
     <div class="col-md-6">
       <label class="section-title" for="nuova_password">Nuova password</label>
-      <input type="password" class="form-control psw" id="nuova_password" name="nuova_password" placeholder="Inserire nuova password">
+      <input type="password" class="form-control psw" id="nuova_password" name="newPassword" placeholder="Inserire nuova password">
     </div> <%-- Nuova Password --%>
 
     <div class="col-md-6">
       <label class="section-title" for="conferma_password">Conferma password</label>
-      <input type="password" class="form-control psw" id="conferma_password" name="conferma_password" placeholder="Conferma password">
+      <input type="password" class="form-control psw" id="conferma_password" name="confirmPassword" placeholder="Conferma password">
     </div> <%-- Conferma Password --%>
 
     <div class="col-md-6">
       <label class="section-title" for="password_attuale">Password attuale</label>
-      <input type="password" class="form-control psw" id="password_attuale" name="password_attuale" placeholder="Inserire la password attuale">
+      <input type="password" class="form-control psw" id="password_attuale" name="oldPassword" placeholder="Inserire la password attuale">
     </div> <%-- Vecchia password --%>
 
     <div class="col-12 mt-4 d-none" id="containerSuccesso">
