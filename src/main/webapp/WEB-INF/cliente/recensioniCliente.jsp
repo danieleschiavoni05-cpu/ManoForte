@@ -13,7 +13,7 @@
     <%=createCardReview(r)%>
     <%}%>
     <%}else{%>
-    <p class="text-muted" id="noPending">Nessuna recensione ricevuta! Lavora di pi&ugrave;!</p>
+    <p class="text-muted" id="noPending">Nessuna recensione effettuata! Quando qualcuno avra' finito il tuo prossimo lavoro effettuane una per vederla qui</p>
     <%}%>
   </div>
 </div>
@@ -25,11 +25,12 @@
         <h5 class="modal-title">Conferma Eliminazione</h5>
       </div>
       <form method="post" action="<%=request.getContextPath()%>/eliminazionerecensione">
-        <input type="hidden" id="id_eliminare" name="id_recensione" value="">
+        <input type="hidden" id="id_eliminare_recensione" name="id_recensione" value="">
+        
         <div class="modal-body modal-border">
-          Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non &egrave; reversibile.
+          Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non è reversibile.
         </div>
-        <div class="modal-footer" style="border-top: 0px;">
+        <div class="modal-footer" style="border-top: none;">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
           <button type="submit" class="btn btn-danger">Elimina</button>
         </div>
@@ -37,6 +38,7 @@
     </div>
   </div>
 </div>
+
 
 <%! public String createCardReview(Recensione r) {
   StringBuilder card = new StringBuilder("<div class='news-card review-card mb-3' id='review-" + r.getId() + "'>" +
