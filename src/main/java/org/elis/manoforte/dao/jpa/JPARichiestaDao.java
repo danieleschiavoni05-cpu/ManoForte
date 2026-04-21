@@ -107,13 +107,17 @@ public class JPARichiestaDao implements RichiestaDAO {
     @Override
     public boolean checkDisponibilitaByOra(Disponibilita disp) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select r from Richiesta r where r.ora_inizio<=:ora_fine and r.ora_fine>=:ora_inizio and r.data=:data and r.professionista=:utente");
+            Query query = em.createQuery("select r from Richiesta r " +
+                    "where r.ora_inizio<=:ora_fine and r.ora_fine>=:ora_inizio " +
+                    "and r.data=:data and r.professionista=:utente " +
+                    "and (r.statoRichiesta=StatoRichiesta.IN_ATTESA_DI_CONFERMA or r.statoRichiesta=StatoRichiesta.IN_CORSO)");
             query.setParameter("ora_inizio", disp.getOra_inizio());
             query.setParameter("ora_fine", disp.getOra_fine());
             query.setParameter("data", disp.getData());
             query.setParameter("utente", disp.getUtente());
-            System.out.println(query.getResultList().isEmpty());
-            return query.getResultList().isEmpty();
+            var lista = query.getResultList();
+            System.out.println(lista.isEmpty());
+            return lista.isEmpty();
         }
     }
 
@@ -124,6 +128,19 @@ public class JPARichiestaDao implements RichiestaDAO {
                     "r.cliente c where c.id = (select u.id from Utente u where u.id = :id) and r.statoRichiesta = :stato");
             query.setParameter("id", id);
             query.setParameter("stato", statoRichiesta);
+            return query.getResultList();
+        }
+    }
+
+    @Override
+    public List<Richiesta> getRichiesteListByIdProfessionistaPendingRunning(Long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            Query query = em.createQuery("select r from Richiesta r join " +
+                    "r.professionista c where c.id = :id " +
+                    "and (r.statoRichiesta = StatoRichiesta.IN_CORSO or r.statoRichiesta= StatoRichiesta.IN_ATTESA_DI_CONFERMA)");
+            query.setParameter("id", id);
+            var list = query.getResultList();
+            System.out.println(list);
             return query.getResultList();
         }
     }

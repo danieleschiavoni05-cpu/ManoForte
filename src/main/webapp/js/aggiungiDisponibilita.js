@@ -8,6 +8,7 @@ const orariCalendario = [
 function gestisciClick(dateStr, hour, isAvailable, id) {
     if (isAvailable) {
         document.getElementById('inputIdRimuovi').value = id;
+        document.getElementById("dataRimozione").value = dateStr;
         let modaleElement = document.getElementById('modalRimuovi');
         let modale = bootstrap.Modal.getInstance(modaleElement);
         if (!modale) {

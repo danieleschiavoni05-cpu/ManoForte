@@ -197,6 +197,7 @@
                 <p>Confermi di voler rimuovere questa disponibilit&agrave;?</p>
                 <form action="gestisciDisponibilita" method="post">
                     <input type="hidden" name="id_disponibilita" id="inputIdRimuovi">
+                    <input type="hidden" name="data_rimozione" id="dataRimozione">
                     <input type="hidden" name="action" value="remove">
                     <div class="d-flex justify-content-between aling-content-center mt-4">
                         <div>
@@ -211,9 +212,6 @@
 </div>
 
 <%!
-
-
-
     private String calcolaPosizione(LocalTime inizio, LocalTime fine){
         LocalTime timelineInizio = LocalTime.of(8,0);
         LocalTime timelineFine = LocalTime.of(20,0);
@@ -228,105 +226,3 @@
     }
 
 %>
-
-<%--
-            <table class="agenda-table">
-                <thead>
-                    <tr>
-                        <th style="color: var(--muted-silver); border-bottom: none; width: 60px;"></th>
-                        <% for (int i = 0; i < 7; i++) {%>
-                            <%LocalDate giornoSettimana = startOfWeek.plusDays(i);%>
-                            <th><%= giornoSettimana.format(dayFormatter).toUpperCase() %></th>
-                        <% } %>
-                    </tr>
-                </thead>
-                <tbody>
-                    <%LocalTime oraInizio = LocalTime.of(8,0);%>
-                    <%LocalTime oraFine = LocalTime.of(20,0);%>
-                    <%for (LocalTime cellaOra =oraInizio; !cellaOra.isAfter(oraFine.minusMinutes(30)); cellaOra = cellaOra.plusMinutes(30)){%>
-                        <tr>
-                            <td class="agenda-time-col"><%=cellaOra.format(DateTimeFormatter.ofPattern("HH:mm"))%></td>
-                            <%for (int i = 0; i < 7; i++) {%>
-                                <%LocalDate giornoSettimana = startOfWeek.plusDays(i);%>
-                                <%Disponibilita disp = null;%>
-                                <%Richiesta rich = null;%>
-                                <%String tipo = "Vuoto";%>
-
-                                <%if(richiesteRicevute.get(giornoSettimana)!=null){%>
-                                    <%rich = checkOrarioRichiesta(richiesteRicevute.get(giornoSettimana), cellaOra);%>
-                                    <%if(rich!=null) tipo="Richiesta";%>
-                                <%}%>
-
-                                <%if(!tipo.equals("Richiesta")){%>
-                                    <%if(disponibilitaEccezioni.get(giornoSettimana)!=null){%>
-                                        <%disp = checkOrario(disponibilitaEccezioni.get(giornoSettimana), cellaOra);%>
-                                        <%if(disp!=null) tipo = "Eccezione";%>
-                                    <%}%>
-
-                                    <%if(disp==null&&disponibilitaSingole.get(giornoSettimana)!=null){%>
-                                        <%disp = checkOrario(disponibilitaSingole.get(giornoSettimana), cellaOra);%>
-                                        <%if(disp!=null) tipo = "Disponibile";%>
-                                    <%}%>
-
-                                    <%if(disp==null&&disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana))!=null){%>
-                                        <%disp = checkOrario(disponibilitaRicorrenti.get(DayOfWeek.from(giornoSettimana)), cellaOra);%>
-                                        <%if(disp!=null) tipo = "Disponibile";%>
-                                    <%}%>
-                                <%}%>
-
-                                <%if(tipo.equals("Richiesta")){%>
-                                    <%=stampaRichiesta()%>
-                                <%}else if(tipo.equals("Eccezione")){%>
-                                    <%=stampaEccezione(disp, cellaOra, giornoSettimana)%>
-                                <%}else if(tipo.equals("Disponibile")){%>
-                                    <%=stampaDisponibile(disp, cellaOra, giornoSettimana)%>
-                                <%}else{%>
-                                    <%=stampaVuoto(cellaOra, giornoSettimana)%>
-                                <%}%>
-
-                            <%}%>
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table> --%>
-
-<%--
-    private Disponibilita checkOrario(List<Disponibilita> disponibilita, LocalTime slotTime) {
-        for (Disponibilita d : disponibilita) {
-            if (!slotTime.isBefore(d.getOra_inizio()) && slotTime.isBefore(d.getOra_fine())) {
-                return d;
-            }
-        }
-        return null;
-    }
-
-    private Richiesta checkOrarioRichiesta(List<Richiesta> richieste, LocalTime slotTime) {
-        for (Richiesta r : richieste) {
-            if (!slotTime.isBefore(r.getOra_inizio()) && slotTime.isBefore(r.getOra_fine())) {
-                return r;
-            }
-        }
-        return null;
-    }
-
-    private String stampaRichiesta(){
-        return  "<td class='slot-requested' title='Richiesta'></td>";
-    }
-
-    private String stampaVuoto(LocalTime ora, LocalDate giornoSettimana){
-        String action = "\"gestisciClick('"+giornoSettimana+"', '"+ora+"', false, '')\"";
-        return "<td class='agenda-slot' onclick="+action+" title=''></td>";
-    }
-
-    private String stampaDisponibile(Disponibilita disponibilita, LocalTime ora, LocalDate giornoSettimana){
-        String action = "\"gestisciClick('"+giornoSettimana+"', '"+ora+"', true, '"+disponibilita.getId()+"')\"";
-        return  "<td class='slot-available' onclick="+action+" title='Disponibile'></td>";
-    }
-
-    private String stampaEccezione(Disponibilita disponibilita, LocalTime ora, LocalDate giornoSettimana){
-        String action = "\"gestisciClick('"+giornoSettimana+"', '"+ora+"', true, '"+disponibilita.getId()+"')\"";
-        return  "<td class='slot-exception' onclick="+action+" title='Eccezione'></td>";
-    }
-
-
---%>

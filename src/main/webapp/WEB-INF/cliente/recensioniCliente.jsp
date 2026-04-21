@@ -26,7 +26,7 @@
       </div>
       <form method="post" action="<%=request.getContextPath()%>/eliminazionerecensione">
         <input type="hidden" id="id_eliminare_recensione" name="id_recensione" value="">
-        
+
         <div class="modal-body modal-border">
           Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non è reversibile.
         </div>
@@ -67,4 +67,3 @@
           .append(r.getDescrizione()).append("</div>").append("</div>").append("</div>").append("</div>");
   return card.toString();
 }%>
-

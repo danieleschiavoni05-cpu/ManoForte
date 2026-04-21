@@ -28,4 +28,6 @@ public interface RichiestaDAO {
     List<Richiesta> getRichiesteListByIdProfessionistaAndStato(Long Id, StatoRichiesta statoRichiesta) throws Exception;
 
     List<Richiesta> getRichiesteByIdClienteAndStato(Long id, StatoRichiesta statoRichiesta) throws Exception;
+
+    List<Richiesta> getRichiesteListByIdProfessionistaPendingRunning(Long id) throws Exception;
 }

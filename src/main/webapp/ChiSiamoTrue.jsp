@@ -139,11 +139,13 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card team-card">
                     <div class="img-box">
-                        <img src="<%=request.getContextPath()%>/img/marco.png" class="profile-img" alt="Capo" onerror="this.src='https://placehold.co/400x600/111/fff?text=IL+CAPO'">
+                        <img src="<%=request.getContextPath()%>/img/tecnico.jpeg" class="profile-img" alt="Capo" onerror="this.src='https://placehold.co/400x600/111/fff?text=IL+CAPO'">
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="text-white fw-bold">Marco Pasquale Martino</h5>
-                        <p class="small text-white">Sezione professionista, stile generale e Gradient Expert.</p>
+                        <span class="rank-badge rank-leader">CAPO DEL GRUPPO</span>
+                        <h5 class="text-white fw-bold">Marco Pasquale "Jihadista" Martino</h5>
+                        <p class="small text-white">Fondatore e mente suprema del Team Manoforte.</p>
+                        <span class="motto">"Andiamo. È il momento."</span>
                     </div>
                 </div>
             </div>
@@ -154,8 +156,10 @@
                         <img src="<%=request.getContextPath()%>/img/ghost.png" class="profile-img" alt="Co-Capo" onerror="this.src='https://placehold.co/400x600/111/fff?text=CO-CAPO'">
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="text-white fw-bold">Daniele Schiavoni</h5>
-                        <p class="small text-white">Sezione utente e Vibe Coding.</p>
+                        <span class="rank-badge rank-co-leader">CO-CAPO</span>
+                        <h5 class="text-white fw-bold">Daniele "Ghost" Schiavoni</h5>
+                        <p class="small text-white">Responsabile tattico e infiltratore d'elite.</p>
+                        <span class="motto">"Stiamo perdendo."</span>
                     </div>
                 </div>
             </div>
@@ -163,11 +167,13 @@
             <div class="col-lg-3 col-md-6">
                 <div class="card team-card">
                     <div class="img-box">
-                        <img src="<%=request.getContextPath()%>/img/juri.png" class="profile-img" alt="Luffy" onerror="this.src='https://placehold.co/400x600/111/fff?text=SOTTOPOSTO'">
+                        <img src="<%=request.getContextPath()%>/img/luffy.jpeg" class="profile-img" alt="Luffy" onerror="this.src='https://placehold.co/400x600/111/fff?text=SOTTOPOSTO'">
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="text-white fw-bold">Juri Boragine</h5>
-                        <p class="small text-white">Homepage (?)</p>
+                        <span class="rank-badge rank-member">SOTTOPOSTO</span>
+                        <h5 class="text-white fw-bold">Juri D. Boragine</h5>
+                        <p class="small text-white">Unità d'assalto. Forza combattiva fuori scala.</p>
+                        <span class="motto">"Diventerò il Re!"</span>
                     </div>
                 </div>
             </div>
@@ -178,8 +184,10 @@
                         <img src="<%=request.getContextPath()%>/img/fumo.jpeg" class="profile-img" alt="Fumo" onerror="this.src='https://placehold.co/400x600/111/fff?text=FUMO'">
                     </div>
                     <div class="card-body text-center">
-                        <h5 class="text-white fw-bold">Gabriele Sebastianelli</h5>
-                        <p class="small text-white">;)</p>
+                        <span class="rank-badge rank-member">SOTTOPOSTO</span>
+                        <h5 class="text-white fw-bold">Gabriele "Fumo" Sebastianelli</h5>
+                        <p class="small text-white">Supporto occulto e gestione perimetrale.</p>
+                        <span class="motto">"Fumiamo?"</span>
                     </div>
                 </div>
             </div>

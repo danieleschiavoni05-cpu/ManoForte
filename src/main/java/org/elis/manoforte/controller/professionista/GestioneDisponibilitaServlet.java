@@ -7,6 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
@@ -22,10 +23,6 @@ import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.TipoDisponibilita;
 import org.elis.manoforte.model.Utente;
 
-/**
- * Servlet che gestisce le operazioni di Aggiunta e Rimozione delle disponibilità
- * orarie del professionista. Risponde all'URL /gestisciDisponibilita.
- */
 @WebServlet("/gestisciDisponibilita")
 public class GestioneDisponibilitaServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -50,11 +47,9 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-    /**
-     * Gestisce le richieste POST (Aggiunta o Rimozione disponibilità).
-     */
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Recupera l'azione richiesta ("add" o "remove")
+
         String action = request.getParameter("action");
         Utente utente = (Utente) request.getSession().getAttribute("utenteLoggato");
 
@@ -109,29 +104,30 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
                 newDisp.setTipo((tipo.equals("SINGOLO")?TipoDisponibilita.SINGOLO:TipoDisponibilita.ECCEZIONE));
 
                 try{
-
                     if(richiestaDao.checkDisponibilitaByOra(newDisp)){
-                        Disponibilita db = disponibilitaDao.checkSovrapposizione(newDisp, utente.getEmail());
-                        if(db!=null&&db.getTipo().equals(newDisp.getTipo())){
-                            LocalTime dbInizio = db.getOra_inizio();
-                            LocalTime dbFine = db.getOra_fine();
-                            Boolean checkEdit = false;
+                        if(tipo.equals("ECCEZIONE")){
+                            disponibilitaDao.inserisciDisponibilita(newDisp);
+                        }else {
+                            Disponibilita db = disponibilitaDao.checkSovrapposizione(newDisp, utente.getEmail());
+                            if (db != null && db.getTipo().equals(TipoDisponibilita.SINGOLO)) {
+                                LocalTime dbInizio = db.getOra_inizio();
+                                LocalTime dbFine = db.getOra_fine();
+                                Boolean checkEdit = false;
 
-                            if(inizio.isBefore(dbInizio)){
-                                db.setOra_inizio(inizio);
-                                checkEdit = true;
-                            }
-                            if(fine.isAfter(dbFine)){
-                                db.setOra_fine(fine);
-                                checkEdit = true;
-                            }
+                                if (inizio.isBefore(dbInizio)) {
+                                    db.setOra_inizio(inizio);
+                                    checkEdit = true;
+                                }
+                                if (fine.isAfter(dbFine)) {
+                                    db.setOra_fine(fine);
+                                    checkEdit = true;
+                                }
 
-                            if(checkEdit) disponibilitaDao.updateDisponibilitaById(db);
+                                if (checkEdit) disponibilitaDao.updateDisponibilitaById(db);
 
-                        }else disponibilitaDao.inserisciDisponibilita(newDisp);
-
+                            } else disponibilitaDao.inserisciDisponibilita(newDisp);
+                        }
                     }
-
                 }catch(Exception e){
                     e.printStackTrace();
                 }
@@ -140,8 +136,27 @@ public class GestioneDisponibilitaServlet extends HttpServlet {
         }else{
             try{
                 Disponibilita disp = disponibilitaDao.findDisponibilitaById(Long.parseLong(request.getParameter("id_disponibilita")));
-                if(richiestaDao.checkDisponibilitaByOra(disp)){
+                if(disp.getTipo().equals(TipoDisponibilita.RICORSIVO)){
+                    List<Richiesta> richieste = richiestaDao.getRichiesteListByIdProfessionistaPendingRunning(utente.getId());
+                    for(Richiesta r:richieste){
+                        if(r.getData().getDayOfWeek().equals(disp.getGiorno_settimana())){
+                            if(r.getOra_inizio().isBefore(disp.getOra_fine()) && (r.getOra_fine()).isAfter(disp.getOra_inizio())){
+                                Disponibilita newDisp = new Disponibilita();
+                                newDisp.setData(r.getData());
+                                newDisp.setOra_fine(r.getOra_fine());
+                                newDisp.setOra_inizio(r.getOra_inizio());
+                                newDisp.setTipo(TipoDisponibilita.SINGOLO);
+                                newDisp.setGiorno_settimana(null);
+                                newDisp.setUtente(utente);
+                                disponibilitaDao.inserisciDisponibilita(newDisp);
+                            }
+                        }
+                    }
                     disponibilitaDao.deleteDisponiblitaById(disp.getId());
+                }else{
+                    if(richiestaDao.checkDisponibilitaByOra(disp)){
+                        disponibilitaDao.deleteDisponiblitaById(disp.getId());
+                    }
                 }
 
             }catch(Exception e){
