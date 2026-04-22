@@ -7,6 +7,18 @@
 	pageEncoding="UTF-8"%>
 
 <!--Creare mappa(id_prof-nome_img) poi fare controllo per stampare l' img -->
+<%
+    Cookie effect = null;
+    Cookie[] cookies = request.getCookies();
+    if(cookies!=null){
+      for(Cookie c:cookies){
+        if(c.getName().equals("effect")){
+          effect = c;
+          break;
+        }
+      }
+    }
+  %>
 
 <!DOCTYPE html>
 <html lang="it">
@@ -16,126 +28,19 @@
 <title>Professionisti | ManoForte</title>
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/spinning-background.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/professionista-style.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/modifica_professionista-style.css">
-<link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-modificaProfilo.css">
-
-<style>
-/* Container Filtri */
-.filter-section {
-	background: rgba(15, 23, 42, 0.6);
-	backdrop-filter: blur(10px);
-	border-radius: 12px;
-	padding: 30px;
-	border: 1px solid rgba(78, 115, 223, 0.3);
-	margin-bottom: 50px;
-}
-
-.filter-label {
-	font-size: 0.8rem;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #f8fafc;
-	margin-bottom: 8px;
-	font-weight: 700;
-}
-
-/* Modifiche ai form control già stilizzati da style-modificaProfilo.css per renderli perfetti qui */
-.filter-section .form-control, .filter-section .form-select {
-    height: 45px;
-    background: rgba(15, 23, 42, 0.6) !important;
-}
-
-/* Card Professionista */
-.rec-card {
-	background: rgba(15, 23, 42, 0.6);
-	border: 1px solid rgba(78, 115, 223, 0.3);
-	border-radius: 15px;
-	transition: all 0.3s ease;
-	position: relative;
-	overflow: hidden;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-}
-
-.rec-card:hover {
-	transform: translateY(-8px);
-	border-color: #6366f1;
-	box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
-}
-
-.rec-card::before {
-	content: "";
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 4px;
-	background: linear-gradient(90deg, #4f46e5, #7c3aed);
-}
-
-.badge-profession {
-	background: rgba(99, 102, 241, 0.15) !important;
-	color: #818cf8 !important;
-	border: 1px solid rgba(99, 102, 241, 0.3);
-	font-size: 0.7rem;
-	padding: 5px 10px;
-}
-
-.btn-contact {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    color: white !important;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    text-align: center;
-}
-
-.btn-contact:hover {
-    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
-    color: white !important;
-}
-
-.stars {
-	color: #f59e0b;
-}
-
-.profile-thumb {
-	width: 60px;
-	height: 60px;
-	border-radius: 50%;
-	overflow: hidden;
-	border: 2px solid rgba(99, 102, 241, 0.5);
-	flex-shrink: 0;
-	background: rgba(15, 23, 42, 0.6);
-}
-
-.profile-thumb img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
-.text-primary-custom {
-    color: #818cf8 !important;
-}
-</style>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/spinning-background.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/professionista-style.css">
+	<link rel="stylesheet" href="<%=request.getContextPath()%>/css/paginaProfessionisti-style.css">
+	
 </head>
 
-<body class="rotation">
+  <body class="rotation">
 	<jsp:include page="/WEB-INF/includes/Navbar.jsp" />
 
 	<div class="container py-5">
@@ -145,6 +50,14 @@
 			</h1>
 			<p class="text-white-50">Esperti verificati pronti ad aiutarti</p>
 		</div>
+		<div class="button-row with-nav">
+          <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+            <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+            <label class="form-check-label ms-2" for="disableEffect">
+              Effettis
+            </label>
+          </div>
+        </div>
 
 		<div class="filter-section shadow">
 			<div class="row g-4">
@@ -291,6 +204,10 @@
 	</div>
 
 	<jsp:include page="/WEB-INF/includes/Footer.jsp" />
+	
+	<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
         document.addEventListener('DOMContentLoaded', () => {

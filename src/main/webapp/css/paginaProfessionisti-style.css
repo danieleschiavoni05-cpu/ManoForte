@@ -1,0 +1,128 @@
+/* --- SFONDO E GENERALE --- */
+body.rotation {
+    background-color: var(--obsidian-base);
+    color: var(--light-silver);
+}
+
+/* --- SEZIONE FILTRI --- */
+.filter-section {
+    background-color: var(--deep-steel);
+    border: 1px solid var(--steel-variant);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.filter-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--craft-gold);
+    margin-bottom: 0.6rem;
+}
+
+.filter-section .form-control, 
+.filter-section .form-select {
+    background-color: var(--obsidian-base);
+    border: 1px solid var(--steel-variant);
+    color: var(--white-text);
+    border-radius: 0.5rem;
+}
+
+.filter-section .form-control:focus, 
+.filter-section .form-select:focus {
+    border-color: var(--craft-gold);
+    box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+    background-color: var(--obsidian-base);
+    color: var(--white-text);
+}
+
+/* --- CARD PROFESSIONISTA --- */
+.rec-card {
+    background-color: var(--deep-steel);
+    border: 1px solid var(--steel-variant);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.rec-card:hover {
+    border-color: var(--craft-gold);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Foto Profilo */
+.profile-thumb {
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    border: 2px solid var(--craft-gold);
+    overflow: hidden;
+    background-color: var(--obsidian-base);
+}
+
+.profile-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Nomi e Testi */
+h5.text-primary-custom {
+    color: var(--craft-gold) !important;
+}
+
+.text-white-50 {
+    color: var(--muted-silver) !important;
+}
+
+/* Badge delle Professioni */
+.badge-profession {
+    background-color: var(--steel-variant);
+    color: var(--light-silver);
+    font-weight: 500;
+    border: none;
+}
+
+/* Stelle e Prezzo */
+.stars i.fa-solid {
+    color: var(--gold-variant);
+}
+
+.stars i.fa-regular {
+    color: var(--steel-variant);
+}
+
+/* --- BOTTONE CONTATTO --- */
+.btn-contact {
+    background-color: var(--craft-gold);
+    color: var(--obsidian-base) !important; /* Testo scuro sull'oro per leggibilità */
+    border: none;
+    font-weight: 700;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    transition: background-color 0.2s ease;
+}
+
+.btn-contact:hover {
+    background-color: var(--gold-variant);
+    color: var(--obsidian-base) !important;
+}
+
+/* Badge PRO (quello in alto a destra nella card) */
+.badge.border.text-primary-custom {
+    border-color: var(--gold-dark) !important;
+    color: var(--craft-gold) !important;
+    background: rgba(212, 175, 55, 0.1);
+}
+
+/* Titolo Pagina */
+.text-primary-custom {
+    color: var(--craft-gold) !important;
+}
