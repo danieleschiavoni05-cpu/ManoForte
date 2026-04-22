@@ -8,27 +8,38 @@ import org.elis.manoforte.dao.jdbc.JdbcAdminDAO;
 @WebServlet("/EliminaCitta")
 public class EliminaCitta extends HttpServlet {
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-	        throws IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
 
-	    HttpSession session = request.getSession(false);
-	    if (session == null || session.getAttribute("utenteLoggato") == null) {
-	        response.sendRedirect("Login");
-	        return;
-	    }
+        HttpSession session = request.getSession(false);
 
-	    int id = Integer.parseInt(request.getParameter("id"));
+        // Controllo login
+        if (session == null || session.getAttribute("utenteLoggato") == null) {
+            response.sendRedirect("Login");
+            return;
+        }
 
-	    if (JdbcAdminDAO.cittaUsata(id)) {
-	        session.setAttribute("erroreCitta", "Impossibile eliminare: la città è collegata a utenti.");
-	    } else {
-	        JdbcAdminDAO.eliminaCitta(id);
-	    }
+        try {
+            int id = Integer.parseInt(request.getParameter("id"));
 
-	    response.sendRedirect("HomeAdmin");
-	}
+            // Controllo se la città è collegata ad utenti
+            if (JdbcAdminDAO.cittaUsata(id)) {
+                session.setAttribute("erroreCitta",
+                        "Impossibile eliminare: la città è collegata a uno o più utenti.");
+            } else {
+                JdbcAdminDAO.eliminaCitta(id);
+            }
 
+        } catch (NumberFormatException e) {
+            session.setAttribute("erroreCitta", "ID città non valido.");
+        } catch (Exception e) {
+            session.setAttribute("erroreCitta", "Errore interno durante l'eliminazione.");
+            e.printStackTrace();
+        }
+
+        response.sendRedirect("HomeAdmin");
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

@@ -21,6 +21,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Home Admin - ManoForte</title>
+
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/header.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/HomeAdmin.css">
     <link rel="stylesheet" href="<%= request.getContextPath() %>/css/footer.css">
@@ -39,26 +40,31 @@
 
     <div class="admin-card">
 
+        <!-- ERRORI -->
         <% if (erroreCitta != null) { %>
-            <div style="color:#E74C3C;font-weight:bold;margin-bottom:15px;"><%= erroreCitta %></div>
+            <div class="admin-error"><%= erroreCitta %></div>
             <% session.removeAttribute("erroreCitta"); %>
         <% } %>
 
         <% if (erroreProfessione != null) { %>
-            <div style="color:#E74C3C;font-weight:bold;margin-bottom:15px;"><%= erroreProfessione %></div>
+            <div class="admin-error"><%= erroreProfessione %></div>
             <% session.removeAttribute("erroreProfessione"); %>
         <% } %>
 
+        <!-- AGGIUNGI CITTÀ -->
         <h2>Aggiungi una Città</h2>
+
         <form action="AggiungiCitta" method="post" class="admin-form">
             <input type="text" name="nomeCitta" placeholder="Nome città" required>
             <button type="submit" class="admin-btn-primary">Aggiungi</button>
         </form>
 
         <h3>Città inserite:</h3>
+
         <ul class="admin-list">
             <% if (citta != null) {
                    for (Object[] c : citta) { %>
+
                 <li class="admin-list-item">
                     <strong><%= c[1] %></strong>
 
@@ -73,21 +79,26 @@
                         <button type="submit" class="admin-btn-small">Modifica</button>
                     </form>
                 </li>
+
             <% } } %>
         </ul>
 
         <hr class="admin-hr">
 
+        <!-- AGGIUNGI PROFESSIONE -->
         <h2>Aggiungi una Professione</h2>
+
         <form action="AggiungiProfessione" method="post" class="admin-form">
             <input type="text" name="nomeProfessione" placeholder="Nome professione" required>
             <button type="submit" class="admin-btn-primary">Aggiungi</button>
         </form>
 
         <h3>Professioni inserite:</h3>
+
         <ul class="admin-list">
             <% if (professioni != null) {
                    for (Object[] p : professioni) { %>
+
                 <li class="admin-list-item">
                     <strong><%= p[1] %></strong>
 
@@ -103,6 +114,7 @@
                         <button type="submit" class="admin-btn-small">Modifica</button>
                     </form>
                 </li>
+
             <% } } %>
         </ul>
 

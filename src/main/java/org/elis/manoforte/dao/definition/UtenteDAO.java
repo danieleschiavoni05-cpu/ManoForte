@@ -32,12 +32,15 @@ public interface UtenteDAO {
 
     List<Utente> findAllProfessionistibyProfessione(String nomeProfessione) throws Exception;
 
-
     void modificaProfessionista(Utente professionista) throws Exception;
 
-	Utente getUtentebyEmail(String emailProfessionista) throws Exception;
-	
-	public long trovaIdProfessionistaPerEmail(String email) throws Exception;
-	
-	public long trovaIdBasePerEmail(String email) throws Exception;
+    Utente getUtentebyEmail(String emailProfessionista) throws Exception;
+
+    long trovaIdProfessionistaPerEmail(String email) throws Exception;
+
+    long trovaIdBasePerEmail(String email) throws Exception;
+
+    boolean esistonoUtentiInCitta(long idCitta) throws Exception;
+
+    boolean esistonoUtentiConProfessione(long idProfessione) throws Exception;
 }
