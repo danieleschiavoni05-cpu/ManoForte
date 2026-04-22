@@ -8,6 +8,18 @@ Utente pro = (Utente) request.getAttribute("professionista");
 Utente utente = (Utente) request.getAttribute("utenteLoggato");
 List<Disponibilita> listaDisp = (List<Disponibilita>) request.getAttribute("listaDisponibilita");
 %>
+<%
+    Cookie effect = null;
+    Cookie[] cookies = request.getCookies();
+    if(cookies!=null){
+      for(Cookie c:cookies){
+        if(c.getName().equals("effect")){
+          effect = c;
+          break;
+        }
+      }
+    }
+  %>
 
 <!DOCTYPE html>
 <html lang="it">
@@ -16,21 +28,19 @@ List<Disponibilita> listaDisp = (List<Disponibilita>) request.getAttribute("list
 <title>Invia Richiesta | ManoForte</title>
 
 <link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <link rel="stylesheet" type="text/css"
 	href="https://npmcdn.com/flatpickr/dist/themes/material_blue.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/color-var.css">
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/header.css">
-<link rel="stylesheet"
-	href="<%=request.getContextPath()%>/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/spinning-background.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/home_professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/professionista-style.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/modifica_professionista-style.css">
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/richiesta-style.css">
 </head>
@@ -40,6 +50,14 @@ List<Disponibilita> listaDisp = (List<Disponibilita>) request.getAttribute("list
 
 	<main class="main-content mt-5">
 		<div class="container">
+		<div class="button-row with-nav">
+          <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+            <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+            <label class="form-check-label ms-2" for="disableEffect">
+              Effettis
+            </label>
+          </div>
+        </div>
 			<div class="row justify-content-center">
 				<div class="col-12 col-lg-10">
 
@@ -197,6 +215,10 @@ List<Disponibilita> listaDisp = (List<Disponibilita>) request.getAttribute("list
 
 	<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 	<script src="https://npmcdn.com/flatpickr/dist/l10n/it.js"></script>
+	
+		<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 	<script>
