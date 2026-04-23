@@ -1,0 +1,94 @@
+/* Applica lo sfondo direttamente all'html e al body */
+html, body {
+    background-color: #0B0D11 !important; /* Colore Obsidian Base manuale */
+    background-color: var(--obsidian-base) !important;
+    color: #E2E8F0 !important;
+    color: var(--light-silver) !important;
+    min-height: 100vh;
+}
+
+/* Sistema il filtro ricerca */
+.filter-section {
+    background-color: #191D24 !important; /* Deep Steel */
+    background-color: var(--deep-steel) !important;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--steel-variant);
+}
+
+.search-box {
+    display: flex;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #2B323D !important; /* Steel Variant */
+    background: var(--steel-variant) !important;
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--craft-gold);
+}
+
+.search-box input {
+    flex: 1;
+    background: transparent !important;
+    border: none !important;
+    color: white !important;
+    padding: 8px 15px;
+    outline: none;
+}
+
+.search-box button {
+    background-color: #D4AF37 !important; /* Craft Gold */
+    background-color: var(--craft-gold) !important;
+    color: #0B0D11 !important;
+    border: none;
+    padding: 8px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* I Riquadri (Card) */
+.prof-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 40px 0;
+}
+
+.prof-card {
+    background-color: #191D24 !important; /* Deep Steel */
+    background-color: var(--deep-steel) !important;
+    border: 1px solid #2B323D !important;
+    border: 1px solid var(--steel-variant) !important;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.prof-card:hover {
+    border-color: var(--craft-gold) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+}
+
+.prof-card h3 {
+    color: var(--craft-gold) !important;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.prof-footer a {
+    display: inline-block;
+    margin-top: 15px;
+    color: var(--craft-gold) !important;
+    text-decoration: none;
+    border: 1px solid var(--craft-gold);
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.prof-footer a:hover {
+    background: var(--craft-gold);
+    color: var(--obsidian-base) !important;
+}

@@ -3,57 +3,22 @@
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.Professione" %>
 
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Esplora Professioni - ManoForte</title>
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/style-home.css">
-    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css">
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/color-var.css?v=1">
+    
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/header.css">
     <link rel="stylesheet" href="<%=request.getContextPath()%>/css/footer.css">
 
-    <style>
-        .prof-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .prof-card {
-            background: var(--obsidian-base);
-            padding: 20px;
-            border-radius: 12px;
-            color: var(--light-silver);
-            border: 1px solid var(--steel-variant);
-        }
-        .prof-card h3 { color: var(--craft-gold); }
-        .prof-card p { color: var(--muted-silver); font-size: 0.9rem; }
-        .prof-footer a {
-            background: var(--craft-gold);
-            color: var(--obsidian-base);
-            padding: 10px 15px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        .prof-footer a:hover { background: var(--gold-variant); }
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px;
-            background: var(--deep-steel);
-            border-radius: 12px;
-            color: var(--light-silver);
-        }
-        .no-results a { color: var(--craft-gold); font-weight: bold; }
-        .filter-section {
-            background: #279AF1; 
-            padding: 30px 0;
-            border-bottom: 1px solid var(--steel-variant);
-        }
-    </style>
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/css/ricercaProfessioni.css?v=1.2">
 </head>
 
 <body>
@@ -103,5 +68,12 @@
 
 <jsp:include page="WEB-INF/includes/Footer.jsp"/>
 
+	
+	<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
+
+	<script
+		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script
+		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

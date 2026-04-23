@@ -54,7 +54,7 @@
                     </div> <%-- Email --%>
                     <div class="col-12">
                         <label class="section-title" for="password">Password</label>
-                        <input type="text" class="form-control" id="password" name="password" placeholder="Inserire una password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Inserire una password">
                     </div> <%-- Password --%>
                     <%if(errore!=null){%>
                         <div class="col-12 mt-4" id="containerErrori">

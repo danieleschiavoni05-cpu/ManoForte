@@ -1,4 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%
+    Cookie effect = null;
+    Cookie[] cookies = request.getCookies();
+    if(cookies!=null){
+      for(Cookie c:cookies){
+        if(c.getName().equals("effect")){
+          effect = c;
+          break;
+        }
+      }
+    }
+  %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
