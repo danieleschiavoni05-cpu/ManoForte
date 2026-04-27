@@ -1,7 +1,7 @@
 function setDeleteId(id) {
 	console.log("Tentativo di inserimento ID: ", id);
 
-	document.getElementById("id_eliminare_recensione").value=id;
+	document.getElementById("id_eliminare").value=id;
 
 }
 
