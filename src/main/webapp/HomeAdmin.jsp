@@ -241,9 +241,12 @@
     <div class="admin-card">
 
         <h2>Aggiungi una Città</h2>
-        <form action="AggiungiCitta" method="post" class="admin-form">
-            <input type="text" name="nomeCitta" placeholder="Nome città" required>
-            <button type="submit" class="admin-btn-primary">Aggiungi</button>
+        <form method="post" class="admin-form" id="aggiungiCittaForm">
+            <div style="flex-grow: 1;">
+                <input type="text" name="nomeCitta" placeholder="Nome città" style="width: 100%;">
+                <p class="d-none text-danger small mt-1 mb-0" style="padding-left: 5px;" id="erroreCitta">PAOLO</p>
+            </div>
+            <button type="submit" class="admin-btn-primary align-self-start">Aggiungi</button>
         </form>
 
         <h3>Città inserite:</h3>
@@ -268,9 +271,12 @@
         <hr class="admin-hr">
 
         <h2>Aggiungi una Professione</h2>
-        <form action="AggiungiProfessione" method="post" class="admin-form">
-            <input type="text" name="nomeProfessione" placeholder="Nome professione" required>
-            <button type="submit" class="admin-btn-primary">Aggiungi</button>
+        <form action="AggiungiProfessione" method="post" class="admin-form" id="aggiungiProfessioneForm">
+            <div style="flex-grow: 1;">
+                <input type="text" name="nomeProfessione" placeholder="Nome professione" style="width: 100%;">
+                <p class="d-none text-danger small mt-1 mb-0" style="padding-left: 5px;" id="erroreProfessione"></p>
+            </div>
+            <button type="submit" class="admin-btn-primary align-self-start">Aggiungi</button>
         </form>
 
         <h3>Professioni inserite:</h3>
@@ -294,6 +300,8 @@
 
     </div>
 </div>
+
+<script src="<%=request.getContextPath()%>/js/homeAdmin-script.js"></script>
 
 <jsp:include page="WEB-INF/includes/Footer.jsp"/>
 

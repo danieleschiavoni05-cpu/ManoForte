@@ -28,7 +28,7 @@
         <input type="hidden" id="id_eliminare_recensione" name="id_recensione" value="">
 
         <div class="modal-body modal-border">
-          Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non è reversibile.
+          Sei sicuro di voler eliminare definitivamente questa recensione? L'azione non ï¿½ reversibile.
         </div>
         <div class="modal-footer" style="border-top: none;">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
@@ -50,7 +50,7 @@
                   "<span class='subtitle' style='font-size: 0.75rem;'>" + r.getData() + "</span>" +
                   "<button class='btn btn-link p-0 text-danger' data-bs-toggle='modal' data-bs-target='#deleteModal' " +
                     "data-id='" + r.getId() + "' " +
-                    "onclick='setDeleteId(" + r.getId() + ")' "+
+                    "onclick='setDeleteReviewId(" + r.getId() + ")' "+
                     "title='Elimina recensione'>" +
                   "<i class='fa-solid fa-trash-can' style='font-size: 0.85rem;'></i>" +
                   "</button>"+

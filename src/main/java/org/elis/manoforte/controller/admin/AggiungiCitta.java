@@ -4,10 +4,15 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.model.Citta;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 @WebServlet("/AggiungiCitta")
 public class AggiungiCitta extends HttpServlet {
@@ -20,21 +25,39 @@ public class AggiungiCitta extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter outJson = response.getWriter();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
 
         String nome = request.getParameter("nomeCitta");
 
-        if (nome != null && !nome.trim().isEmpty()) {
-            Citta c = new Citta();
-            c.setNome(nome);
-            try {
-                cittaDao.inserisciCitta(c);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        if(nome==null || nome.isBlank()){
+            DTOGenericResponse dto = new DTOGenericResponse(false, "Inserire una città.");
+            outJson.println(mapper.writeValueAsString(dto));
+            outJson.flush();
+            return;
         }
 
-        response.sendRedirect("HomeAdmin");
+        Citta c = new Citta();
+        c.setNome(nome);
+        try {
+            cittaDao.inserisciCitta(c);
+
+            DTOGenericResponse dto = new DTOGenericResponse(true, "Città inserita.");
+            outJson.println(mapper.writeValueAsString(dto));
+            outJson.flush();
+            return;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            DTOGenericResponse dto = new DTOGenericResponse(false, "Errore nell'esecuzione della fetch.");
+            outJson.println(mapper.writeValueAsString(dto));
+            outJson.flush();
+            return;
+        }
     }
 }

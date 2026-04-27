@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -19,6 +20,10 @@ import org.elis.manoforte.model.Disponibilita;
 import org.elis.manoforte.model.Richiesta;
 import org.elis.manoforte.model.StatoRichiesta;
 import org.elis.manoforte.model.Utente;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 /**
  * Servlet implementation class RichiestaServlet
@@ -109,9 +114,15 @@ public class RichiestaServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+
+		PrintWriter outJson = response.getWriter();
+		ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
+
 		HttpSession session = request.getSession();
 		Utente cliente = (Utente) session.getAttribute("utenteLoggato");
-		
+
 		try {
 			// Recupero parametri dal form della pagina professionisti
 			String emailProfessionista=request.getParameter("emailProfessionista");
@@ -121,58 +132,56 @@ public class RichiestaServlet extends HttpServlet {
 			String ora_fineString=request.getParameter("ora_fine");
 			String giornoString=request.getParameter("giorni");
 			LocalDate giorno=null;
-			LocalDate giornoOggi=LocalDate.now(); 
-			
-			
+			LocalDate giornoOggi=LocalDate.now();
+
+			if(indirizzo==null || indirizzo.isBlank()){
+				DTOGenericResponse dto = new DTOGenericResponse(false, "Inserire un indirizzo");
+				outJson.print(mapper.writeValueAsString(dto));
+				outJson.flush();
+				return;
+			}
+
+			if(descrizione==null || descrizione.isBlank()){
+				DTOGenericResponse dto = new DTOGenericResponse(false, "Inserire una descrizione");
+				outJson.print(mapper.writeValueAsString(dto));
+				outJson.flush();
+				return;
+			}
+
 			LocalTime ora_inizio = null;
 		    LocalTime ora_fine = null;
 			if (ora_inizioString != null && !ora_inizioString.isEmpty()) {
 			     ora_inizio = LocalTime.parse(ora_inizioString);
-			    // Ora puoi usare ora_inizio come oggetto LocalTime
 			}
 			if (ora_fineString != null && !ora_fineString.isEmpty()) {
 			     ora_fine = LocalTime.parse(ora_fineString);
-			    // Ora puoi usare ora_inizio come oggetto LocalTime
 			}
 			
 			if (ora_inizio != null && ora_fine != null) {
-			    // Verifichiamo che i minuti siano 00 o 30
 			    if (ora_inizio.getMinute() % 30 != 0 || ora_fine.getMinute() % 30 != 0) {
 			        throw new Exception("L'orario deve essere a intervalli di 30 minuti.");
 			    }
-			    
-			    // Bonus: Verifica che l'ora di fine sia dopo l'ora di inizio
+
 			    if (!ora_fine.isAfter(ora_inizio)) {
 			        throw new Exception("L'orario di fine deve essere successivo a quello di inizio.");
 			    }
 			}
 			
 			if (giornoString != null && !giornoString.isEmpty()) {
-			    giorno = LocalDate.parse(giornoString); // Converte la stringa "yyyy-MM-dd"
+			    giorno = LocalDate.parse(giornoString);
 			    
-			    // Controllo sicurezza: la data non deve essere antecedente a oggi
+
 			    if (giorno.isBefore(giornoOggi)) {
 			        throw new Exception("Non puoi richiedere un intervento per una data passata!");
 			    }
 			} else {
-			    // Se non viene scelta una data, potresti voler usare oggi come default
 			    giorno = giornoOggi; 
 			}
 
 			Utente professionista = utenteDao.getUtentebyEmail(emailProfessionista);
 
-			// Prepariamo i dati per la nuova Richiesta
-			Richiesta nuovaRichiesta = new Richiesta(
-					null, // L'ID verrà generato dal DB (Auto-increment)
-					giorno, 
-					ora_inizio,
-					ora_fine,
-					indirizzo, 
-					StatoRichiesta.IN_ATTESA_DI_CONFERMA, 
-					descrizione,
-					cliente,
-					professionista
-					);
+			Richiesta nuovaRichiesta = new Richiesta(null, giorno, ora_inizio, ora_fine, indirizzo,
+					StatoRichiesta.IN_ATTESA_DI_CONFERMA, descrizione, cliente, professionista );
 			
 			System.out.println("--- Dettagli Nuova Richiesta ---");
 			System.out.println("Data: " + nuovaRichiesta.getData());
@@ -187,13 +196,19 @@ public class RichiestaServlet extends HttpServlet {
 			richiestaDao.inserisciRichiesta(nuovaRichiesta);
 			
 			System.out.println("Richiesta salvata con successo!");
-			
-			
-			response.sendRedirect(request.getContextPath() + "/homeBase");
+
+			DTOGenericResponse dto = new DTOGenericResponse(true, "Richiesta inviata con successo.");
+			outJson.println(mapper.writeValueAsString(dto));
+			outJson.flush();
+			return;
 
 		} catch (Exception e) {
 			e.printStackTrace();
 
+			DTOGenericResponse dto = new DTOGenericResponse(false, "Errore durante il completamente dell'operazione. Riprova più tardi.");
+			outJson.println(mapper.writeValueAsString(dto));
+			outJson.flush();
+			return;
 		}
 	}
 }

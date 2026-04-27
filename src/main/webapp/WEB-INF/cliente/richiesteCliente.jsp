@@ -163,7 +163,7 @@
 
         if (r.getStatoRichiesta().name().equals("IN_ATTESA_DI_CONFERMA")) {
             actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
-                    "<button class='btn btn-outline-danger btn-sm' data-bs-toggle='modal' data-bs-target='#cancelRequestModal' onclick='setDeleteId(" + r.getId() + ")'>" +
+                    "<button class='btn btn-outline-danger btn-sm' data-bs-toggle='modal' data-bs-target='#cancelRequestModal' onclick='setDeleteRequestId(" + r.getId() + ")'>" +
                     "<i class='fas fa-times me-1'></i> Annulla" +
                     "</button>" +
                     "</div>";
