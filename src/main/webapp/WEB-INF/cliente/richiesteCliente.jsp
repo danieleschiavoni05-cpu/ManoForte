@@ -1,7 +1,9 @@
 <%@page import="org.elis.manoforte.model.Richiesta"%>
 <%@ page import="java.util.List" %>
 <%@ page import="org.elis.manoforte.model.StatoRichiesta" %>
+<%@ page import="org.elis.manoforte.model.Recensione" %>
 
+<% List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni");%>
 <% List<Richiesta> richiesteInAttesa = (List<Richiesta>) request.getAttribute("richiesteInAttesa");%>
 <% List<Richiesta> richiesteInCorso = (List<Richiesta>) request.getAttribute("richiesteInCorso");%>
 <% List<Richiesta> richiesteCompletate = (List<Richiesta>) request.getAttribute("richiesteCompletate");%>
@@ -33,7 +35,7 @@
         <div class="row row-cols-12 g-1 flex-column">
             <%if(richiesteInAttesa!=null && !richiesteInAttesa.isEmpty()){
                 for(Richiesta r:richiesteInAttesa){ %>
-                    <div class="col"><%=createCardRequest(r)%></div>
+                    <div class="col"><%=createCardRequest(r,recensioni)%></div>
                 <%}%>
             <%}else{%>
                 <p class="ms-3" style="color: var(--light-silver);" id="noPending">Nessuna richiesta in attesa.</p>
@@ -48,7 +50,7 @@
         <div class="row row-cols-12 g-4">
             <%if(richiesteInCorso!=null && !richiesteInCorso.isEmpty()){
                 for(Richiesta r:richiesteInCorso){ %>
-                    <div class="col"><%=createCardRequest(r)%></div>
+                    <div class="col"><%=createCardRequest(r,recensioni)%></div>
                 <%}%>
             <%}else{%>
                 <p class="ms-3" style="color: var(--light-silver);" id="noRunning">Nessuna richiesta in corso.</p>
@@ -63,7 +65,7 @@
         <div class="row row-cols-12 g-4">
             <%if(richiesteCompletate!=null && !richiesteCompletate.isEmpty()){%>
                 <%for(Richiesta r: richiesteCompletate){%>
-                    <div class="col"><%=createCardRequest(r)%></div>
+                    <div class="col"><%=createCardRequest(r,recensioni)%></div>
                 <%}%>
             <%}else{%>
                 <p class="ms-3" style="color: var(--light-silver);" id="noCompleted">Nessuna richiesta completata.</p>
@@ -78,7 +80,7 @@
         <div class="row row-cols-12 g-4">
             <%if(richiesteAnnullate!=null && !richiesteAnnullate.isEmpty()){
                 for(Richiesta r:richiesteAnnullate){ %>
-                    <div class="col"><%=createCardRequest(r)%></div>
+                    <div class="col"><%=createCardRequest(r,recensioni)%></div>
                 <%}%>
             <%}else{%>
                 <p class="ms-3" style="color: var(--light-silver);" id="noCanceled">Nessuna richiesta annullata.</p>
@@ -145,7 +147,8 @@
 </div>
 
 <%!
-    public String createCardRequest(Richiesta r) {
+
+    public String createCardRequest(Richiesta r,List<Recensione> recensioni) {
         String professionistaNome = (r.getProfessionista() != null) ? r.getProfessionista().getNome() + " " + r.getProfessionista().getCognome() : "Non assegnato";
         String badgeClass = "";
         String statoText = r.getStatoRichiesta().toString().replace("_", " ");
@@ -168,11 +171,21 @@
                     "</button>" +
                     "</div>";
         }else if (r.getStatoRichiesta().name().equals("COMPLETA")) {
-            actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
-                    "<button class='btn btn-success btn-sm text-white' data-bs-toggle='modal' data-bs-target='#reviewModal' onclick='prepareReviewModal(" + r.getId() + ")'>" +
-                    "<i class='fas fa-star me-1'></i> Lascia una Recensione" +
-                    "</button>" +
-                    "</div>";
+        	boolean esiste=false;
+            for(Recensione recensione : recensioni){
+            	if(recensione.getRichiesta().getId()==r.getId()){
+            			esiste=true;
+                            break;
+            	}
+            }
+            if(!esiste){
+             actionButton = "<div class='mt-3 border-top pt-2 text-end'>" +
+                            "<button class='btn btn-success btn-sm text-white' data-bs-toggle='modal' data-bs-target='#reviewModal' onclick='prepareReviewModal(" + r.getId() + ")'>" +
+                            "<i class='fas fa-star me-1'></i> Lascia una Recensione" +
+                            "</button>" +
+                            "</div>";
+            }
+           
         }
 
         return "<div class='detail-card h-100' id='richiesta-" + r.getId() + "'>" +

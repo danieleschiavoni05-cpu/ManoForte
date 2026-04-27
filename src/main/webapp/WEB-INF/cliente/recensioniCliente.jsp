@@ -1,7 +1,7 @@
-<%@ page import="org.elis.manoforte.model.Recensione" %>
+
 <%@ page import="java.util.List" %>
 <%@ page import="java.math.BigDecimal" %>
-<% List<Recensione> recensioni = (List<Recensione>) request.getAttribute("recensioni");%>
+
 
 <div class="row section-title reviews mb-3">
   <h2>Recensioni</h2>

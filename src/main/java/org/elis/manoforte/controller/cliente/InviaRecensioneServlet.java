@@ -83,13 +83,20 @@ public class InviaRecensioneServlet extends HttpServlet {
 
 
 		        Richiesta richiesta = richiestaDao.getRichiestaById(idRichiesta);
+		        
+		        boolean giaRecensita = recensioneDao.esisteRecensionePerRichiesta(idRichiesta);
+		        if (giaRecensita==true) {
+		            session.setAttribute("messaggioErrore", "Hai già recensito questa prestazione!");
+		            response.sendRedirect(request.getContextPath() + "/homeBase");
+		            return; // Fondamentale: esce dal metodo e non salva nulla
+		        }
 
 		        // Controllo di business e di proprietà (il cliente che recensisce deve essere quello della richiesta)
 		        if (richiesta != null && 
 		            StatoRichiesta.COMPLETA.equals(richiesta.getStatoRichiesta()) &&
 		            richiesta.getCliente().getId().equals(idBase)) {
 
-		            Recensione rec = new Recensione(null, descrizione, new BigDecimal(voto), data, richiesta.getCliente(), richiesta.getProfessionista());
+		            Recensione rec = new Recensione(null, descrizione, new BigDecimal(voto), data, richiesta.getCliente(), richiesta.getProfessionista(),richiesta);
 		            System.out.println("DEBUG: rec:" +rec);
 		            recensioneDao.inserisciRecensione(rec);
 		            session.setAttribute("messaggioSuccesso", "Recensione inviata con successo!");

@@ -78,4 +78,17 @@ public class JPARecensioneDao implements RecensioneDAO {
         }
     }
 
+	@Override
+	public boolean esisteRecensionePerRichiesta(long idRichiesta) {
+		try (EntityManager em = emf.createEntityManager()) {
+	        Long count = em.createQuery(
+	            "SELECT COUNT(r) FROM Recensione r WHERE r.richiesta.id = :idRichiesta", Long.class)
+	            .setParameter("idRichiesta", idRichiesta)
+	            .getSingleResult();
+	        return count > 0;
+	    }
+	}
+
+	
+
 }

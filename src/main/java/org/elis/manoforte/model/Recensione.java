@@ -23,14 +23,18 @@ public class Recensione {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Utente professionista;
+    @OneToOne // Una recensione per ogni richiesta
+    @JoinColumn(name = "richiesta_id", nullable = true, unique = true) 
+    private Richiesta richiesta;
 
-    public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data, Utente cliente, Utente professionista) {
+    public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data, Utente cliente, Utente professionista,Richiesta richiesta) {
         this.id = id;
         this.descrizione = descrizione;
         this.voto = voto;
         this.data = data;
         this.cliente = cliente;
         this.professionista = professionista;
+        this.richiesta=richiesta;
     }
 
     public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data) {
@@ -93,6 +97,8 @@ public class Recensione {
     public void setProfessionista(Utente professionista){
         this.professionista = professionista;
     }
+    public Richiesta getRichiesta() { return richiesta; }
+    public void setRichiesta(Richiesta richiesta) { this.richiesta = richiesta; }
 
 	@Override
 	public String toString() {

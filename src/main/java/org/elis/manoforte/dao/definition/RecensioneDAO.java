@@ -18,4 +18,8 @@ public interface RecensioneDAO {
     List<Recensione> getRecensioneByIdProfessionista(Long id) throws Exception;
 
     List<Recensione> getRecensioneByIdCliente(Long id) throws Exception;
+
+	boolean esisteRecensionePerRichiesta(long idRichiesta);
+
+	
 }
