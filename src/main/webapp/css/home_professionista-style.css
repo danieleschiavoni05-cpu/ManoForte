@@ -150,14 +150,14 @@
 }
 
 .button-info-container {
-    background: linear-gradient(var(--gradient-angle), var(--obsidian-base) 0%, var(--deep-steel) 100%);
+    background: linear-gradient(var(--gradient-angle), var(--color1) 0%, var(--color2) 100%);
     animation: rotate-gradient1 1s linear infinite;
     width: 45px;
     height: 45px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%; /* Il cerchio perfetto è più elegante */
+    border-radius: 50%;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     flex-shrink: 0;
@@ -190,7 +190,7 @@
     border: none;
     background: transparent;
     font-size: 1rem;
-    color: var(--craft-gold);
+    color: var(--white-text);
     width: 100%;
     height: 100%;
     cursor: pointer;
@@ -201,7 +201,6 @@
 }
 
 .news-card:hover .button-info-container {
-    background: var(--obsidian-base); /* Cambia colore (dal blu al magenta) */
     transform: scale(1.05);
 }
 

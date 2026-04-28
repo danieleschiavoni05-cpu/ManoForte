@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
     })
 
-    // Funzione accetta task
     acceptButtons.forEach(button => {
         button.addEventListener("click", (e) => {
             const idRichiesta = button.getAttribute("data-id");

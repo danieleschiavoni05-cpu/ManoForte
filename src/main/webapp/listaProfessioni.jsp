@@ -27,7 +27,7 @@
 
 <div class="filter-section">
     <div class="container">
-        <form class="search-box" action="ListaProfessionisti" method="get" style="display:flex; gap:10px; justify-content:center;">
+        <form class="search-box" action="ListaProfessioni" method="get" style="display:flex; gap:10px; justify-content:center;">
             <%
                 String cerca = request.getParameter("nome"); // Uniformato al Controller
                 if (cerca == null) cerca = "";
@@ -43,7 +43,7 @@
 
     <div class="prof-grid">
         <%
-            List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessionisti");
+            List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessioni");
         %>
 
         <% if (professioni != null && !professioni.isEmpty()) { %>
@@ -60,7 +60,7 @@
             <div class="no-results">
                 <h3>Nessun risultato trovato</h3>
                 <p>Prova a cambiare i filtri di ricerca.</p>
-                <a href="ListaProfessionisti">Mostra tutti</a>
+                <a href="ListaProfessioni">Mostra tutti</a>
             </div>
         <% } %>
     </div>

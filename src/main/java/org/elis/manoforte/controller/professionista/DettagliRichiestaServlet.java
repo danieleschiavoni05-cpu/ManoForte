@@ -65,7 +65,7 @@ public class DettagliRichiestaServlet extends HttpServlet {
             if(richiesta!=null){
                 Utente cliente = richiesta.getCliente();
                 Citta citta = cliente.getCitta();
-                String nome = cliente.getNome()+" "+cliente.getCognome().charAt(0)+".";
+                String nome = cliente.getNome()+" "+cliente.getCognome();
                 DTOResponseDettagliRichiesta risposta = new DTOResponseDettagliRichiesta(
                         richiesta, nome, citta.getNome());
 

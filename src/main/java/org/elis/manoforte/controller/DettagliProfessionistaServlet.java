@@ -5,77 +5,98 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.elis.manoforte.dao.definition.*;
+import org.elis.manoforte.model.*;
+import org.elis.manoforte.utility.Utility;
+import org.elis.manoforte.utility.dto.DTODettagliProfessionista;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import org.elis.manoforte.utility.dto.DTOResponseDettagliRichiesta;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
+
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.List;
 
-import org.elis.manoforte.dao.definition.DaoFactory;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
-import org.elis.manoforte.dao.definition.RecensioneDAO;
-import org.elis.manoforte.dao.definition.UtenteDAO;
 
-import org.elis.manoforte.model.Professione;
-import org.elis.manoforte.model.Recensione;
-import org.elis.manoforte.model.Utente;
-
-/**
- * Servlet implementation class DettagliProfessionistaServlet
- */
-@WebServlet("/DettagliProfessionista")
+@WebServlet("/dettagliProfessionista")
 public class DettagliProfessionistaServlet extends HttpServlet {
-	private static final long serialVersionUID = 1L;
-       
-	private UtenteDAO utenteDao;
-    private RecensioneDAO recensioneDao;
-    private ProfessioneDAO professioneDao;
+    private static final long serialVersionUID = 1L;
 
-    @Override
-    public void init() throws ServletException{
-        utenteDao = DaoFactory.getInstance().getUtenteDAO();
-        recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
-        professioneDao =DaoFactory.getInstance().getProfessioneDAO();
+    private RecensioneDAO recensioneDao;
+    private CittaDAO cittaDao;
+    private UtenteDAO utenteDao;
+    private VeicoloDAO veicoloDAO;
+    private ProfessioneDAO professioneDao;
+    private ImmagineDAO immagineDao;
+
+
+    public DettagliProfessionistaServlet() {
+        super();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String nomeProfessione = request.getParameter("nome");
-		
-		try {
-	        // Recupero tutte le recensioni
-	        List<Recensione> recensioni = recensioneDao.findAll();
-	        List<Utente> tuttiUtenti;
-			
-			tuttiUtenti = utenteDao.findAllProfessionisti();
-			for(Utente u : tuttiUtenti) {
-				String emailProfessionista = u.getEmail();
-				Long idProfessionista=utenteDao.findIdByEmail(emailProfessionista);
-				request.setAttribute("idProfessionista", idProfessionista);
-			}
-            // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
-            List<Utente> risultato = utenteDao.findAllProfessionistibyProfessione(nomeProfessione);
-            List<Professione> professioni= professioneDao.getAllProfessioni();
+    @Override
+    public void init() throws ServletException {
+        recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+        cittaDao = DaoFactory.getInstance().getCittaDAO();
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        veicoloDAO = DaoFactory.getInstance().getVeicoloDAO();
+        professioneDao = DaoFactory.getInstance().getProfessioneDAO();
+        immagineDao = DaoFactory.getInstance().getImmagineDAO();
+    }
 
-            request.setAttribute("nomeProfessione", nomeProfessione);
-            request.setAttribute("listaProfessioni", professioni);
-            request.setAttribute("listaProfessionisti", risultato);
-            request.setAttribute("recensioni", recensioni);
+    /**
+     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+     */
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        } catch (Exception e) {
+        PrintWriter outJson = response.getWriter();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
+
+        Long id_professionista = Long.valueOf(request.getParameter("id"));
+        BigDecimal media = new BigDecimal(request.getParameter("media"));
+
+        try{
+            Utente professionista = utenteDao.findById(id_professionista);
+            List<Veicolo> veicoli = veicoloDAO.getVeicoliByEmailProfessionista(professionista.getEmail());
+            List<Professione> professioni = professioneDao.findProfessioniByIdProfessionista(id_professionista);
+            Immagine immagine = immagineDao.getImmagineByIdUtente(id_professionista);
+            Citta citta = cittaDao.getCittaById(professionista.getCitta().getId());
+
+            DTODettagliProfessionista dto = new DTODettagliProfessionista();
+            dto.setNomeCompleto(professionista.getNome()+" "+professionista.getCognome());
+            dto.setMediaVoto(media);
+            dto.setTariffa(professionista.getTariffa());
+            if(immagine == null){
+                dto.setImmagine(Utility.DEFAULT_PROPIC_PATH);
+            }else{
+                dto.setImmagine(immagine.getPercorso());
+            }
+            dto.setProfessioni(professioni);
+            dto.setVeicoli(veicoli);
+            dto.setCitta(citta);
+
+            response.setStatus(HttpServletResponse.SC_OK);
+            outJson.write(mapper.writeValueAsString(dto));
+
+        }catch(Exception e){
             e.printStackTrace();
-            request.setAttribute("errore", "Impossibile recuperare i professionisti.");
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500
+            outJson.write("{\"error\": \"Errore interno del server\"}");
+        }finally{
+            outJson.flush();
+            outJson.close();
         }
+    }
 
-        request.getRequestDispatcher("dettaglioPro.jsp").forward(request, response);
-	}
+    /**
+     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+     */
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
+    }
 }

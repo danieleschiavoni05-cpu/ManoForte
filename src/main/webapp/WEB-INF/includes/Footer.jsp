@@ -14,7 +14,7 @@
             <h4>Link Utili</h4>
             <ul>
                 <li><a href="Homepage">Home</a></li>
-                <li><a href="ListaProfessionisti">Servizi</a></li>
+                <li><a href="listaProfessioni">Servizi</a></li>
                 <li><a href="<%=request.getContextPath()%>/ChiSiamo.jsp">Chi Siamo</a></li>
                 <li><a href="login">Accedi</a></li>
             </ul>

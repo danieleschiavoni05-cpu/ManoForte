@@ -27,7 +27,7 @@
 
 <div class="col-12 text-center mb-3 <%=propic==null?"d-none":""%>" id="deleteButton">
     <form method="post" action="<%=request.getContextPath()%>/deleteImage" id="formDeletePropic">
-        <button type="submit" class="login-register-button btn btn-danger mt-0 w-100" style="background-color: var(--deep-steel);">
+        <button type="submit" class="delete-register-button btn btn-danger mt-0 w-100">
             Elimina immagine
         </button>
     </form>

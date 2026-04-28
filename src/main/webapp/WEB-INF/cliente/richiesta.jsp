@@ -166,7 +166,7 @@
 												<span class="input-group-text  border-dark">
 													<i class="fa-solid fa-clock text-primary"></i>
 												</span>
-												<select name="ora_inizio" id="oraInizio" class="form-select border-dark fw-bold" style="color: #212529 !important; border-width: 2px" required>
+												<select name="ora_inizio" id="oraInizio" class="form-select border-dark fw-bold" style="border-width: 2px" required>
 													<option value="">Scegli prima una data...</option>
 												</select>
 											</div>

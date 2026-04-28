@@ -155,6 +155,7 @@
                 "<div class=\"button-info-container\">" +
                   "<button type=\"button\" class=\"button-info-arrow btn-apri-modale\" "+
                       "data-id=\""+r.getId()+"\">" +
+                        "<i class=\"bi bi-chevron-right\"></i>" +
                   "</button>" +
                 "</div>" +
               "</div>";

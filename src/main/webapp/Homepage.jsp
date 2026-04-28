@@ -50,7 +50,7 @@
 					la tua mano di fiducia.</p>
 				<div class="mt-5">
 					<form class="d-flex justify-content-center"
-						action="ListaProfessionisti" method="get">
+						action="listaProfessionisti" method="get">
 						<div class="col-md-8">
 							<div class="input-group">
 								<%

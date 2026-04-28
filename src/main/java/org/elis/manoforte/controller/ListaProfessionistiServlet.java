@@ -5,52 +5,85 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
-import org.elis.manoforte.dao.definition.DaoFactory;
-import org.elis.manoforte.dao.definition.ProfessioneDAO;
-import org.elis.manoforte.model.Professione;
-
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-@WebServlet("/ListaProfessionisti")
+import org.elis.manoforte.dao.definition.*;
+
+import org.elis.manoforte.model.Immagine;
+import org.elis.manoforte.model.Professione;
+import org.elis.manoforte.model.Recensione;
+import org.elis.manoforte.model.Utente;
+
+/**
+ * Servlet implementation class DettagliProfessionistaServlet
+ */
+@WebServlet("/listaProfessionisti")
 public class ListaProfessionistiServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1L;
+       
+	private UtenteDAO utenteDao;
+    private RecensioneDAO recensioneDao;
     private ProfessioneDAO professioneDao;
+	private ImmagineDAO immagineDao;
 
     @Override
-    public void init() throws ServletException {
-        // Uso la Factory come nel tuo codice originale per coerenza
-        professioneDao = DaoFactory.getInstance().getProfessioneDAO();
+    public void init() throws ServletException{
+        utenteDao = DaoFactory.getInstance().getUtenteDAO();
+        recensioneDao = DaoFactory.getInstance().getRecensioneDAO();
+        professioneDao =DaoFactory.getInstance().getProfessioneDAO();
+		immagineDao = DaoFactory.getInstance().getImmagineDAO();
     }
 
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String nomeProfessione = request.getParameter("nome");
+		
+		try {
+	        // Recupero tutte le recensioni
+	        List<Recensione> recensioni = recensioneDao.findAll();
+			List<Immagine> immaginiDb = immagineDao.findAllProfessionistiProPic();
+	        List<Utente> tuttiUtenti;
+			Map<Long, String> immagini = new HashMap<>();
+			
+			tuttiUtenti = utenteDao.findAllProfessionisti();
+			for(Utente u : tuttiUtenti) {
+				for(Immagine img:immaginiDb){
+					if(img.getUtente().getId().equals(u.getId())){
+						immagini.put(u.getId(), img.getPercorso());
+						break;
+					}
+				}
+			}
+            // Usiamo sempre il database, addio liste statiche "Database.utentiRegistrati"
+            List<Utente> risultato = utenteDao.findAllProfessionistibyProfessione(nomeProfessione);
+            List<Professione> professioni= professioneDao.getAllProfessioni();
 
-        String nomeProfessione = request.getParameter("nome");
-        if (nomeProfessione == null) nomeProfessione = "";
-        String filtroMinuscolo = nomeProfessione.toLowerCase();
-
-        try {
-            List<Professione> tutte = professioneDao.getAllProfessioni();
-
-            List<Professione> filtrati = tutte.stream()
-                    .filter(p -> p.getNome().toLowerCase().contains(filtroMinuscolo))
-                    .collect(Collectors.toList());
-
-            request.setAttribute("listaProfessionisti", filtrati);
-            
-            // Nota: La variabile 'risultato' non era dichiarata nel tuo snippet.
-            // Se serve passare altro alla JSP, dichiarala qui sopra.
+            request.setAttribute("nomeProfessione", nomeProfessione);
+            request.setAttribute("listaProfessioni", professioni);
+            request.setAttribute("listaProfessionisti", risultato);
+            request.setAttribute("recensioni", recensioni);
+			request.setAttribute("immagini", immagini);
 
         } catch (Exception e) {
             e.printStackTrace();
+            request.setAttribute("errore", "Impossibile recuperare i professionisti.");
         }
 
-        request.getRequestDispatcher("/ListaProfessionisti.jsp")
-               .forward(request, response);
-    }
+        request.getRequestDispatcher("listaProfessionisti.jsp").forward(request, response);
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
 }

@@ -3,6 +3,7 @@ package org.elis.manoforte.utility;
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.UtenteDAO;
 import org.elis.manoforte.exception.DatiErratiException;
+import org.elis.manoforte.exception.NoImageException;
 import org.elis.manoforte.model.*;
 
 import java.io.File;
@@ -250,8 +251,14 @@ public class Utility {
     }
 
     public static File getFile(String path){
+
         if(path==null || path.isEmpty()){
-            throw new RuntimeException();
+            throw new NoImageException("Nessun immagine trovata.");
+        }
+
+        int lastSlash = path.lastIndexOf("/");
+        if(lastSlash!=-1){
+            path = path.substring(lastSlash+1);
         }
 
         return new File(path);

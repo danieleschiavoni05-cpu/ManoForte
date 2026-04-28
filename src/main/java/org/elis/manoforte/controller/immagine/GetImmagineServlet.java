@@ -7,11 +7,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.ImmagineDAO;
+import org.elis.manoforte.exception.NoImageException;
 import org.elis.manoforte.utility.Utility;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 
 @WebServlet("/getImmagine")
 public class GetImmagineServlet extends HttpServlet {
@@ -23,14 +25,18 @@ public class GetImmagineServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)throws IOException {
-        response.setContentType("image/*");
-        String path = request.getParameter("path");
+        try{
+            response.setContentType("image/*");
+            String path = request.getParameter("path");
 
-        path = System.getenv("propicPath")+path;
-        File file = Utility.getFile(path);
+            path = System.getenv("propicPath")+path;
+            File file = Utility.getFile(path);
 
-        response.setContentLength((int)file.length());
+            response.setContentLength((int)file.length());
+            Files.copy(file.toPath(), response.getOutputStream());
+        }catch(NoSuchFileException | NoImageException e){
+            response.sendRedirect(Utility.DEFAULT_PROPIC_PATH);
+        }
 
-        Files.copy(file.toPath(), response.getOutputStream());
     }
 }

@@ -55,20 +55,22 @@ public class UpdateImageServlet extends HttpServlet {
         Part part = request.getPart("propic");
         Path folderPath = Paths.get(System.getenv("propicPath"));
         String ext = part.getSubmittedFileName().substring(part.getSubmittedFileName().lastIndexOf('.'));
-        String fileName = "propic_"+loggedUser.getNome()+loggedUser.getCognome()+ext;
+        String fileName = "propic_"+loggedUser.getNome()+loggedUser.getCognome()+loggedUser.getId()+ext;
 
         if(!Files.exists(folderPath)) Files.createDirectory(folderPath);
 
         Files.copy(part.getInputStream(), folderPath.resolve(fileName), StandardCopyOption.REPLACE_EXISTING);
 
         try {
+            Immagine img = new Immagine();
+            img.setNome(fileName);
+            img.setPercorso(fileName);
+            img.setUtente(loggedUser);
+            img.setFotoProfilo(true);
             if(immagineDAO.getImmagineByIdUtente(loggedUser.getId())==null){
-                Immagine img = new Immagine();
-                img.setNome(fileName);
-                img.setPercorso(fileName);
-                img.setUtente(loggedUser);
-                img.setFotoProfilo(true);
                 immagineDAO.inserisciImmagine(img);
+            }else{
+                immagineDAO.sostituisciImmagine(img);
             }
             DTOGenericResponse genericResponse = new DTOGenericResponse(true, "Immagine caricata con successo.");
             outJson.print(mapper.writeValueAsString(genericResponse));

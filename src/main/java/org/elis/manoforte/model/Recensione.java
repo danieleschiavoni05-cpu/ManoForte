@@ -23,8 +23,8 @@ public class Recensione {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Utente professionista;
-    @OneToOne // Una recensione per ogni richiesta
-    @JoinColumn(name = "richiesta_id", nullable = true, unique = true) 
+    @OneToOne
+    @JoinColumn(unique = true)
     private Richiesta richiesta;
 
     public Recensione(Long id, String descrizione, BigDecimal voto, LocalDate data, Utente cliente, Utente professionista,Richiesta richiesta) {
