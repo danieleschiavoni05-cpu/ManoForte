@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             let temp = new FormData(formRegistrazioneUtenteBase);
             let formData = new URLSearchParams(temp);
 
-            let path = executeFetch("registerBase", formData);
+            let path = executeFetch("registrazionecliente", formData);
             console.log(path);
         })
     }else if(formModificaProfiloUtenteBase!=null){

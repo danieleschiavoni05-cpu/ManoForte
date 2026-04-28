@@ -11,6 +11,7 @@
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/spinning-background.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
     <meta charset="UTF-8">
@@ -24,6 +25,28 @@
 <% List<Professione> professioni = (List<Professione>) request.getAttribute("professioni"); %>
 <% List<Citta> citta = (List<Citta>) request.getAttribute("citta"); %>
 <% List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli");%>
+
+<%
+    Cookie effect = null;
+    Cookie[] cookies = request.getCookies();
+    if(cookies!=null){
+        for(Cookie c:cookies){
+            if(c.getName().equals("effect")){
+                effect = c;
+                System.out.println(effect.getValue());
+                break;
+            }
+        }
+    }
+%>
+<div class="button-row">
+    <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+        <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+        <label class="form-check-label ms-2" for="disableEffect">
+            Effettis
+        </label>
+    </div>
+</div>
 
 <div class="container mb-5 mt-5">
     <div class="row justify-content-center">
@@ -134,7 +157,7 @@
             <hr style="color: white;">
             <div class="text-center">
                 <p class="mb-0">Hai già un account? <a href="<%=request.getContextPath()%>/login">Accedi ora!</a></p>
-                <p class="mt-1">Sei un cliente? <a href="<%=request.getContextPath()%>/registazionecliente">Registrati qui!</a></p>
+                <p class="mt-1">Sei un cliente? <a href="<%=request.getContextPath()%>/registrazionecliente">Registrati qui!</a></p>
             </div>
         </div>
     </div>

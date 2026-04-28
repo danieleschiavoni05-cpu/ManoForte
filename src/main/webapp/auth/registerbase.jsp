@@ -12,6 +12,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/registrazione_professionista.css">
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/spinning-background.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/color-var.css">
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/professionista-style.css">
 
@@ -21,6 +22,28 @@
 	<% List<String> messaggi = (List<String>) request.getAttribute("messages"); %>
 	<% String errore = (String) request.getAttribute("errore");%>
 	<% List<Citta> citta = (List<Citta>) request.getAttribute("listaCitta"); %>
+
+    <%
+        Cookie effect = null;
+        Cookie[] cookies = request.getCookies();
+        if(cookies!=null){
+            for(Cookie c:cookies){
+                if(c.getName().equals("effect")){
+                    effect = c;
+                    System.out.println(effect.getValue());
+                    break;
+                }
+            }
+        }
+    %>
+    <div class="button-row">
+        <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
+            <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+            <label class="form-check-label ms-2" for="disableEffect">
+                Effettis
+            </label>
+        </div>
+    </div>
 
 	<div class="container mb-5 mt-5">
     <div class="row justify-content-center">

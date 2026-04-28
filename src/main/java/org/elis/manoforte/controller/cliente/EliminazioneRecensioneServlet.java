@@ -1,4 +1,4 @@
-package org.elis.manoforte.controller;
+package org.elis.manoforte.controller.cliente;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

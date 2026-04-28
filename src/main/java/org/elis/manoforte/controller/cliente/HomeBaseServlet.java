@@ -56,12 +56,6 @@ public class HomeBaseServlet extends HttpServlet {
 
 		Utente loggedUser = (Utente)session.getAttribute("utenteLoggato");
 
-		if(loggedUser==null){
-			response.sendRedirect(request.getContextPath()+"/login");
-			return;
-		}else if(loggedUser.getRuolo()!= Ruolo.UTENTE_BASE){
-			response.sendRedirect(request.getContextPath()+"/"+ Utility.getUserHomePage(loggedUser));
-		}
 
 		try {
 			loggedUser = utenteDao.reinizializzaUtente(loggedUser.getId());

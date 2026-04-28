@@ -7,11 +7,17 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 
 import org.elis.manoforte.model.Ruolo;
+import org.elis.manoforte.model.Utente;
 
 /**
  * Servlet Filter implementation class ProfessionistaFilter
  */
-@WebFilter("/professionista/*")
+@WebFilter(urlPatterns = {
+		"/gestisciDisponibilita",
+		"/dettagliRichiesta",
+		"/homeprofessionista",
+		"/modificaProfiloProfessionista"
+})
 public class ProfessionistaFilter extends HttpFilter implements Filter {
        
 	  @Override
@@ -25,12 +31,12 @@ public class ProfessionistaFilter extends HttpFilter implements Filter {
 	      
 	      boolean isProfessionista = false;
 
-	      if (session != null) {
-	          Ruolo ruolo = (Ruolo) session.getAttribute("ruolo");
-	          if (ruolo == Ruolo.PROFESSIONISTA) {
-	              isProfessionista = true;
-	          }
-	      }
+		  if(session != null) {
+			  Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+			  if (utenteLoggato!=null && utenteLoggato.getRuolo() == Ruolo.PROFESSIONISTA) {
+				  isProfessionista = true;
+			  }
+		  }
 	      
 	      if (isProfessionista) {
 	          chain.doFilter(request, response);

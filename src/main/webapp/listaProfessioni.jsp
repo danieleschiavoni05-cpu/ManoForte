@@ -52,7 +52,7 @@
                     <h3><%= p.getNome() %></h3>
                     <p>Esplora i professionisti specializzati in questa categoria.</p>
                     <div class="prof-footer" style="margin-top:15px;">
-                        <a href="<%=request.getContextPath()%>/DettagliProfessionista?nome=<%=p.getNome()%>">Vedi Profilo</a>
+                        <a href="<%=request.getContextPath()%>/listaProfessionisti?nome=<%=p.getNome()%>">Vedi Profilo</a>
                     </div>
                 </div>
             <% } %>
@@ -60,7 +60,7 @@
             <div class="no-results">
                 <h3>Nessun risultato trovato</h3>
                 <p>Prova a cambiare i filtri di ricerca.</p>
-                <a href="ListaProfessioni">Mostra tutti</a>
+                <a href="listaProfessioni">Mostra tutti</a>
             </div>
         <% } %>
     </div>

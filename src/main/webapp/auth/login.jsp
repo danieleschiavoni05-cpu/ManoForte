@@ -40,7 +40,7 @@
             </label>
         </div>
     </div>
-<div class="container mt-5">
+<div class="container mt-5" style="max-width: 500px;">
     <div class="row justify-content-center">
         <div class="col-md-12">
             <h2>
@@ -68,7 +68,7 @@
             </form>
             <hr style="color: white;">
             <div class="text-center">
-                <p class="mt-1 mb-0">Sei un cliente? <a href="<%=request.getContextPath()%>/registerBase">Registrati qui!</a></p>
+                <p class="mt-1 mb-0">Sei un cliente? <a href="<%=request.getContextPath()%>/registrazionecliente">Registrati qui!</a></p>
                 <p class="mt-1 mb-0">Sei un professionista? <a href="<%=request.getContextPath()%>/registrazioneprofessionista">Registrati qui!</a></p>
             </div>
         </div>

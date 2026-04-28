@@ -72,7 +72,7 @@ public class DettagliProfessionistaServlet extends HttpServlet {
             dto.setMediaVoto(media);
             dto.setTariffa(professionista.getTariffa());
             if(immagine == null){
-                dto.setImmagine(Utility.DEFAULT_PROPIC_PATH);
+                dto.setImmagine(null);
             }else{
                 dto.setImmagine(immagine.getPercorso());
             }

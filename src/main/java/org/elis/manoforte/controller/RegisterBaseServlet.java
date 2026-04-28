@@ -29,7 +29,7 @@ import tools.jackson.datatype.hibernate6.Hibernate6Module;
 /**
  * Servlet implementation class LoginServlet
  */
-@WebServlet("/registerBase")
+@WebServlet("/registrazionecliente")
 public class RegisterBaseServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 

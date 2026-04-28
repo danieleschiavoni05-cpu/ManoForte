@@ -3,10 +3,20 @@ package org.elis.manoforte.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
+import org.elis.manoforte.model.Ruolo;
+import org.elis.manoforte.model.Utente;
 
 import java.io.IOException;
 
-@WebFilter("/admin/*")
+@WebFilter(urlPatterns = {
+        "/AggiungiCitta",
+        "/AggiungiProfessione",
+        "/EliminaCitta",
+        "/EliminaProfessione",
+        "/HomeAdmin",
+        "/ModificaCitta",
+        "/ModificaProfessione"
+})
 public class AdminFilter extends HttpFilter implements Filter {
        
   @Override
@@ -21,8 +31,8 @@ public class AdminFilter extends HttpFilter implements Filter {
       boolean isAdmin = false;
 
       if (session != null) {
-          Object ruolo = session.getAttribute("ruolo");
-          if (ruolo != null && ruolo.toString().equals("ADMIN")) {
+          Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+          if (utenteLoggato!=null && utenteLoggato.getRuolo() == Ruolo.ADMIN) {
               isAdmin = true;
           }
       }

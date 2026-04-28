@@ -7,11 +7,22 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 
 import org.elis.manoforte.model.Ruolo;
+import org.elis.manoforte.model.Utente;
 
 /**
  * Servlet Filter implementation class UtenteFilter
  */
-@WebFilter("/UtenteFilter")
+@WebFilter(urlPatterns = {
+		"/homeBase",
+		"/eliminaRichiesta",
+		"/eliminazionerecensione",
+		"/InviaRecensione",
+		"/ModificaProfilo",
+		"/professionisti",
+		"/RecensioniProfessionisti",
+		"/ricercaProfessioni",
+		"/richiesta"
+})
 public class UtenteFilter extends HttpFilter implements Filter {
        
 	@Override
@@ -26,8 +37,8 @@ public class UtenteFilter extends HttpFilter implements Filter {
 	      boolean isUtente = false;
 
 	      if (session != null) {
-	          Ruolo ruolo = (Ruolo) session.getAttribute("ruolo");
-	          if (ruolo == Ruolo.UTENTE_BASE) {
+			  Utente utenteLoggato = (Utente) session.getAttribute("utenteLoggato");
+	          if (utenteLoggato!=null && utenteLoggato.getRuolo() == Ruolo.UTENTE_BASE) {
 	              isUtente = true;
 	          }
 	      }
