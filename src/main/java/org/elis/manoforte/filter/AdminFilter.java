@@ -9,7 +9,6 @@ import org.elis.manoforte.model.Utente;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {
-        "/AggiungiCitta",
         "/AggiungiProfessione",
         "/EliminaCitta",
         "/EliminaProfessione",

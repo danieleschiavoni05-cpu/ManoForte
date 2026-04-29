@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             fetch("AggiungiCitta",{
                 method: "POST",
-                body: formData,
+                body: formData
             }).then(response => response.json()).then(data => {
                 console.log("Risposta dal server:", data);
                 if(data.successo === false){
@@ -30,7 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     erroreElement.classList.add("d-none");
                     erroreElement.innerHTML = "";
 
-                    window.location.href = getContextPath()+"/HomeAdmin";
+                    window.location.href = getContextPath()+"/HomeAdmin#city";
+                    window.location.reload();
                 }
             }).catch(e => {
                 console.error("Errore durante l'esecuzione della fetch: ", e);
@@ -65,7 +66,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     erroreElement.classList.add("d-none");
                     erroreElement.innerHTML = "";
 
-                    window.location.href = getContextPath()+"/HomeAdmin";
+                    window.location.href = getContextPath()+"/HomeAdmin#professions";
+                    window.location.reload();
+                }
+            }).catch(e => {
+                console.error("Errore durante l'esecuzione della fetch: ", e);
+                alert("Si è verificato un errore di connessione.");
+            });
+        })
+    }
+
+    const formAggiungiVeicolo = document.getElementById("aggiungiVeicoloForm");
+
+    if(formAggiungiVeicolo!=null){
+        formAggiungiVeicolo.addEventListener("submit", (e) =>{
+            e.preventDefault();
+
+            const erroreElement = document.getElementById("erroreVeicolo");
+
+            let temp = new FormData(formAggiungiVeicolo);
+            let formData = new URLSearchParams(temp);
+
+            erroreElement.classList.add("d-none");
+            erroreElement.innerHTML = "";
+
+            fetch("AggiungiVeicolo",{
+                method: "POST",
+                body: formData,
+            }).then(response => response.json()).then(data => {
+                console.log("Risposta dal server:", data);
+                if(data.successo === false){
+                    erroreElement.innerHTML = data.messaggio;
+                    erroreElement.classList.remove("d-none");
+                }else{
+                    erroreElement.classList.add("d-none");
+                    erroreElement.innerHTML = "";
+
+                    window.location.href = getContextPath()+"/HomeAdmin#vehicles";
+                    window.location.reload();
                 }
             }).catch(e => {
                 console.error("Errore durante l'esecuzione della fetch: ", e);

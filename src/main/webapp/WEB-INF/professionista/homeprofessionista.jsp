@@ -54,20 +54,27 @@
         <div class="col-12 d-flex justify-content-between align-items-end flex-wrap gap-3">
 
             <div class="profile-header-container">
-                <%if(propicHome==null){%>
-                    <img id="homePropic" src="<%=Utility.DEFAULT_PROPIC_PATH%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
-                <%}else{%>
-                    <img id="homePropic" src="getImmagine?path=<%=propicHome%>" alt="Immagine Profilo Attuale" class="img-thumbnail rounded-circle shadow" style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+                <%if (propicHome == null) {%>
+                <img id="homePropic" src="<%=Utility.DEFAULT_PROPIC_PATH%>" alt="Immagine Profilo Attuale"
+                     class="img-thumbnail rounded-circle shadow"
+                     style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
+                <%} else {%>
+                <img id="homePropic" src="getImmagine?path=<%=propicHome%>" alt="Immagine Profilo Attuale"
+                     class="img-thumbnail rounded-circle shadow"
+                     style="width: 220px; height: 220px; object-fit: cover; border: 1px solid rgba(78, 115, 223, 0.3); background: rgba(15, 23, 42, 0.6); padding: 6px; transition: opacity 0.3s ease;">
                 <%}%>
                 <div class="welcome-text-container">
-                    <h2 class="mb-1 display-6 fw-bold" style="color: var(--craft-gold); font-family: 'Poppins', sans-serif;">Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
+                    <h2 class="mb-1 display-6 fw-bold"
+                        style="color: var(--craft-gold); font-family: 'Poppins', sans-serif;">
+                        Benvenuto <%=utente.getNome()%> <%=utente.getCognome()%>!</h2>
                     <p class="mb-0 fs-5" style="color: #cbd5e1;">Cosa vuoi fare oggi?</p>
                 </div>
             </div>
 
             <div class="button-row with-nav">
                 <div class="form-check form-switch bg-dark p-2 rounded-3 text-white opacity-75">
-                    <input class="form-check-input ms-0" type="checkbox" id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
+                    <input class="form-check-input ms-0" type="checkbox"
+                           id="disableEffect" <%=(effect!=null && effect.getValue().equals("true"))?"checked":""%>>
                     <label class="form-check-label ms-2" for="disableEffect">
                         Effettis
                     </label>
@@ -76,7 +83,6 @@
 
         </div>
     </div>
-
 
     <div class="row mt-3 mb-4">
         <div class="col-md-2"></div>

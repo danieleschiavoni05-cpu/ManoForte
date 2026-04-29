@@ -27,12 +27,10 @@
 
 <div class="filter-section">
     <div class="container">
-        <form class="search-box" action="ListaProfessioni" method="get" style="display:flex; gap:10px; justify-content:center;">
-            <%
-                String cerca = request.getParameter("nome"); // Uniformato al Controller
-                if (cerca == null) cerca = "";
-            %>
-            <input type="text" name="nome" placeholder="Cerca per nome..." value="<%= cerca %>">
+        <form class="search-box" action="listaProfessioni" method="get" style="display:flex; gap:10px; justify-content:center;">
+            <% String cerca = request.getParameter("professioni");%>
+            <% if (cerca == null) cerca = ""; %>
+            <input type="text" name="professione" placeholder="Cerca per professione..." value="<%=cerca%>">
             <button type="submit">Cerca</button>
         </form>
     </div>
@@ -42,9 +40,7 @@
     <h2 style="margin-top: 20px;">Professioni Disponibili</h2>
 
     <div class="prof-grid">
-        <%
-            List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessioni");
-        %>
+        <% List<Professione> professioni = (List<Professione>) request.getAttribute("listaProfessioni"); %>
 
         <% if (professioni != null && !professioni.isEmpty()) { %>
             <% for (Professione p : professioni) { %>

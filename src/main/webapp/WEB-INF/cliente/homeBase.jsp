@@ -29,10 +29,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dashboard Utente | ManoForte</title>
 
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <link rel="stylesheet"
 	href="<%=request.getContextPath()%>/css/color-var.css">
@@ -123,15 +121,15 @@
 				<div class="tab-content" id="pills-tabContent">
 					<div class="tab-pane fade show active" id="requests"
 						role="tabpanel" aria-labelledby="pills-requests" tabindex="0">
-						<%@include file="/WEB-INF/cliente/richiesteCliente.jsp"%>
+						<%@include file="/WEB-INF/cliente/homeTab/richiesteCliente.jsp"%>
 					</div>
 					<div class="tab-pane fade" id="edit" role="tabpanel"
 						aria-labelledby="pills-edit" tabindex="0">
-						<%@include file="/WEB-INF/cliente/modificaProfilo.jsp"%>
+						<%@include file="/WEB-INF/cliente/homeTab/modificaProfilo.jsp"%>
 					</div>
 					<div class="tab-pane fade" id="reviews" role="tabpanel"
 						aria-labelledby="pills-reviews" tabindex="0">
-						<%@include file="/WEB-INF/cliente/recensioniCliente.jsp"%>
+						<%@include file="/WEB-INF/cliente/homeTab/recensioniCliente.jsp"%>
 					</div>
 					<div class="tab-pane fade" id="propic" role="tabpanel"
 						aria-labelledby="pills-propic" tabindex="0">

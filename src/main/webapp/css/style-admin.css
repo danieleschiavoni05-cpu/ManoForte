@@ -1,0 +1,171 @@
+/* --- Dashboard Admin Styles --- */
+
+:root {
+    /* Assicurati che queste variabili siano definite, altrimenti usa i fallback */
+    --deep-steel: #2c3e50;
+    --craft-gold: #d4af37;
+    --light-silver: #ecf0f1;
+    --danger-red: #e74c3c;
+    --success-green: #27ae60;
+}
+
+.homeadmin-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.homeadmin-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.homeadmin-header h1 {
+    color: var(--craft-gold);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Card Principale */
+.admin-card {
+    background: var(--deep-steel);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    color: white;
+}
+
+.admin-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: var(--craft-gold);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    padding-bottom: 10px;
+}
+
+.admin-card h3 {
+    font-size: 1.1rem;
+    margin-top: 30px;
+    color: var(--light-silver);
+}
+
+/* Form di Aggiunta */
+.admin-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.admin-form input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(0,0,0,0.2);
+    color: white;
+}
+
+.admin-btn-primary {
+    background: var(--craft-gold);
+    color: var(--deep-steel);
+    border: none;
+    padding: 10px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.admin-btn-primary:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Lista Elementi (Città/Professioni) */
+.admin-list {
+    list-style: none;
+    padding: 0;
+}
+
+.admin-list-item {
+    background: rgba(255,255,255,0.05);
+    margin-bottom: 10px;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.3s;
+}
+
+.admin-list-item:hover {
+    background: rgba(255,255,255,0.1);
+}
+
+.admin-list-item strong {
+    font-size: 1.05rem;
+    min-width: 150px;
+}
+
+/* Azioni (Modifica ed Elimina) */
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.admin-delete-link {
+    color: var(--danger-red);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.admin-delete-link:hover {
+    text-decoration: underline;
+}
+
+/* Form Modifica Inline */
+.admin-inline-form {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.admin-inline-form input {
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    border: none;
+    background: rgba(255,255,255,0.9);
+    width: 150px;
+}
+
+.admin-btn-small {
+    background: #5dade2;
+    color: white;
+    border: none;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 0.8rem;
+}
+
+.admin-hr {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(to right, transparent, var(--craft-gold), transparent);
+    margin: 40px 0;
+    opacity: 0.5;
+}
+
+/* Alert Bootstrap Customization */
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+input::placeholder {
+    font-weight: bold;
+    opacity: 0.5;
+    color: white;
+}

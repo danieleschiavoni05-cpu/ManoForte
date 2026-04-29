@@ -74,4 +74,26 @@ public class JPAVeicoloDao implements VeicoloDAO {
             return veicolo;
         }
     }
+
+    @Override
+    public void removeVeicolo(Long id) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.remove(em.find(Veicolo.class, id));
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void modificaVeicoloById(Long id, String trim) throws Exception {
+        try(EntityManager em = emf.createEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            Veicolo veicolo = em.find(Veicolo.class, id);
+            veicolo.setNome(trim);
+            em.merge(veicolo);
+            transaction.commit();
+        }
+    }
 }

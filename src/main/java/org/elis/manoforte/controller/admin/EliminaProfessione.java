@@ -40,7 +40,7 @@ public class EliminaProfessione extends HttpServlet {
             }
         }
 
-        response.sendRedirect("HomeAdmin");
+        response.sendRedirect("HomeAdmin#professions");
     }
 
     @Override

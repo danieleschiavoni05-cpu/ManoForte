@@ -1,21 +1,24 @@
 package org.elis.manoforte.controller.admin;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-import java.io.IOException;
-
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
+import org.elis.manoforte.dao.definition.VeicoloDAO;
 
-@WebServlet("/ModificaCitta")
-public class ModificaCitta extends HttpServlet {
+import java.io.IOException;
+
+@WebServlet("/ModificaVeicolo")
+public class ModificaVeicolo extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-	CittaDAO cittaDao;
+	VeicoloDAO veicoloDao;
 
     public void init() throws ServletException{
-        cittaDao = DaoFactory.getInstance().getCittaDAO();
+        veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
     }
 
     @Override
@@ -27,12 +30,12 @@ public class ModificaCitta extends HttpServlet {
 
         if (nome != null && !nome.trim().isEmpty()) {
             try {
-                cittaDao.modificaCitta(id, nome.trim());
+                veicoloDao.modificaVeicoloById(id, nome.trim());
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }
 
-        response.sendRedirect("HomeAdmin#city");
+        response.sendRedirect("HomeAdmin#vehicles");
     }
 }

@@ -1,21 +1,26 @@
 
 package org.elis.manoforte.controller.admin;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
-import java.io.IOException;
-
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
-@WebServlet("/EliminaCitta")
-public class EliminaCitta extends HttpServlet {
+import org.elis.manoforte.dao.definition.VeicoloDAO;
+import org.elis.manoforte.model.Veicolo;
+
+import java.io.IOException;
+
+@WebServlet("/EliminaVeicolo")
+public class EliminaVeicolo extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private CittaDAO cittaDAO;
+    private VeicoloDAO veicoloDao;
 
     @Override
     public void init() throws ServletException {
-        cittaDAO = DaoFactory.getInstance().getCittaDAO();
+        veicoloDao = DaoFactory.getInstance().getVeicoloDAO();
     }
 
     @Override
@@ -27,19 +32,19 @@ public class EliminaCitta extends HttpServlet {
         if (idParam != null && !idParam.isEmpty()) {
             try {
                 Long id = Long.parseLong(idParam);
-                cittaDAO.removeCitta(id);
-                request.getSession().setAttribute("successo", "Città rimossa con successo.");
+                veicoloDao.removeVeicolo(id);
+                request.getSession().setAttribute("successo", "Veicolo rimosso con successo.");
             } catch (Exception e) {
                 e.printStackTrace();
                 
                 // Messaggio specifico per l'utente associato
-                String msgErrore = "Impossibile eliminare la citta selezionata . " +
-                        "Ci sono ancora professionisti registrati con questa citta.";
+                String msgErrore = "Impossibile eliminare il veicolo selezionato. " +
+                        "Ci sono ancora professionisti registrati con questo veicolo.";
                 request.getSession().setAttribute("errore", msgErrore);
             }
         }
 
-        response.sendRedirect("HomeAdmin#city");
+        response.sendRedirect("HomeAdmin#vehicles");
     }
 
     @Override

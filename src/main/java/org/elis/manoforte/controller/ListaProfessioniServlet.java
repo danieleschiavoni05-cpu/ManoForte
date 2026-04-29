@@ -22,7 +22,6 @@ public class ListaProfessioniServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-        // Uso la Factory come nel tuo codice originale per coerenza
         professioneDao = DaoFactory.getInstance().getProfessioneDAO();
     }
 
@@ -30,7 +29,7 @@ public class ListaProfessioniServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String nomeProfessione = request.getParameter("nome");
+        String nomeProfessione = request.getParameter("professione");
         if (nomeProfessione == null) nomeProfessione = "";
         String filtroMinuscolo = nomeProfessione.toLowerCase();
 

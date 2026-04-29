@@ -33,6 +33,6 @@ public class ModificaProfessione extends HttpServlet {
             }
         }
 
-        response.sendRedirect("HomeAdmin");
+        response.sendRedirect("HomeAdmin#professions");
     }
 }
