@@ -22,16 +22,16 @@
 
         <div class="footer-col">
             <h4>Contatti</h4>
-            <p>📍 Via Roma 12, Milano</p>
-            <p>📞 +39 320 123 4567</p>
+            <p>📍 Via Sandro Sandri 81, Roma</p>
+            <p>📞 (+39) 064 592 4447</p>
             <p>📧 support@manoforte.it</p>
         </div>
 
         <div class="footer-col">
             <h4>Seguici</h4>
             <p class="footer-social">
-                <a href="#">📸</a>
-                <a href="#">🐦</a>
+                <a href="https://www.instagram.com/centroelis/"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.facebook.com/centroelis/"><i class="fab fa-facebook"></i></a>
             </p>
         </div>
 

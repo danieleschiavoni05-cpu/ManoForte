@@ -10,8 +10,13 @@ import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
 import org.elis.manoforte.dao.definition.VeicoloDAO;
 import org.elis.manoforte.model.Veicolo;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet("/EliminaVeicolo")
 public class EliminaVeicolo extends HttpServlet {
@@ -26,6 +31,11 @@ public class EliminaVeicolo extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter outJson = response.getWriter();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
         
         String idParam = request.getParameter("id");
         
@@ -33,18 +43,20 @@ public class EliminaVeicolo extends HttpServlet {
             try {
                 Long id = Long.parseLong(idParam);
                 veicoloDao.removeVeicolo(id);
-                request.getSession().setAttribute("successo", "Veicolo rimosso con successo.");
+
+                DTOGenericResponse dto = new DTOGenericResponse(true, "Veicolo rimosso con successo.");
+                request.getSession().setAttribute("successoVeicolo", "Veicolo rimosso con successo.");
+
+                outJson.println(mapper.writeValueAsString(dto));
+                outJson.flush();
             } catch (Exception e) {
                 e.printStackTrace();
-                
-                // Messaggio specifico per l'utente associato
-                String msgErrore = "Impossibile eliminare il veicolo selezionato. " +
-                        "Ci sono ancora professionisti registrati con questo veicolo.";
-                request.getSession().setAttribute("errore", msgErrore);
+
+                DTOGenericResponse dto = new DTOGenericResponse(false, "Impossibile eliminare il veicolo selezionato.");
+                outJson.println(mapper.writeValueAsString(dto));
+                outJson.flush();
             }
         }
-
-        response.sendRedirect("HomeAdmin#vehicles");
     }
 
     @Override

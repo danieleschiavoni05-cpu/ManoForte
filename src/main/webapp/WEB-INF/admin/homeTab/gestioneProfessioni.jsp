@@ -3,6 +3,8 @@
 
 
 <% List<Professione> professioni = (List<Professione>) request.getAttribute("professioni"); %>
+<% String successoProfessione = (String) request.getSession().getAttribute("successoProfessione");%>
+<% request.getSession().removeAttribute("successoProfessione"); %>
 
 <style>
     #aggiungiProfessioneForm input::placeholder {
@@ -16,6 +18,20 @@
         border: 1px solid var(--steel-variant);
     }
 </style>
+
+<div class="alert alert-danger alert-dismissible fade d-none mb-4" id="containerErroreProfessione" role="alert" style="border-left: 5px solid #dc3545;">
+    <i class="fa-solid fa-circle-exclamation me-2"></i>
+    <strong id="erroreProfessione"></strong>
+    <button type="button" class="btn-close" aria-label="Close" id="btnCloseAlertProfessione"></button>
+</div>
+
+<%if(successoProfessione!=null){%>
+<div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-left: 5px solid #198754;">
+    <i class="fa-solid fa-check-double me-2"></i>
+    <%= successoProfessione %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%}%>
 
 <div class="row section-title mb-4 align-items-center">
     <div class="col-md-12 mb-2">
@@ -49,10 +65,11 @@
                                   onclick="preparaModaleModificaProfessione('<%= p.getId() %>', '<%= p.getNome().replace("'", "\\'") %>')">
                               <i class="fas fa-edit"></i> Modifica
                           </button>
-                          <a href="EliminaProfessione?id=<%= p.getId() %>" class="btn btn-sm btn-outline-danger w-50"
-                             onclick="return confirm('Sei sicuro di voler eliminare questa professione? L\'operazione fallirà se ci sono utenti associati.');">
+                          <button type="button" class="btn btn-sm w-50" style="background-color: var(--danger-red); color: var(--white-text);"
+                                  data-bs-toggle="modal" data-bs-target="#modalEliminaProfessione"
+                                  onclick="preparaModaleEliminaProfessione('<%= p.getId() %>')">
                               <i class="fas fa-trash"></i> Elimina
-                          </a>
+                          </button>
                         </div>
                       </div>
                   </div>
@@ -91,10 +108,36 @@
     </div>
 </div>
 
+<!-- Modale Elimina Professione -->
+<div class="modal fade" id="modalEliminaProfessione" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--deep-steel); border: 1px solid var(--steel-variant);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--steel-variant);">
+                <h5 class="modal-title" style="color: var(--craft-gold);">Elimina professione</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="eliminaProfessioneForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="modalEliminaProfessioneId">
+                    <p style="color: white;">Sei sicuro di voler eliminare questa professione? L'operazione fallir&agrave; se ci sono utenti associati.</p>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid var(--steel-variant);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: var(--steel-variant); border: none;">Annulla</button>
+                    <button type="submit" class="btn" style="background-color: var(--danger-red); color: var(--white-text);">Conferma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <script>
     function preparaModaleModificaProfessione(id, nomeAttuale) {
         document.getElementById('modalModificaProfessioneId').value = id;
         document.getElementById('modalModificaProfessioneNome').value = nomeAttuale;
+    }
+    function preparaModaleEliminaProfessione(id) {
+        document.getElementById('modalEliminaProfessioneId').value = id;
     }
 </script>
 

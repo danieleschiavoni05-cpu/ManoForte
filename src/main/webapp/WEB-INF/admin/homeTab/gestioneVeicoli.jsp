@@ -1,9 +1,10 @@
 <%@ page import="java.util.List" %>
-<%@ page import="org.elis.manoforte.model.Citta" %>
 <%@ page import="org.elis.manoforte.model.Veicolo" %>
 
 
 <% List<Veicolo> veicoli = (List<Veicolo>) request.getAttribute("veicoli"); %>
+<% String successoVeicolo = (String) request.getSession().getAttribute("successoVeicolo");%>
+<% request.getSession().removeAttribute("successoVeicolo"); %>
 
 <style>
   #aggiungiVeicoloForm input::placeholder {
@@ -19,6 +20,20 @@
 
 </style>
 
+<div class="alert alert-danger alert-dismissible fade d-none mb-4" id="containerErroreVeicolo" role="alert" style="border-left: 5px solid #dc3545;">
+    <i class="fa-solid fa-circle-exclamation me-2"></i>
+    <strong id="erroreVeicolo"></strong>
+    <button type="button" class="btn-close" aria-label="Close" id="btnCloseAlertVeicolo"></button>
+</div>
+
+<%if(successoVeicolo!=null){%>
+<div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-left: 5px solid #198754;">
+    <i class="fa-solid fa-check-double me-2"></i>
+    <%=successoVeicolo%>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+<%}%>
+
 <div class="row section-title mb-4 align-items-center">
     <div class="col-md-12 mb-2">
         <h2 style="color: var(--white-text);">Gestione Veicoli</h2>
@@ -33,8 +48,6 @@
               <input type="text" name="nomeVeicolo" class="form-control" placeholder="Nome veicolo" style="margin-right: 5px;">
                 <button type="submit" class="btn-login" style="margin-left: 5px;">Aggiungi</button>
             </div>
-
-            <p class="d-none text-danger small mt-1 mb-0" style="padding-left: 5px;" id="erroreVeicolo">Errore</p>
           </form>
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -51,18 +64,20 @@
                                   onclick="preparaModaleModificaVeicolo('<%= v.getId() %>', '<%= v.getNome().replace("'", "\\'") %>')">
                               <i class="fas fa-edit"></i> Modifica
                           </button>
-                          <a href="EliminaVeicolo?id=<%= v.getId() %>" class="btn btn-sm btn-outline-danger w-50"
-                             onclick="return confirm('Sei sicuro di voler eliminare questo veicolo? L\'operazione fallirà se ci sono utenti associati.');">
+                          <button type="button" class="btn btn-sm w-50" style="background-color: var(--danger-red); color: var(--white-text);"
+                                  data-bs-toggle="modal" data-bs-target="#modalEliminaVeicolo"
+                                  onclick="preparaModaleEliminaVeicolo('<%= v.getId() %>')">
                               <i class="fas fa-trash"></i> Elimina
-                          </a>
+                          </button>
                         </div>
                       </div>
                   </div>
-              <% } } else { %>
+                <%}%>
+                <%}else{%>
                   <div class="col-12">
                       <p class="text-muted">Nessun veicolo trovato.</p>
                   </div>
-              <% } %>
+                <%}%>
             </div>
         </div>
     </div>
@@ -76,7 +91,7 @@
                 <h5 class="modal-title" style="color: var(--craft-gold);">Modifica veicolo</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="ModificaVeicolo" method="post">
+            <form method="post" id="modificaVeicoloForm">
                 <div class="modal-body">
                     <input type="hidden" name="id" id="modalModificaVeicoloId">
                     <div class="mb-3">
@@ -93,10 +108,35 @@
     </div>
 </div>
 
+<!-- Modale Elimina Veicolo -->
+<div class="modal fade" id="modalEliminaVeicolo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--deep-steel); border: 1px solid var(--steel-variant);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--steel-variant);">
+                <h5 class="modal-title" style="color: var(--craft-gold);">Elimina Veicolo</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="eliminaVeicoloForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="modalEliminaVeicoloId">
+                    <p style="color: white;">Sei sicuro di voler eliminare questo veicolo? L'operazione fallir&agrave; se ci sono utenti associati.</p>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid var(--steel-variant);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: var(--steel-variant); border: none;">Annulla</button>
+                    <button type="submit" class="btn" style="background-color: var(--danger-red); color: var(--white-text);">Conferma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function preparaModaleModificaVeicolo(id, nomeAttuale) {
         document.getElementById('modalModificaVeicoloId').value = id;
-        document.getElementById('modalModificVeicoloNome').value = nomeAttuale;
+        document.getElementById('modalModificaVeicoloNome').value = nomeAttuale;
+    }
+    function preparaModaleEliminaVeicolo(id) {
+        document.getElementById('modalEliminaVeicoloId').value = id;
     }
 </script>
 

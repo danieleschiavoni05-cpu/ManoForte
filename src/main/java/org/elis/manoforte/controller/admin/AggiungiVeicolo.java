@@ -50,7 +50,9 @@ public class AggiungiVeicolo extends HttpServlet {
         try {
             veicoloDao.inserisciVeicolo(v);
 
-            DTOGenericResponse dto = new DTOGenericResponse(true, "Veicolo inserita.");
+            DTOGenericResponse dto = new DTOGenericResponse(true, "Veicolo inserito.");
+            request.getSession().setAttribute("successoVeicolo", "Veicolo inserito con successo.");
+
             outJson.println(mapper.writeValueAsString(dto));
             outJson.flush();
             return;

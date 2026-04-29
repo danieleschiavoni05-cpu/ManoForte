@@ -9,12 +9,16 @@ import org.elis.manoforte.model.Utente;
 import java.io.IOException;
 
 @WebFilter(urlPatterns = {
-        "/AggiungiProfessione",
-        "/EliminaCitta",
-        "/EliminaProfessione",
         "/HomeAdmin",
+        "/AggiungiCitta",
         "/ModificaCitta",
-        "/ModificaProfessione"
+        "/EliminaCitta",
+        "/AggiungiProfessione",
+        "/ModificaProfessione",
+        "/EliminaProfessione",
+        "/AggiungiVeicolo",
+        "/ModificaVeicolo",
+        "/EliminaVeicolo"
 })
 public class AdminFilter extends HttpFilter implements Filter {
        

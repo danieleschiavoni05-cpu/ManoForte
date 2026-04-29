@@ -44,6 +44,8 @@ public class AggiungiProfessione extends HttpServlet {
             professioneDAO.addProfessione(nome);
 
             DTOGenericResponse dto = new DTOGenericResponse(true, "Professione inserita.");
+            request.getSession().setAttribute("successoProfessione", "Professione inserita con successo.");
+
             outJson.println(mapper.writeValueAsString(dto));
             outJson.flush();
             return;

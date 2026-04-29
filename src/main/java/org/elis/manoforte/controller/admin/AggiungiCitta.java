@@ -47,17 +47,15 @@ public class AggiungiCitta extends HttpServlet {
             cittaDao.inserisciCitta(c);
 
             DTOGenericResponse dto = new DTOGenericResponse(true, "Città inserita.");
-            outJson.println(mapper.writeValueAsString(dto));
-            outJson.flush();
-            return;
+            request.getSession().setAttribute("successoCitta", "Città inserita con successo.");
 
+            outJson.println(mapper.writeValueAsString(dto));
         } catch (Exception e) {
             e.printStackTrace();
 
             DTOGenericResponse dto = new DTOGenericResponse(false, "Errore nell'esecuzione della fetch.");
             outJson.println(mapper.writeValueAsString(dto));
-            outJson.flush();
-            return;
         }
+        outJson.flush();
     }
 }

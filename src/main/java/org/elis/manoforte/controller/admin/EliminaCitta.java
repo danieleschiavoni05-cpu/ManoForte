@@ -5,9 +5,15 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import org.elis.manoforte.dao.definition.CittaDAO;
 import org.elis.manoforte.dao.definition.DaoFactory;
+import org.elis.manoforte.utility.dto.DTOGenericResponse;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.hibernate6.Hibernate6Module;
+
 @WebServlet("/EliminaCitta")
 public class EliminaCitta extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -21,6 +27,12 @@ public class EliminaCitta extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        PrintWriter outJson = response.getWriter();
+        ObjectMapper mapper = JsonMapper.builder().addModule(new Hibernate6Module()).build();
         
         String idParam = request.getParameter("id");
         
@@ -28,18 +40,19 @@ public class EliminaCitta extends HttpServlet {
             try {
                 Long id = Long.parseLong(idParam);
                 cittaDAO.removeCitta(id);
-                request.getSession().setAttribute("successo", "Città rimossa con successo.");
+
+                DTOGenericResponse dto = new DTOGenericResponse(true, "Città rimossa con successo.");
+                request.getSession().setAttribute("successoCitta", "Città rimossa con successo.");
+
+                outJson.println(mapper.writeValueAsString(dto));
             } catch (Exception e) {
                 e.printStackTrace();
-                
-                // Messaggio specifico per l'utente associato
-                String msgErrore = "Impossibile eliminare la citta selezionata . " +
-                        "Ci sono ancora professionisti registrati con questa citta.";
-                request.getSession().setAttribute("errore", msgErrore);
-            }
-        }
 
-        response.sendRedirect("HomeAdmin#city");
+                DTOGenericResponse dto = new DTOGenericResponse(false, "Impossibile eliminare la città selezionata.");
+                outJson.println(mapper.writeValueAsString(dto));
+            }
+            outJson.flush();
+        }
     }
 
     @Override

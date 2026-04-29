@@ -3,6 +3,8 @@
 
 
 <% List<Citta> citta = (List<Citta>) request.getAttribute("citta"); %>
+<% String successoCitta = (String) request.getSession().getAttribute("successoCitta");%>
+<% request.getSession().removeAttribute("successoCitta"); %>
 
 <style>
   #aggiungiCittaForm input::placeholder {
@@ -18,11 +20,26 @@
 
 </style>
 
+<div class="alert alert-danger alert-dismissible fade d-none mb-4" id="containerErroreCitta" role="alert" style="border-left: 5px solid #dc3545;">
+    <i class="fa-solid fa-circle-exclamation me-2"></i>
+    <strong id="erroreCitta"></strong>
+    <button type="button" class="btn-close" aria-label="Close" id="btnCloseAlertCitta"></button>
+</div>
+
+<%if(successoCitta!=null){%>
+    <div class="alert alert-success alert-dismissible fade show mb-4" role="alert" style="border-left: 5px solid #198754;">
+        <i class="fa-solid fa-check-double me-2"></i>
+        <%= successoCitta %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+<%}%>
+
 <div class="row section-title mb-4 align-items-center">
     <div class="col-md-12 mb-2">
         <h2 style="color: var(--white-text);">Gestione Citt&agrave;</h2>
     </div>
 </div>
+
 
 <div class="row">
     <div class="col-12">
@@ -32,8 +49,6 @@
               <input type="text" name="nomeCitta" class="form-control" placeholder="Nome citt&agrave;" style="margin-right: 5px;">
                 <button type="submit" class="btn-login" style="margin-left: 5px;">Aggiungi</button>
             </div>
-
-            <p class="d-none text-danger small mt-1 mb-0" style="padding-left: 5px;" id="erroreCitta">Errore</p>
           </form>
 
             <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
@@ -50,10 +65,11 @@
                                   onclick="preparaModaleModificaCitta('<%= c.getId() %>', '<%= c.getNome().replace("'", "\\'") %>')">
                               <i class="fas fa-edit"></i> Modifica
                           </button>
-                          <a href="EliminaCitta?id=<%= c.getId() %>" class="btn btn-sm btn-outline-danger w-50"
-                             onclick="return confirm('Sei sicuro di voler eliminare questa città? L\'operazione fallirà se ci sono utenti associati.');">
-                              <i class="fas fa-trash"></i> Elimina
-                          </a>
+                          <button type="button" class="btn btn-sm w-50" style="background-color: var(--danger-red); color: var(--white-text);"
+                                   data-bs-toggle="modal" data-bs-target="#modalEliminaCitta"
+                                   onclick="preparaModaleEliminaCitta('<%= c.getId() %>')">
+                                <i class="fas fa-trash"></i> Elimina
+                          </button>
                         </div>
                       </div>
                   </div>
@@ -75,7 +91,7 @@
                 <h5 class="modal-title" style="color: var(--craft-gold);">Modifica Citt&agrave;</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="ModificaCitta" method="post">
+            <form method="post" id="modificaCittaForm">
                 <div class="modal-body">
                     <input type="hidden" name="id" id="modalModificaCittaId">
                     <div class="mb-3">
@@ -92,10 +108,35 @@
     </div>
 </div>
 
+<!-- Modale Elimina Città -->
+<div class="modal fade" id="modalEliminaCitta" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="background-color: var(--deep-steel); border: 1px solid var(--steel-variant);">
+            <div class="modal-header" style="border-bottom: 1px solid var(--steel-variant);">
+                <h5 class="modal-title" style="color: var(--craft-gold);">Elimina Citt&agrave;</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" id="eliminaCittaForm">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="modalEliminaCittaId">
+                    <p style="color: white;">Sei sicuro di voler eliminare questa citt&agrave;? L'operazione fallir&agrave; se ci sono utenti associati.</p>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid var(--steel-variant);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background-color: var(--steel-variant); border: none;">Annulla</button>
+                    <button type="submit" class="btn" style="background-color: var(--danger-red); color: var(--white-text);">Conferma</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     function preparaModaleModificaCitta(id, nomeAttuale) {
         document.getElementById('modalModificaCittaId').value = id;
         document.getElementById('modalModificaCittaNome').value = nomeAttuale;
+    }
+    function preparaModaleEliminaCitta(id, nomeAttuale) {
+        document.getElementById('modalEliminaCittaId').value = id;
     }
 </script>
 
