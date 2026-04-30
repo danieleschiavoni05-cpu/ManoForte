@@ -67,9 +67,16 @@
 	
 	<script src="<%=request.getContextPath()%>/js/random_color.js"></script>
 
-	<script
-		src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-	<script
-		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const url = new URL(window.location.href);
+        const param = url.searchParams.get("professione");
+
+        if (param === "" || param === null) {
+            url.searchParams.delete("professione");
+            window.history.replaceState({}, document.title, url.pathname + url.search);
+        }
+    </script>
 </body>
 </html>
