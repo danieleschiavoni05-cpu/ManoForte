@@ -143,6 +143,8 @@
 												<input type="text" name="giorni" id="dataScelta" class="form-control  border-dark fw-bold" placeholder="Seleziona una data..." readonly required>
 											</div>
 										</div>
+										
+										
 
 										<div class="col-md-6">
 											<label class="form-label fw-bold">Durata Stimata</label>
@@ -203,55 +205,96 @@
 
 
 <script>
-	// 1. Dati caricati da JSP
-	const dispRicorsiva = {};
-	const dispSingola = {};
-	const eccezioni = []; // Array di date disabilitate
+//1. Dati caricati da JSP
+const dispRicorsiva = {};
+const dispSingola = {};
+const eccezioni = []; 
 
-	// Mappa giorni Java -> Indici Flatpickr (0=Domenica, 1=Lunedì...)
-	const dayMap = { "sunday": 0, "monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6 };
-	const enabledDays = [];
+const dayMap = { "sunday": 0, "monday": 1, "tuesday": 2, "wednesday": 3, "thursday": 4, "friday": 5, "saturday": 6 };
+// Usiamo un Set per evitare duplicati, poi lo trasformiamo in array
+const enabledDaysSet = new Set();
 
-	<%if (listaDisp != null) {%>
-		<%for (Disponibilita d : listaDisp) {%>
-			<%String oraI = (d.getOra_inizio() != null) ? d.getOra_inizio().toString() : "";%>
-			<%String oraF = (d.getOra_fine() != null) ? d.getOra_fine().toString() : "";%>
+<%if (listaDisp != null) {%>
+	<%for (Disponibilita d : listaDisp) {%>
+		<%
+		    String oraI = (d.getOra_inizio() != null) ? d.getOra_inizio().toString().substring(0, 5) : "";
+		    String oraF = (d.getOra_fine() != null) ? d.getOra_fine().toString().substring(0, 5) : "";
+		    String giornoJava = d.getGiorno_settimana() != null ? d.getGiorno_settimana().name().toLowerCase() : "";
+		%>
 
-			<%if (d.getTipo() == TipoDisponibilita.RICORSIVO) {%>
-				dispRicorsiva["<%=d.getGiorno_settimana().name().toLowerCase()%>"] = { inizio: "<%=oraI%>", fine: "<%=oraF%>" };
-				enabledDays.push(dayMap["<%=d.getGiorno_settimana().name().toLowerCase()%>"]);
-			<%} else if (d.getTipo() == TipoDisponibilita.SINGOLO) {%>
-				dispSingola["<%=d.getData()%>"] = { inizio: "<%=oraI%>", fine: "<%=oraF%>" };
-			<%} else if (d.getTipo() == TipoDisponibilita.ECCEZIONE) {%>
-				eccezioni.push("<%=d.getData()%>");
-			<%}%>
+		<%if (d.getTipo() == TipoDisponibilita.RICORSIVO) {%>
+			dispRicorsiva["<%=giornoJava%>"] = { inizio: "<%=oraI%>", fine: "<%=oraF%>" };
+			if(dayMap["<%=giornoJava%>"] !== undefined) {
+				enabledDaysSet.add(dayMap["<%=giornoJava%>"]);
+			}
+		<%} else if (d.getTipo() == TipoDisponibilita.SINGOLO) {%>
+			dispSingola["<%=d.getData()%>"] = { inizio: "<%=oraI%>", fine: "<%=oraF%>" };
+		<%} else if (d.getTipo() == TipoDisponibilita.ECCEZIONE) {%>
+			eccezioni.push("<%=d.getData()%>");
 		<%}%>
 	<%}%>
+<%}%>
 
-	// 2. Inizializzazione Calendario Flatpickr
-	flatpickr("#dataScelta", {
-		locale: "it",
-		minDate: "today",
-		dateFormat: "Y-m-d",
-		disable: [
-			function(date) {
-				const dateStr = date.toISOString().split('T')[0];
-				const dayIndex = date.getDay();
-				if (eccezioni.includes(dateStr)) return true;
-				if (dispSingola[dateStr]) return false;
-				return !enabledDays.includes(dayIndex);
-			}
-		],
-		onChange: function(selectedDates, dateStr) {
-			if (!dateStr) return;
+const enabledDays = Array.from(enabledDaysSet);
 
-			const dateObj = new Date(dateStr);
-			const giornoSett = dateObj.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
-			const disp = dispSingola[dateStr] || dispRicorsiva[giornoSett];
+//Controlliamo se esiste almeno una disponibilità singola nell'oggetto
+const haDisponibilitaSingole = Object.keys(dispSingola).length > 0;
 
-			popolaOrari(disp);
-		}
-	});
+flatpickr("#dataScelta", {
+    locale: "it",
+    minDate: "today",
+    dateFormat: "Y-m-d",
+    // LOGICA DI SBLOCCO
+    disable: [
+        function(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            const dateStr = `${y}-${m}-${d}`; 
+            const dayIndex = date.getDay();
+
+            // 1. Le eccezioni (ferie) rimangono SEMPRE bloccate
+            if (eccezioni.includes(dateStr)) return true;
+
+            // 2. SE CI SONO DISPONIBILITÀ SINGOLE -> SBLOCCA TUTTO IL CALENDARIO
+            if (haDisponibilitaSingole) {
+                return false; // Ritorna false = non disabilitare nulla
+            }
+
+            // 3. SE NON CI SONO SINGOLE -> SEGUI LA LOGICA RICORSIVA CLASSICA
+            // Blocca se il giorno non è in enabledDays
+            return !enabledDays.includes(dayIndex);
+        }
+    ],
+    onChange: function(selectedDates, dateStr) {
+        if (!dateStr) return;
+        
+        const dateObj = selectedDates[0];
+        const giornoSett = dateObj.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+        
+        // Cerchiamo gli orari
+        const disp = dispSingola[dateStr] || dispRicorsiva[giornoSett];
+
+        if (disp) {
+            // Se troviamo la disponibilità (singola o ricorsiva), popoliamo gli orari
+            popolaOrari(disp);
+            document.getElementById('containerErrori').classList.add('d-none');
+            document.getElementById('btnSubmit').disabled = false;
+        } else {
+            // Se l'utente clicca un giorno "vuoto" (perché abbiamo sbloccato tutto)
+            // svuotiamo la select e mostriamo un errore
+            const selectInizio = document.getElementById('oraInizio');
+            selectInizio.innerHTML = '<option value="">Nessuna disponibilità per oggi</option>';
+            document.getElementById('orarioFineAnteprima').innerHTML = "";
+            
+            // Mostriamo l'errore nel container che hai già nel form
+            const listaErrori = document.getElementById('listaErrori');
+            listaErrori.innerHTML = "<li>Il professionista non riceve in questa data. Scegline un'altra.</li>";
+            document.getElementById('containerErrori').classList.remove('d-none');
+            document.getElementById('btnSubmit').disabled = true;
+        }
+    }
+});
 
 	// 3. Logica Form
 	const selectInizio = document.getElementById('oraInizio');
