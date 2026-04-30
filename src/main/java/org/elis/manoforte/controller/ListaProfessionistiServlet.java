@@ -75,7 +75,7 @@ public class ListaProfessionistiServlet extends HttpServlet {
             request.setAttribute("errore", "Impossibile recuperare i professionisti.");
         }
 
-        request.getRequestDispatcher("listaProfessionisti.jsp").forward(request, response);
+        request.getRequestDispatcher("/listaProfessionisti.jsp").forward(request, response);
 	}
 
 	/**

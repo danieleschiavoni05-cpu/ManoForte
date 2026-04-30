@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 
 @WebServlet("/getImmagine")
 public class GetImmagineServlet extends HttpServlet {
@@ -28,12 +29,13 @@ public class GetImmagineServlet extends HttpServlet {
         try{
             response.setContentType("image/*");
             String path = request.getParameter("path");
-
-            path = System.getenv("propicPath")+path;
-            File file = Utility.getFile(path);
+            	
+            String pathConvertito = Paths.get(System.getenv("propicPath"), path).toString();
+            File file = Utility.getFile(pathConvertito);
 
             response.setContentLength((int)file.length());
             Files.copy(file.toPath(), response.getOutputStream());
+          
         }catch(NoSuchFileException | NoImageException e){
             response.sendRedirect(Utility.DEFAULT_PROPIC_PATH);
         }

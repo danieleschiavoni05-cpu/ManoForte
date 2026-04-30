@@ -255,13 +255,13 @@ public class Utility {
         if(path==null || path.isEmpty()){
             throw new NoImageException("Nessun immagine trovata.");
         }
-
-        int lastSlash = path.lastIndexOf("/");
-        if(lastSlash!=-1){
-            path = path.substring(lastSlash+1);
+        
+        File file = new File(path);
+        if(!file.exists()||!file.isFile()) {
+        	throw new NoImageException("Nessun immagine trovata.");
         }
 
-        return new File(path);
+        return file;
     }
     
 }
