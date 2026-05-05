@@ -57,7 +57,9 @@ public class JPADisponibilitaDao implements DisponibilitaDAO {
     @Override
     public List<Disponibilita> findDisponibilitaByEmailProfessionista(String email) throws Exception {
         try(EntityManager em = emf.createEntityManager()) {
-            Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email");
+            //Query query = em.createQuery("select d from Utente u join u.disponibilita d where u.email=:email");
+            Query query = em.createQuery("SELECT d FROM Utente u JOIN u.disponibilita d WHERE u.email = :email AND NOT EXISTS (" +
+                                            "SELECT r FROM Richiesta r WHERE r.professionista = u AND r.data = d.data AND r.ora_inizio = d.ora_inizio AND r.ora_fine = d.ora_fine)");
             query.setParameter("email", email);
             return query.getResultList();
         }
