@@ -31,17 +31,24 @@ function executeFetch(servlet, data){
             containerErrori.classList.remove("d-none")
             mainRow.classList.remove("mb-4");
         }else{
-            if(servlet.includes("modifica")){
+            console.log(servlet);
+            if(servlet==="modificaProfiloProfessionista"){
                 const li = document.createElement("li");
                 li.textContent = "Profilo modificato con successo.";
                 listaSuccessi.appendChild(li);
                 containerSuccesso.classList.remove("d-none");
                 return getContextPath()+"/modificaProfiloProfessionista";
+            }else if(servlet==="ModificaProfilo"){
+                const li = document.createElement("li");
+                li.textContent = "Profilo modificato con successo.";
+                listaSuccessi.appendChild(li);
+                containerSuccesso.classList.remove("d-none");
+                return getContextPath()+"/homeBase";
+            }else{
+                console.log(getContextPath());
+                let path= getContextPath()+"/login";
+                window.location.href = path;
             }
-            console.log(getContextPath());
-            let path= getContextPath()+"/login";
-            window.location.href = path;
-
         }
     }).catch(e => {
         console.error("Errore durante l'esecuzione della fetch: ", e);

@@ -124,6 +124,22 @@ public class Utente {
 		this.veicolo = null;
 	}
 
+	public Utente(String email, String password, String nome,
+	              String cognome, LocalDate dataNascita, String codice_fiscale,
+	              Citta citta) {
+		this.email = email;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataNascita = dataNascita;
+		this.codice_fiscale = codice_fiscale;
+		this.ruolo = Ruolo.UTENTE_BASE;
+		this.citta = citta;
+		this.professione = null;
+		this.tariffa = null;
+		this.veicolo = null;
+	}
+
 
 	public Utente() {
 	}

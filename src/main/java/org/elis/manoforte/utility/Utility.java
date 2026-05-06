@@ -238,7 +238,8 @@ public class Utility {
         nome, 
         cognome, 
         dataNascita, 
-        codiceFiscale
+        codiceFiscale,
+        citta
     );
 }
 
